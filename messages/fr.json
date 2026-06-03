@@ -54,35 +54,35 @@
     "name": "Appartement Risoul 1850",
     "location": "Risoul 1850, Hautes-Alpes",
     "type": "Appartement",
-    "description": "Au cœur de la station de ski de Risoul 1850, cet appartement offre un accès direct aux pistes et une vue imprenable sur les sommets alpins. Idéal pour les familles et groupes d'amis en quête de montagne, été comme hiver.",
+    "description": "Appartement 26 m² avec balcon et casier à skis, situé tout près des pistes dans la résidence Altaïr (3ème étage avec ascenseur, sans vis-à-vis). Pour 4 à 6 personnes. Entrée coin nuit avec 2 lits superposés séparée du séjour par une porte. Salle de bain avec baignoire, WC séparés. Séjour ensoleillé (orienté Est) avec 2 lits gigognes et cloison coulissante pour chambre indépendante. Kitchenette équipée : réfrigérateur, lave-vaisselle, 4 plaques vitrocéramique, micro-ondes/grill, cafetières, service raclette/crêpière, grille-pain, bouilloire. TV écran plat, jeux de société. Balcon avec table et chaises. Commerces et cabinet médical à proximité. ⚠️ Draps non fournis — ménage à effectuer par les locataires. En période de vacances scolaires d'hiver (février/mars) : location à la semaine uniquement (samedi au samedi).",
     "badge": "Station de ski"
   },
   "property_avignon": {
     "name": "Appartement Avignon Intramuros",
     "location": "Avignon, Vaucluse",
     "type": "Appartement",
-    "description": "Niché au cœur de la cité des Papes, derrière les remparts historiques d'Avignon, cet appartement vous plonge dans l'histoire et la culture provençale. À deux pas du Palais des Papes et du célèbre Pont d'Avignon.",
+    "description": "Studio de 20 m² récemment rénové, niché dans une ruelle calme à l'intérieur des remparts d'Avignon, à proximité de tous les commerces et lieux touristiques. Espace nuit avec banquette composée de 2 lits 1 place. Grand placard avec penderie et étagères. Ventilateur pour les nuits d'été. Accès en voiture possible — parkings de la ville recommandés. Disponible uniquement en juillet et août. Minimum 2 nuits.",
     "badge": "Centre historique"
   },
   "property_lauris1": {
     "name": "Maison de Mémé",
     "location": "Lauris, Luberon",
     "type": "Maison",
-    "description": "Grande maison de caractère au cœur du village perché de Lauris. Poutres apparentes, carreaux de ciment, arches provençales — un intérieur plein d'âme à deux pas des ruelles et des lavandes du Luberon.",
+    "description": "Maison de caractère au cœur du village de Lauris, à proximité des commerces et du château. RDC : grand séjour avec cuisine équipée, WC. 1er étage : salon avec TV, WC, grand dressing, salle d'eau, 1 chambre (2 lits simples), 1 chambre (lit double + dressing). 2ème étage : 2 chambres avec lit double, salle d'eau avec WC, espace extérieur sous les toits. Cuisine équipée : grille-pain, bouilloire, Nespresso, cafetière filtre, micro-ondes, four traditionnel, réfrigérateur/congélateur, lave-linge, plaques induction, lave-vaisselle. Wifi gratuit. Voiture recommandée. Idéalement à la semaine (samedi/samedi), minimum 2 nuits. Possibilité de combiner avec la maison mitoyenne pour plus de voyageurs.",
     "badge": "Luberon"
   },
   "property_lauris2": {
     "name": "L'Atelier",
     "location": "Lauris, Luberon",
     "type": "Maison",
-    "description": "Ancienne maison d'artisan entièrement rénovée avec goût à Lauris. Décoration contemporaine, douche à l'italienne, ambiance cosy — un pied-à-terre idéal pour explorer le Parc Naturel du Luberon.",
+    "description": "Maison entièrement refaite à neuf au cœur du village de Lauris, à 5 km de Lourmarin. RDC : séjour avec cuisine équipée, WC. 1er étage : espace rangement (lave-linge, WC), suite parentale (salle d'eau, lit double, dressing). 2ème étage : suite parentale (lit double) + espace extérieur. Cuisine équipée : grille-pain, bouilloire, Nespresso, cafetière filtre, micro-ondes, four traditionnel, réfrigérateur/congélateur, lave-linge, plaques induction, lave-vaisselle. Wifi gratuit. Voiture recommandée, accès voiture à 20 m. ⚠️ Escaliers abrupts. Idéalement à la semaine, minimum 2 nuits.",
     "badge": "Luberon"
   },
   "property_lauris3": {
     "name": "Maison d'Alain",
     "location": "Lauris, Luberon",
     "type": "Maison",
-    "description": "Maison de caractère au cœur du village de Lauris, dans le Parc Naturel du Luberon. Un séjour authentique en Provence, entre lavandes, marchés et villages perchés.",
+    "description": "Maison de caractère au cœur du village de Lauris, dans le Parc Naturel du Luberon. Un séjour authentique en Provence, entre lavandes, marchés et villages perchés. Minimum 2 nuits.",
     "badge": "Luberon"
   },
   "lauris": {

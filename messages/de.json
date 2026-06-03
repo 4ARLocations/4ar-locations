@@ -54,35 +54,35 @@
     "name": "Appartement Risoul 1850",
     "location": "Risoul 1850, Hautes-Alpes",
     "type": "Appartement",
-    "description": "Im Herzen des Skigebiets Risoul 1850 bietet dieses Appartement direkten Zugang zu den Pisten und einen atemberaubenden Blick auf die Alpengipfel. Ideal für Familien und Freundesgruppen, die das Bergabenteuer suchen, im Sommer wie im Winter.",
+    "description": "26 m² Appartement mit Balkon und Skiaufbewahrung, direkt an den Pisten in der Residenz Altaïr (3. Stock, Aufzug, kein Einblick). 4–6 Personen. Schlafbereich mit 2 Etagenbetten (80x180 cm), durch Tür vom Wohnzimmer getrennt. Badezimmer mit Badewanne, separates WC. Helles Wohnzimmer (Ostausrichtung) mit 2 Ausziehbetten und Schiebewand für separates Schlafzimmer. Ausgestattete Küchenzeile: Kühlschrank, Spülmaschine, 4-Platten-Ceranfeld, Mikrowelle/Grill, Kaffeemaschinen, Raclette/Crêpes-Set, Toaster, Wasserkocher. Flachbild-TV, Brettspiele. Balkon mit Tisch und Stühlen. Geschäfte und Arztpraxis in der Nähe. ⚠️ Bettwäsche nicht inklusive — Endreinigung durch Mieter. Winterferien (Feb./März): nur Wochenvermietung (Samstag bis Samstag).",
     "badge": "Skigebiet"
   },
   "property_avignon": {
     "name": "Appartement Avignon Intramuros",
     "location": "Avignon, Vaucluse",
     "type": "Appartement",
-    "description": "Im Herzen der Papststadt, hinter den historischen Stadtmauern von Avignon, taucht dieses Appartement Sie in Geschichte und provenzalische Kultur ein. Nur wenige Schritte vom Palais des Papes und der berühmten Pont d'Avignon entfernt.",
+    "description": "Kürzlich renoviertes Studio (20 m²) in einer ruhigen Gasse innerhalb der Stadtmauern von Avignon, nahe allen Geschäften und Sehenswürdigkeiten. Schlafbereich mit Schlafsofa (2 Einzelbetten). Großer Schrank mit Hänge- und Regalfläche. Ventilator für Sommernächte. Pkw-Zufahrt möglich — Nutzung der Stadtparkplätze empfohlen. Nur im Juli und August verfügbar. Mindestens 2 Nächte.",
     "badge": "Historisches Zentrum"
   },
   "property_lauris1": {
-    "name": "Maison Mémé",
+    "name": "Maison de Mémé",
     "location": "Lauris, Luberon",
     "type": "Haus",
-    "description": "Ein großes, charaktervolles Haus im Herzen des Hügeldorfs Lauris. Sichtbare Balken, Zementfliesen, provenzalische Bögen — ein seelenvolles Interieur, nur wenige Schritte von den lavendelduftenden Gassen des Luberon entfernt.",
+    "description": "Charaktervolles Haus im Herzen des Dorfes Lauris, nahe Geschäften und Schloss. EG: großes Wohnzimmer mit ausgestatteter Küche, WC. 1. OG: Wohnzimmer mit TV, WC, großes Ankleidezimmer, Duschbad, Zimmer (2 Einzelbetten), Zimmer (Doppelbett + Ankleidezimmer). 2. OG: 2 Doppelzimmer, Duschbad mit WC, Außenbereich unter dem Dach. Vollständig ausgestattete Küche: Toaster, Wasserkocher, Nespresso, Filterkaffeemaschine, Mikrowelle, Backofen, Kühlschrank/Gefrierfach, Waschmaschine, Induktionskochfeld, Spülmaschine. Kostenloses WLAN. Auto empfohlen. Ideal wochenweise (Sa–Sa), mindestens 2 Nächte. Kombination mit dem Nachbarhaus für größere Gruppen möglich.",
     "badge": "Luberon"
   },
   "property_lauris2": {
     "name": "L'Atelier",
     "location": "Lauris, Luberon",
     "type": "Haus",
-    "description": "Ein ehemaliges Handwerkerhaus, komplett mit Geschmack renoviert in Lauris. Zeitgenössisches Dekor, begehbare Dusche, gemütliche Atmosphäre — die perfekte Ausgangsbasis zur Erkundung des Naturparks Luberon.",
+    "description": "Komplett renoviertes Haus im Herzen des Dorfes Lauris, 5 km von Lourmarin. EG: Wohnzimmer mit ausgestatteter Küche, WC. 1. OG: Abstellraum (Waschmaschine, WC), Mastersuite (Duschbad, Doppelbett, Ankleidezimmer). 2. OG: Mastersuite (Doppelbett) + Außenbereich. Vollständig ausgestattete Küche: Toaster, Wasserkocher, Nespresso, Filterkaffeemaschine, Mikrowelle, Backofen, Kühlschrank/Gefrierfach, Waschmaschine, Induktionskochfeld, Spülmaschine. Kostenloses WLAN. Auto empfohlen, Parken 20 m entfernt. ⚠️ Steile Treppen. Ideal wochenweise, mindestens 2 Nächte.",
     "badge": "Luberon"
   },
   "property_lauris3": {
     "name": "Maison d'Alain",
     "location": "Lauris, Luberon",
     "type": "Haus",
-    "description": "Ein charaktervolles Haus im Herzen des Dorfes Lauris, im Naturpark Luberon. Ein authentischer Provence-Aufenthalt umgeben von Lavendel, Märkten und Bergdörfern.",
+    "description": "Charaktervolles Haus im Herzen des Dorfes Lauris, im Naturpark Luberon. Ein authentischer Provence-Aufenthalt umgeben von Lavendel, Märkten und Bergdörfern. Mindestens 2 Nächte.",
     "badge": "Luberon"
   },
   "lauris": {
