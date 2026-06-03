@@ -20,7 +20,9 @@ export default function PropertyCard({ property, locale }: { property: Property;
   const hasPhoto = property.image && !property.image.includes('lauris3');
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border border-[#E8DCC8]">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border border-[#E8DCC8] cursor-pointer"
+      onClick={() => window.location.href = `/${locale}/biens/${property.slug}`}
+    >
       {/* Image */}
       <div className={`relative h-56 overflow-hidden ${!hasPhoto ? `bg-gradient-to-br ${regionGradient[property.region]} flex items-center justify-center` : ''}`}>
         {hasPhoto ? (

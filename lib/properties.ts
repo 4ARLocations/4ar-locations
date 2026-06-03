@@ -13,6 +13,7 @@ export type Property = {
   airbnbUrl: string;
   abritelUrl?: string;
   image: string;
+  images: string[];
   region: 'alpes' | 'avignon' | 'luberon';
 };
 
@@ -31,6 +32,7 @@ export const properties: Property[] = [
     priceFrom: 120,
     airbnbUrl: 'https://www.airbnb.fr/rooms/28044230',
     image: '/images/risoul.jpg',
+    images: ['/images/risoul.jpg', '/images/risoul2.jpg'],
     region: 'alpes',
   },
   {
@@ -47,6 +49,7 @@ export const properties: Property[] = [
     priceFrom: 65,
     airbnbUrl: 'https://www.airbnb.fr/rooms/1439243184509708331',
     image: '/images/avignon.jpg',
+    images: ['/images/avignon.jpg', '/images/avignon2.jpg'],
     region: 'avignon',
   },
   {
@@ -64,6 +67,7 @@ export const properties: Property[] = [
     airbnbUrl: 'https://www.airbnb.fr/rooms/1175438485297975130',
     abritelUrl: 'https://www.abritel.fr/location-vacances/p2476917?dateless=true',
     image: '/images/lauris-meme.jpg',
+    images: ['/images/lauris-meme.jpg', '/images/lauris-meme2.jpg', '/images/lauris-meme3.jpg'],
     region: 'luberon',
   },
   {
@@ -81,11 +85,12 @@ export const properties: Property[] = [
     airbnbUrl: 'https://www.airbnb.fr/rooms/1175460558277880811',
     abritelUrl: 'https://www.abritel.fr/location-vacances/p2476923?dateless=true',
     image: '/images/lauris-atelier.jpg',
+    images: ['/images/lauris-atelier.jpg', '/images/lauris-atelier2.jpg'],
     region: 'luberon',
   },
   {
-    id: 'lauris-3',
-    slug: 'lauris-3',
+    id: 'lauris-alain',
+    slug: 'lauris-alain',
     nameKey: 'property_lauris3.name',
     locationKey: 'property_lauris3.location',
     typeKey: 'property_lauris3.type',
@@ -96,7 +101,8 @@ export const properties: Property[] = [
     bathrooms: 1,
     priceFrom: 120,
     airbnbUrl: '#',
-    image: '/images/lauris-meme2.jpg',
+    image: '/images/lauris-meme.jpg',
+    images: ['/images/lauris-meme.jpg'],
     region: 'luberon',
   },
 ];
