@@ -100,7 +100,7 @@ export const properties: Property[] = [
     bedrooms: 3,
     bathrooms: 1,
     priceFrom: 120,
-    airbnbUrl: '#',
+    airbnbUrl: 'https://www.airbnb.fr/rooms/1336390142884366353',
     image: '/images/lauris-meme.jpg',
     images: ['/images/lauris-meme.jpg'],
     region: 'luberon',
