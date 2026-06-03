@@ -8,6 +8,7 @@ export type Property = {
   badgeKey: string;
   guests: number;
   bedrooms: number;
+  beds: number;
   bathrooms: number;
   priceFrom: number;
   priceTo?: number;         // pour les tarifs variables (ex: Risoul 75-180€)
@@ -31,7 +32,8 @@ export const properties: Property[] = [
     descriptionKey: 'property_risoul.description',
     badgeKey: 'property_risoul.badge',
     guests: 6,
-    bedrooms: 2,
+    bedrooms: 1,
+    beds: 6,
     bathrooms: 1,
     priceFrom: 75,
     priceTo: 180,
@@ -51,6 +53,7 @@ export const properties: Property[] = [
     badgeKey: 'property_avignon.badge',
     guests: 2,
     bedrooms: 1,
+    beds: 2,
     bathrooms: 1,
     priceFrom: 0,
     airbnbUrl: 'https://www.airbnb.fr/rooms/1439243184509708331',
@@ -68,6 +71,7 @@ export const properties: Property[] = [
     badgeKey: 'property_lauris1.badge',
     guests: 8,
     bedrooms: 4,
+    beds: 5,
     bathrooms: 2,
     priceFrom: 142,
     cleaningFee: 120,
@@ -88,7 +92,8 @@ export const properties: Property[] = [
     badgeKey: 'property_lauris2.badge',
     guests: 4,
     bedrooms: 2,
-    bathrooms: 1,
+    beds: 2,
+    bathrooms: 2,
     priceFrom: 115,
     cleaningFee: 80,
     minNights: 2,
@@ -106,9 +111,10 @@ export const properties: Property[] = [
     typeKey: 'property_lauris3.type',
     descriptionKey: 'property_lauris3.description',
     badgeKey: 'property_lauris3.badge',
-    guests: 6,
-    bedrooms: 3,
-    bathrooms: 1,
+    guests: 8,
+    bedrooms: 4,
+    beds: 2,
+    bathrooms: 3,
     priceFrom: 200,
     cleaningFee: 100,
     minNights: 2,

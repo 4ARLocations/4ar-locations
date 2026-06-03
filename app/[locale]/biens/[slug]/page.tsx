@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { properties } from '@/lib/properties';
 import PropertyGallery from '@/components/PropertyGallery';
 import LaurisCombine from '@/components/LaurisCombine';
+import ReviewList from '@/components/ReviewList';
+import ReviewForm from '@/components/ReviewForm';
 
 export default async function PropertyPage({
   params,
@@ -90,16 +92,21 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
           <p className="text-[#5C4F3A] leading-relaxed text-lg">{t(property.descriptionKey)}</p>
 
           {/* Caractéristiques */}
-          <div className="grid grid-cols-3 gap-4 mt-8 p-5 bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl">
+          <div className="grid grid-cols-4 gap-3 mt-8 p-5 bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl">
             <div className="text-center">
               <div className="text-3xl mb-1">👥</div>
               <div className="text-2xl font-bold text-[#2C2416]">{property.guests}</div>
               <div className="text-xs text-[#9B8A74]">{t('properties.guests')}</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl mb-1">🛏</div>
+              <div className="text-3xl mb-1">🚪</div>
               <div className="text-2xl font-bold text-[#2C2416]">{property.bedrooms}</div>
               <div className="text-xs text-[#9B8A74]">{t('properties.bedrooms')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-1">🛏</div>
+              <div className="text-2xl font-bold text-[#2C2416]">{property.beds}</div>
+              <div className="text-xs text-[#9B8A74]">{t('properties.beds')}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl mb-1">🚿</div>
@@ -146,6 +153,14 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
               loc4ar@gmail.com
             </a>
           </div>
+        </div>
+      </div>
+
+      {/* Avis voyageurs */}
+      <div className="mt-4">
+        <ReviewList propertyId={property.id} />
+        <div className="mt-6">
+          <ReviewForm propertyId={property.id} propertyName={t(property.nameKey)} />
         </div>
       </div>
 

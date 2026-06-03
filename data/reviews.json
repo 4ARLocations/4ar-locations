@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "propertyId": "lauris-meme",
+    "author": "Sophie M.",
+    "date": "2024-08",
+    "rating": 5,
+    "comment": "Maison magnifique au cœur du village, très bien équipée. Accueil chaleureux, on reviendra avec plaisir !",
+    "approved": true
+  },
+  {
+    "id": "2",
+    "propertyId": "risoul",
+    "author": "Thomas D.",
+    "date": "2024-02",
+    "rating": 5,
+    "comment": "Appartement idéalement situé, à deux pas des pistes. Propre, bien équipé. Parfait pour notre séjour ski en famille.",
+    "approved": true
+  },
+  {
+    "id": "3",
+    "propertyId": "lauris-atelier",
+    "author": "Camille R.",
+    "date": "2024-07",
+    "rating": 5,
+    "comment": "Coup de cœur pour l'Atelier ! La maison est magnifiquement rénovée, le village de Lauris est superbe. On se sent vraiment en Provence.",
+    "approved": true
+  }
+]
