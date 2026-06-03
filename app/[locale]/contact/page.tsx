@@ -41,6 +41,15 @@ function ContactForm() {
       setDateError('La date de départ doit être après la date d\'arrivée.');
       return false;
     }
+    // Vérification durée minimale
+    const prop = properties.find((p) => p.id === property);
+    if (prop?.minNights) {
+      const nights = Math.round((new Date(checkout).getTime() - new Date(checkin).getTime()) / 86400000);
+      if (nights < prop.minNights) {
+        setDateError(`La durée minimale de séjour est de ${prop.minNights} nuits pour ce logement.`);
+        return false;
+      }
+    }
     if (property === 'avignon') {
       if (!isInJulyAugust(checkin) || !isInJulyAugust(checkout)) {
         setDateError('L\'appartement d\'Avignon est uniquement disponible en juillet et août.');

@@ -76,12 +76,27 @@ export default function PropertyCard({ property, locale }: { property: Property;
         {/* Price & CTA */}
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
-            {property.priceFrom > 0 ? (
-              <>
+            {property.priceOnRequest ? (
+              <div>
+                <span className="text-xs text-[#9B8A74]">Entre </span>
+                <span className="text-lg font-bold text-[#C8763A]">{property.priceFrom}€</span>
+                <span className="text-xs text-[#9B8A74]"> et </span>
+                <span className="text-lg font-bold text-[#C8763A]">{property.priceTo}€</span>
+                <span className="text-xs text-[#9B8A74]">/nuit</span>
+                <div className="text-xs text-[#C8763A] font-medium">Nous contacter pour les tarifs</div>
+              </div>
+            ) : property.priceFrom > 0 ? (
+              <div>
                 <span className="text-xs text-[#9B8A74]">{t('home.from_price')}</span>
                 <span className="text-xl font-bold text-[#C8763A] ml-1">{property.priceFrom}€</span>
-                <span className="text-xs text-[#9B8A74]">{t('properties.per_night')}</span>
-              </>
+                <span className="text-xs text-[#9B8A74]">/nuit</span>
+                {property.cleaningFee && (
+                  <div className="text-xs text-[#9B8A74]">+ {property.cleaningFee}€ ménage</div>
+                )}
+                {property.minNights && (
+                  <div className="text-xs text-[#9B8A74]">min. {property.minNights} nuits</div>
+                )}
+              </div>
             ) : (
               <span className="text-sm font-semibold text-[#9B8A74] italic">Sur demande</span>
             )}

@@ -10,6 +10,10 @@ export type Property = {
   bedrooms: number;
   bathrooms: number;
   priceFrom: number;
+  priceTo?: number;         // pour les tarifs variables (ex: Risoul 75-180€)
+  priceOnRequest?: boolean; // "Nous contacter pour les tarifs"
+  cleaningFee?: number;     // frais de ménage
+  minNights?: number;       // durée minimum de séjour
   airbnbUrl: string;
   abritelUrl?: string;
   image: string;
@@ -29,7 +33,9 @@ export const properties: Property[] = [
     guests: 6,
     bedrooms: 2,
     bathrooms: 1,
-    priceFrom: 0,
+    priceFrom: 75,
+    priceTo: 180,
+    priceOnRequest: true,
     airbnbUrl: 'https://www.airbnb.fr/rooms/28044230',
     image: '/images/risoul.jpg',
     images: ['/images/risoul.jpg', '/images/risoul2.jpg'],
@@ -63,7 +69,9 @@ export const properties: Property[] = [
     guests: 8,
     bedrooms: 4,
     bathrooms: 2,
-    priceFrom: 0,
+    priceFrom: 142,
+    cleaningFee: 120,
+    minNights: 2,
     airbnbUrl: 'https://www.airbnb.fr/rooms/1175438485297975130',
     abritelUrl: 'https://www.abritel.fr/location-vacances/p2476917?dateless=true',
     image: '/images/lauris-meme.jpg',
@@ -81,7 +89,9 @@ export const properties: Property[] = [
     guests: 4,
     bedrooms: 2,
     bathrooms: 1,
-    priceFrom: 0,
+    priceFrom: 115,
+    cleaningFee: 80,
+    minNights: 2,
     airbnbUrl: 'https://www.airbnb.fr/rooms/1175460558277880811',
     abritelUrl: 'https://www.abritel.fr/location-vacances/p2476923?dateless=true',
     image: '/images/lauris-atelier.jpg',
@@ -99,7 +109,9 @@ export const properties: Property[] = [
     guests: 6,
     bedrooms: 3,
     bathrooms: 1,
-    priceFrom: 120,
+    priceFrom: 200,
+    cleaningFee: 100,
+    minNights: 2,
     airbnbUrl: 'https://www.airbnb.fr/rooms/1336390142884366353',
     image: '/images/lauris-meme.jpg',
     images: ['/images/lauris-meme.jpg'],

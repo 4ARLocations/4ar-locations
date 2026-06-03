@@ -43,12 +43,35 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
         </div>
         <div className="text-right">
           <div>
-            {property.priceFrom > 0 ? (
-              <>
+            {property.priceOnRequest ? (
+              <div>
+                <div>
+                  <span className="text-sm text-[#9B8A74]">Entre </span>
+                  <span className="text-3xl font-bold text-[#C8763A]">{property.priceFrom}€</span>
+                  <span className="text-sm text-[#9B8A74]"> et </span>
+                  <span className="text-3xl font-bold text-[#C8763A]">{property.priceTo}€</span>
+                  <span className="text-sm text-[#9B8A74]">/nuit</span>
+                </div>
+                <div className="text-sm text-[#C8763A] font-medium mt-1">Nous contacter pour les tarifs</div>
+              </div>
+            ) : property.priceFrom > 0 ? (
+              <div>
                 <span className="text-sm text-[#9B8A74]">{t('home.from_price')} </span>
                 <span className="text-3xl font-bold text-[#C8763A]">{property.priceFrom}€</span>
-                <span className="text-sm text-[#9B8A74]">{t('properties.per_night')}</span>
-              </>
+                <span className="text-sm text-[#9B8A74]">/nuit</span>
+                <div className="flex flex-wrap gap-3 mt-2">
+                  {property.cleaningFee && (
+                    <span className="text-xs bg-[#FAF7F2] border border-[#E8DCC8] rounded-full px-3 py-1 text-[#5C4F3A]">
+                      🧹 {property.cleaningFee}€ de ménage
+                    </span>
+                  )}
+                  {property.minNights && (
+                    <span className="text-xs bg-[#FAF7F2] border border-[#E8DCC8] rounded-full px-3 py-1 text-[#5C4F3A]">
+                      📅 Min. {property.minNights} nuits
+                    </span>
+                  )}
+                </div>
+              </div>
             ) : (
               <span className="text-lg font-semibold text-[#9B8A74] italic">Sur demande</span>
             )}
