@@ -1,6 +1,8 @@
+'use client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import type { Property } from '@/lib/properties';
 
 const regionGradient: Record<string, string> = {
@@ -17,11 +19,12 @@ const regionEmoji: Record<string, string> = {
 
 export default function PropertyCard({ property, locale }: { property: Property; locale: string }) {
   const t = useTranslations();
+  const router = useRouter();
   const hasPhoto = property.image && !property.image.includes('lauris3');
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border border-[#E8DCC8] cursor-pointer"
-      onClick={() => window.location.href = `/${locale}/biens/${property.slug}`}
+      onClick={() => router.push(`/${locale}/biens/${property.slug}`)}
     >
       {/* Image */}
       <div className={`relative h-56 overflow-hidden ${!hasPhoto ? `bg-gradient-to-br ${regionGradient[property.region]} flex items-center justify-center` : ''}`}>
