@@ -13,6 +13,7 @@ function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
   const [dateError, setDateError] = useState('');
+  const [isCombined, setIsCombined] = useState(false);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -23,7 +24,9 @@ function ContactForm() {
 
   useEffect(() => {
     const bien = searchParams.get('bien');
+    const combine = searchParams.get('combine');
     if (bien) setForm((f) => ({ ...f, property: bien }));
+    if (combine === 'true') setIsCombined(true);
   }, [searchParams]);
 
   // Vérifie si une date est hors juillet-août (pour Avignon)
@@ -124,6 +127,18 @@ function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-[#E8DCC8] p-6 md:p-8 space-y-5">
+      {/* Bandeau réservation combinée */}
+      {isCombined && (
+        <div className="flex items-start gap-3 bg-[#C8763A]/10 border border-[#C8763A]/30 rounded-xl p-4">
+          <span className="text-2xl shrink-0">🏘️</span>
+          <div>
+            <p className="font-bold text-[#2C2416] text-sm">Demande de réservation combinée</p>
+            <p className="text-[#5C4F3A] text-sm mt-0.5">
+              Précisez dans le message le nombre de personnes et les maisons souhaitées — nous vérifierons les disponibilités pour vous.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Nom + Email */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

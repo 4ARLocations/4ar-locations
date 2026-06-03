@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { properties } from '@/lib/properties';
 import PropertyGallery from '@/components/PropertyGallery';
+import LaurisCombine from '@/components/LaurisCombine';
 
 export default async function PropertyPage({
   params,
@@ -147,6 +148,11 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
           </div>
         </div>
       </div>
+
+      {/* Section combinaison maisons Lauris */}
+      {property.region === 'luberon' && (
+        <LaurisCombine currentProperty={property} locale={locale} />
+      )}
     </div>
   );
 }
