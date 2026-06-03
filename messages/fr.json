@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "properties": "Nos logements",
+    "contact": "Contact & Réservation"
+  },
+  "hero": {
+    "tagline": "Locations de vacances en Provence & Alpes",
+    "subtitle": "Des séjours authentiques, de la montagne à la garrigue",
+    "cta": "Voir nos logements",
+    "cta_book": "Réserver directement"
+  },
+  "home": {
+    "intro_title": "Bienvenue chez 4AR Locations",
+    "intro_text": "Famille Arougon, nous mettons à votre disposition 5 logements soigneusement sélectionnés dans trois destinations d'exception : les Alpes du Sud, le cœur historique d'Avignon et le Luberon provençal.",
+    "properties_title": "Nos logements",
+    "airbnb_link": "Voir sur Airbnb",
+    "book_direct": "Réserver en direct",
+    "from_price": "À partir de"
+  },
+  "properties": {
+    "title": "Tous nos logements",
+    "subtitle": "5 adresses d'exception entre montagne, ville et Provence",
+    "guests": "voyageurs",
+    "bedrooms": "chambres",
+    "bathrooms": "salles de bain",
+    "per_night": "/ nuit"
+  },
+  "contact": {
+    "title": "Contact & Réservation directe",
+    "subtitle": "Contactez-nous directement pour une réservation sans commission",
+    "form_name": "Votre nom",
+    "form_email": "Votre email",
+    "form_phone": "Téléphone (optionnel)",
+    "form_property": "Logement souhaité",
+    "form_checkin": "Date d'arrivée",
+    "form_checkout": "Date de départ",
+    "form_guests": "Nombre de voyageurs",
+    "form_message": "Message",
+    "form_submit": "Envoyer la demande",
+    "form_success": "Votre demande a bien été envoyée, nous vous répondrons rapidement !",
+    "select_property": "Choisir un logement",
+    "advantage_title": "Pourquoi réserver en direct ?",
+    "advantage_1": "Pas de frais de service Airbnb",
+    "advantage_2": "Contact direct avec les propriétaires",
+    "advantage_3": "Flexibilité sur les dates et conditions",
+    "advantage_4": "Tarifs négociables pour les longs séjours"
+  },
+  "footer": {
+    "tagline": "Locations de vacances familiales en Provence & Alpes",
+    "rights": "Tous droits réservés"
+  },
+  "property_risoul": {
+    "name": "Appartement Risoul 1850",
+    "location": "Risoul 1850, Hautes-Alpes",
+    "type": "Appartement",
+    "description": "Au cœur de la station de ski de Risoul 1850, cet appartement offre un accès direct aux pistes et une vue imprenable sur les sommets alpins. Idéal pour les familles et groupes d'amis en quête de montagne, été comme hiver.",
+    "badge": "Station de ski"
+  },
+  "property_avignon": {
+    "name": "Appartement Avignon Intramuros",
+    "location": "Avignon, Vaucluse",
+    "type": "Appartement",
+    "description": "Niché au cœur de la cité des Papes, derrière les remparts historiques d'Avignon, cet appartement vous plonge dans l'histoire et la culture provençale. À deux pas du Palais des Papes et du célèbre Pont d'Avignon.",
+    "badge": "Centre historique"
+  },
+  "property_lauris1": {
+    "name": "Maison Mémé",
+    "location": "Lauris, Luberon",
+    "type": "Maison",
+    "description": "Grande maison de caractère au cœur du village perché de Lauris. Poutres apparentes, carreaux de ciment, arches provençales — un intérieur plein d'âme à deux pas des ruelles et des lavandes du Luberon.",
+    "badge": "Luberon"
+  },
+  "property_lauris2": {
+    "name": "L'Atelier",
+    "location": "Lauris, Luberon",
+    "type": "Maison",
+    "description": "Ancienne maison d'artisan entièrement rénovée avec goût à Lauris. Décoration contemporaine, douche à l'italienne, ambiance cosy — un pied-à-terre idéal pour explorer le Parc Naturel du Luberon.",
+    "badge": "Luberon"
+  },
+  "property_lauris3": {
+    "name": "Maison Lauris — Bientôt disponible",
+    "location": "Lauris, Luberon",
+    "type": "Maison",
+    "description": "Une troisième maison dans le village de Lauris, au cœur du Luberon. Informations et disponibilités à venir. Contactez-nous pour en savoir plus.",
+    "badge": "Luberon"
+  },
+  "lauris": {
+    "discover_title": "Découvrir Lauris & le Luberon",
+    "discover_text": "Perché sur un promontoire rocheux à 250 m d'altitude, Lauris offre une vue panoramique époustouflante sur la vallée de la Durance et le Luberon. Ce village provençal authentique est le point de départ idéal pour explorer l'un des plus beaux parcs naturels de France.",
+    "link1_label": "Lauris par French Moments",
+    "link2_label": "J'aime le Vaucluse",
+    "link3_label": "Destination Luberon"
+  }
+}

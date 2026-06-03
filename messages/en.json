@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Home",
+    "properties": "Our properties",
+    "contact": "Contact & Booking"
+  },
+  "hero": {
+    "tagline": "Holiday rentals in Provence & the Alps",
+    "subtitle": "Authentic stays, from mountain to garrigue",
+    "cta": "View our properties",
+    "cta_book": "Book directly"
+  },
+  "home": {
+    "intro_title": "Welcome to 4AR Locations",
+    "intro_text": "The Arougon family offers 5 carefully selected properties in three exceptional destinations: the Southern Alps, the historic heart of Avignon, and the Provençal Luberon.",
+    "properties_title": "Our properties",
+    "airbnb_link": "View on Airbnb",
+    "book_direct": "Book directly",
+    "from_price": "From"
+  },
+  "properties": {
+    "title": "All our properties",
+    "subtitle": "5 exceptional addresses between mountain, city and Provence",
+    "guests": "guests",
+    "bedrooms": "bedrooms",
+    "bathrooms": "bathrooms",
+    "per_night": "/ night"
+  },
+  "contact": {
+    "title": "Contact & Direct Booking",
+    "subtitle": "Contact us directly for a commission-free booking",
+    "form_name": "Your name",
+    "form_email": "Your email",
+    "form_phone": "Phone (optional)",
+    "form_property": "Desired property",
+    "form_checkin": "Check-in date",
+    "form_checkout": "Check-out date",
+    "form_guests": "Number of guests",
+    "form_message": "Message",
+    "form_submit": "Send request",
+    "form_success": "Your request has been sent, we will get back to you shortly!",
+    "select_property": "Choose a property",
+    "advantage_title": "Why book directly?",
+    "advantage_1": "No Airbnb service fees",
+    "advantage_2": "Direct contact with the owners",
+    "advantage_3": "Flexibility on dates and conditions",
+    "advantage_4": "Negotiable rates for long stays"
+  },
+  "footer": {
+    "tagline": "Family holiday rentals in Provence & the Alps",
+    "rights": "All rights reserved"
+  },
+  "property_risoul": {
+    "name": "Risoul 1850 Apartment",
+    "location": "Risoul 1850, Hautes-Alpes",
+    "type": "Apartment",
+    "description": "In the heart of the Risoul 1850 ski resort, this apartment offers direct access to the slopes and breathtaking views of the Alpine peaks. Perfect for families and groups of friends seeking mountain adventures, summer or winter.",
+    "badge": "Ski resort"
+  },
+  "property_avignon": {
+    "name": "Avignon Intramuros Apartment",
+    "location": "Avignon, Vaucluse",
+    "type": "Apartment",
+    "description": "Nestled in the heart of the City of Popes, behind the historic ramparts of Avignon, this apartment immerses you in history and Provençal culture. Steps away from the Palais des Papes and the famous Pont d'Avignon.",
+    "badge": "Historic centre"
+  },
+  "property_lauris1": {
+    "name": "Maison Mémé",
+    "location": "Lauris, Luberon",
+    "type": "House",
+    "description": "A large characterful house in the heart of the hilltop village of Lauris. Exposed beams, encaustic tiles, Provençal arches — a soulful interior steps away from the lavender-scented lanes of the Luberon.",
+    "badge": "Luberon"
+  },
+  "property_lauris2": {
+    "name": "L'Atelier",
+    "location": "Lauris, Luberon",
+    "type": "House",
+    "description": "A former craftsman's house fully renovated with taste in Lauris. Contemporary décor, walk-in shower, cosy atmosphere — the perfect base for exploring the Luberon Natural Park.",
+    "badge": "Luberon"
+  },
+  "property_lauris3": {
+    "name": "Lauris House — Coming soon",
+    "location": "Lauris, Luberon",
+    "type": "House",
+    "description": "A third house in the village of Lauris, in the heart of the Luberon. Details and availability coming soon. Contact us to find out more.",
+    "badge": "Luberon"
+  },
+  "lauris": {
+    "discover_title": "Discover Lauris & the Luberon",
+    "discover_text": "Perched on a rocky promontory at 250m altitude, Lauris offers a breathtaking panoramic view over the Durance valley and the Luberon. This authentic Provençal village is the ideal starting point for exploring one of France's most beautiful natural parks.",
+    "link1_label": "Lauris by French Moments",
+    "link2_label": "J'aime le Vaucluse",
+    "link3_label": "Destination Luberon"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "properties": "Unsere Unterkünfte",
+    "contact": "Kontakt & Buchung"
+  },
+  "hero": {
+    "tagline": "Ferienvermietung in der Provence & den Alpen",
+    "subtitle": "Authentische Aufenthalte, vom Berg bis zur Garrigue",
+    "cta": "Unsere Unterkünfte entdecken",
+    "cta_book": "Direkt buchen"
+  },
+  "home": {
+    "intro_title": "Willkommen bei 4AR Locations",
+    "intro_text": "Die Familie Arougon stellt Ihnen 5 sorgfältig ausgewählte Unterkünfte in drei außergewöhnlichen Reisezielen zur Verfügung: die Südalpen, das historische Herz von Avignon und das provenzalische Luberon.",
+    "properties_title": "Unsere Unterkünfte",
+    "airbnb_link": "Auf Airbnb ansehen",
+    "book_direct": "Direkt buchen",
+    "from_price": "Ab"
+  },
+  "properties": {
+    "title": "Alle unsere Unterkünfte",
+    "subtitle": "5 außergewöhnliche Adressen zwischen Bergen, Stadt und Provence",
+    "guests": "Gäste",
+    "bedrooms": "Schlafzimmer",
+    "bathrooms": "Badezimmer",
+    "per_night": "/ Nacht"
+  },
+  "contact": {
+    "title": "Kontakt & Direktbuchung",
+    "subtitle": "Kontaktieren Sie uns direkt für eine provisionsfreie Buchung",
+    "form_name": "Ihr Name",
+    "form_email": "Ihre E-Mail",
+    "form_phone": "Telefon (optional)",
+    "form_property": "Gewünschte Unterkunft",
+    "form_checkin": "Anreisedatum",
+    "form_checkout": "Abreisedatum",
+    "form_guests": "Anzahl der Gäste",
+    "form_message": "Nachricht",
+    "form_submit": "Anfrage senden",
+    "form_success": "Ihre Anfrage wurde gesendet, wir werden uns schnell bei Ihnen melden!",
+    "select_property": "Unterkunft wählen",
+    "advantage_title": "Warum direkt buchen?",
+    "advantage_1": "Keine Airbnb-Servicegebühren",
+    "advantage_2": "Direkter Kontakt mit den Eigentümern",
+    "advantage_3": "Flexibilität bei Terminen und Konditionen",
+    "advantage_4": "Verhandelbare Preise für Langzeitaufenthalte"
+  },
+  "footer": {
+    "tagline": "Familiengeführte Ferienvermietung in der Provence & den Alpen",
+    "rights": "Alle Rechte vorbehalten"
+  },
+  "property_risoul": {
+    "name": "Appartement Risoul 1850",
+    "location": "Risoul 1850, Hautes-Alpes",
+    "type": "Appartement",
+    "description": "Im Herzen des Skigebiets Risoul 1850 bietet dieses Appartement direkten Zugang zu den Pisten und einen atemberaubenden Blick auf die Alpengipfel. Ideal für Familien und Freundesgruppen, die das Bergabenteuer suchen, im Sommer wie im Winter.",
+    "badge": "Skigebiet"
+  },
+  "property_avignon": {
+    "name": "Appartement Avignon Intramuros",
+    "location": "Avignon, Vaucluse",
+    "type": "Appartement",
+    "description": "Im Herzen der Papststadt, hinter den historischen Stadtmauern von Avignon, taucht dieses Appartement Sie in Geschichte und provenzalische Kultur ein. Nur wenige Schritte vom Palais des Papes und der berühmten Pont d'Avignon entfernt.",
+    "badge": "Historisches Zentrum"
+  },
+  "property_lauris1": {
+    "name": "Maison Mémé",
+    "location": "Lauris, Luberon",
+    "type": "Haus",
+    "description": "Ein großes, charaktervolles Haus im Herzen des Hügeldorfs Lauris. Sichtbare Balken, Zementfliesen, provenzalische Bögen — ein seelenvolles Interieur, nur wenige Schritte von den lavendelduftenden Gassen des Luberon entfernt.",
+    "badge": "Luberon"
+  },
+  "property_lauris2": {
+    "name": "L'Atelier",
+    "location": "Lauris, Luberon",
+    "type": "Haus",
+    "description": "Ein ehemaliges Handwerkerhaus, komplett mit Geschmack renoviert in Lauris. Zeitgenössisches Dekor, begehbare Dusche, gemütliche Atmosphäre — die perfekte Ausgangsbasis zur Erkundung des Naturparks Luberon.",
+    "badge": "Luberon"
+  },
+  "property_lauris3": {
+    "name": "Haus Lauris — Bald verfügbar",
+    "location": "Lauris, Luberon",
+    "type": "Haus",
+    "description": "Ein drittes Haus im Dorf Lauris, im Herzen des Luberon. Details und Verfügbarkeiten folgen in Kürze. Kontaktieren Sie uns für weitere Informationen.",
+    "badge": "Luberon"
+  },
+  "lauris": {
+    "discover_title": "Lauris & den Luberon entdecken",
+    "discover_text": "Auf einem Felssporn in 250 m Höhe gelegen, bietet Lauris einen atemberaubenden Panoramablick über das Durance-Tal und den Luberon. Dieses authentische provenzalische Dorf ist der ideale Ausgangspunkt zur Erkundung eines der schönsten Naturparks Frankreichs.",
+    "link1_label": "Lauris – French Moments",
+    "link2_label": "J'aime le Vaucluse",
+    "link3_label": "Destination Luberon"
+  }
+}
