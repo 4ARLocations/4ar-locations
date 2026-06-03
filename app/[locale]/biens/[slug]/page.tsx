@@ -43,9 +43,15 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
         </div>
         <div className="text-right">
           <div>
-            <span className="text-sm text-[#9B8A74]">{t('home.from_price')} </span>
-            <span className="text-3xl font-bold text-[#C8763A]">{property.priceFrom}€</span>
-            <span className="text-sm text-[#9B8A74]">{t('properties.per_night')}</span>
+            {property.priceFrom > 0 ? (
+              <>
+                <span className="text-sm text-[#9B8A74]">{t('home.from_price')} </span>
+                <span className="text-3xl font-bold text-[#C8763A]">{property.priceFrom}€</span>
+                <span className="text-sm text-[#9B8A74]">{t('properties.per_night')}</span>
+              </>
+            ) : (
+              <span className="text-lg font-semibold text-[#9B8A74] italic">Sur demande</span>
+            )}
           </div>
         </div>
       </div>

@@ -73,9 +73,15 @@ export default function PropertyCard({ property, locale }: { property: Property;
         {/* Price & CTA */}
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
-            <span className="text-xs text-[#9B8A74]">{t('home.from_price')}</span>
-            <span className="text-xl font-bold text-[#C8763A] ml-1">{property.priceFrom}€</span>
-            <span className="text-xs text-[#9B8A74]">{t('properties.per_night')}</span>
+            {property.priceFrom > 0 ? (
+              <>
+                <span className="text-xs text-[#9B8A74]">{t('home.from_price')}</span>
+                <span className="text-xl font-bold text-[#C8763A] ml-1">{property.priceFrom}€</span>
+                <span className="text-xs text-[#9B8A74]">{t('properties.per_night')}</span>
+              </>
+            ) : (
+              <span className="text-sm font-semibold text-[#9B8A74] italic">Sur demande</span>
+            )}
           </div>
           <div className="flex gap-2 flex-wrap">
             {property.airbnbUrl !== '#' && (
