@@ -26,12 +26,26 @@ function ContactForm() {
     if (bien) setForm((f) => ({ ...f, property: bien }));
   }, [searchParams]);
 
+  // Vérifie si une date est hors juillet-août (pour Avignon)
+  const isAvignon = form.property === 'avignon';
+  const isInJulyAugust = (dateStr: string) => {
+    if (!dateStr) return true;
+    const month = new Date(dateStr).getMonth(); // 0-based: 6=juillet, 7=août
+    return month === 6 || month === 7;
+  };
+
   // Validation des dates en temps réel
-  const validateDates = (checkin: string, checkout: string) => {
+  const validateDates = (checkin: string, checkout: string, property = form.property) => {
     if (!checkin || !checkout) { setDateError(''); return true; }
     if (checkout <= checkin) {
       setDateError('La date de départ doit être après la date d\'arrivée.');
       return false;
+    }
+    if (property === 'avignon') {
+      if (!isInJulyAugust(checkin) || !isInJulyAugust(checkout)) {
+        setDateError('L\'appartement d\'Avignon est uniquement disponible en juillet et août.');
+        return false;
+      }
     }
     setDateError('');
     return true;
@@ -39,7 +53,6 @@ function ContactForm() {
 
   const handleCheckin = (val: string) => {
     const newForm = { ...form, checkin: val };
-    // Si le checkout est avant ou égal au nouvel arrivée, on le réinitialise
     if (form.checkout && form.checkout <= val) {
       newForm.checkout = '';
     }
@@ -50,6 +63,12 @@ function ContactForm() {
   const handleCheckout = (val: string) => {
     setForm({ ...form, checkout: val });
     validateDates(form.checkin, val);
+  };
+
+  const handlePropertyChange = (val: string) => {
+    const newForm = { ...form, property: val, checkin: '', checkout: '' };
+    setForm(newForm);
+    setDateError('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -124,7 +143,7 @@ function ContactForm() {
         <div>
           <label className="block text-sm font-medium text-[#5C4F3A] mb-1">{t('form_property')} *</label>
           <select required value={form.property}
-            onChange={(e) => setForm({ ...form, property: e.target.value })}
+            onChange={(e) => handlePropertyChange(e.target.value)}
             className={inputClass}>
             <option value="">{t('select_property')}</option>
             {properties.map((p) => (
@@ -133,6 +152,14 @@ function ContactForm() {
           </select>
         </div>
       </div>
+
+      {/* Avertissement Avignon */}
+      {isAvignon && (
+        <div className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+          <span className="text-blue-500 text-lg shrink-0">ℹ️</span>
+          <p className="text-blue-700 text-sm">L'appartement d'Avignon est <strong>disponible uniquement en juillet et août</strong>.</p>
+        </div>
+      )}
 
       {/* Dates + Voyageurs */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
