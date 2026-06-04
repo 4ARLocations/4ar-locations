@@ -23,45 +23,67 @@ function BiensContent({ locale }: { locale: string }) {
         <p className="text-[#5C4F3A] text-lg">{t('subtitle')}</p>
       </div>
 
-      {/* ─── SECTION ALPES & AVIGNON — fond montagne ─── */}
-      <section
-        className="relative py-12"
-        style={{
-          backgroundImage: "url('/images/bg-risoul-mountain.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          backgroundAttachment: 'fixed',
-        }}
-      >
-        <div className="absolute inset-0 bg-[#FAF7F2]/87 pointer-events-none" />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+      {/* ══════════════════════════════════════════════════════
+          ÉCRAN SCINDÉ — Alpes du Sud | Avignon
+          Chaque moitié a son propre fond photographique
+      ══════════════════════════════════════════════════════ */}
+      <div className="flex flex-col md:flex-row mb-2">
 
-          {/* Label de région */}
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">⛷</span>
-            <h2 className="text-xl font-bold text-[#2C2416]">Alpes du Sud & Avignon</h2>
-            <div className="flex-1 h-px bg-[#E8DCC8]" />
-          </div>
+        {/* ─── CÔTÉ GAUCHE : Alpes du Sud ─── */}
+        <div
+          className="relative flex-1 py-10 px-6 md:px-10"
+          style={{
+            backgroundImage: "url('/images/bg-risoul-mountain.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 35%',
+            backgroundAttachment: 'fixed',
+          }}
+        >
+          {/* Voile crème légèrement bleutée pour ambiance alpine */}
+          <div className="absolute inset-0 bg-[#EEF3F7]/84 pointer-events-none" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-[#E8DCC8] shadow-sm">
-            <div className="p-6 bg-white/80 backdrop-blur-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-lg">🏔️</span>
-                <span className="text-sm font-semibold text-[#9B8A74]">Hautes-Alpes</span>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-2xl">⛷</span>
+              <div>
+                <h2 className="text-xl font-bold text-[#1A2C3A]">Alpes du Sud</h2>
+                <p className="text-xs text-[#5C7080] font-medium tracking-wide">Hautes-Alpes · Risoul 1850</p>
               </div>
-              <PropertyCard property={risoul} locale={locale} />
             </div>
-            <div className="block md:hidden h-px bg-[#E8DCC8] mx-6" />
-            <div className="p-6 bg-white/80 backdrop-blur-sm border-t md:border-t-0 md:border-l border-[#E8DCC8]">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-lg">🏛️</span>
-                <span className="text-sm font-semibold text-[#9B8A74]">Vaucluse · Intramuros</span>
-              </div>
-              <PropertyCard property={avignon} locale={locale} />
-            </div>
+            <PropertyCard property={risoul} locale={locale} />
           </div>
         </div>
-      </section>
+
+        {/* Séparateur vertical */}
+        <div className="hidden md:block w-px bg-[#D8CFC4] flex-shrink-0 my-6" />
+        <div className="md:hidden h-px bg-[#D8CFC4] mx-6" />
+
+        {/* ─── CÔTÉ DROIT : Avignon ─── */}
+        <div
+          className="relative flex-1 py-10 px-6 md:px-10"
+          style={{
+            backgroundImage: "url('/images/bg-avignon.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 45%',
+            backgroundAttachment: 'fixed',
+          }}
+        >
+          {/* Voile crème légèrement chaude pour ambiance provençale */}
+          <div className="absolute inset-0 bg-[#F8F2E8]/84 pointer-events-none" />
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-2xl">🏛️</span>
+              <div>
+                <h2 className="text-xl font-bold text-[#2C1A08]">Avignon</h2>
+                <p className="text-xs text-[#80604A] font-medium tracking-wide">Vaucluse · Intramuros</p>
+              </div>
+            </div>
+            <PropertyCard property={avignon} locale={locale} />
+          </div>
+        </div>
+
+      </div>
 
       {/* ─── SECTION LUBERON — fond château de Lauris ─── */}
       <section
@@ -69,7 +91,7 @@ function BiensContent({ locale }: { locale: string }) {
         style={{
           backgroundImage: "url('/images/bg-lauris-chateau.jpg')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center 35%',
+          backgroundPosition: 'center 40%',
           backgroundAttachment: 'fixed',
         }}
       >
@@ -78,8 +100,11 @@ function BiensContent({ locale }: { locale: string }) {
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">🌿</span>
-            <h2 className="text-xl font-bold text-[#2C2416]">Luberon — Lauris</h2>
-            <div className="flex-1 h-px bg-[#E8DCC8]" />
+            <div>
+              <h2 className="text-xl font-bold text-[#2C2416]">Luberon — Lauris</h2>
+              <p className="text-xs text-[#6B7C45] font-medium tracking-wide">Vaucluse · Village perché · 3 maisons combinables</p>
+            </div>
+            <div className="flex-1 h-px bg-[#E8DCC8] ml-2" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
@@ -112,7 +137,6 @@ function BiensContent({ locale }: { locale: string }) {
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
