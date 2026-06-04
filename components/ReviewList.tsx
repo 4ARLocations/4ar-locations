@@ -1,16 +1,4 @@
-import reviewsData from '@/data/reviews.json';
-
-interface Review {
-  id: string;
-  propertyId: string;
-  author: string;
-  date: string;
-  rating: number;
-  comment: string;
-  approved: boolean;
-}
-
-const reviews: Review[] = reviewsData as Review[];
+import { getReviews, type Review } from '@/lib/redis';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -36,10 +24,8 @@ function formatDate(dateStr: string) {
   return dateStr;
 }
 
-export default function ReviewList({ propertyId }: { propertyId: string }) {
-  const propertyReviews = reviews.filter(
-    (r) => r.propertyId === propertyId && r.approved
-  );
+export default async function ReviewList({ propertyId }: { propertyId: string }) {
+  const propertyReviews = await getReviews(propertyId);
 
   if (propertyReviews.length === 0) return null;
 

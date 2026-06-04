@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>4AR Locations — Concept Interactif v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cr:#FAF7F2; --cb:#F0EAE0; --cw:#fff;
+  --tr:#C8763A; --tr2:#E8914A; --tr3:#FBE9D8;
+  --tl:#1E8A78; --tl2:#28B09A; --tl3:#D4F0EA;
+  --lv:#7A5FAF; --lv2:#9B7FD4; --lv3:#EDE8F8;
+  --dk:#14110A; --md:#5C4F3A; --mu:#9B8A74;
+  --bd:#E5DDD0;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cr);color:var(--dk);overflow-x:hidden}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+  background:rgba(250,247,242,0.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd);
+}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--dk);text-decoration:none}
+.logo-sq{width:28px;height:28px;background:var(--dk);border-radius:6px;display:grid;place-items:center;font-size:0.6rem;color:#fff;font-weight:800;letter-spacing:-0.02em;flex-shrink:0}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:0.8rem;font-weight:500;color:var(--mu);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--dk)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.lang{display:flex;gap:2px}
+.lb{padding:3px 8px;font-size:0.65rem;font-weight:700;border:1px solid var(--bd);border-radius:3px;background:none;color:var(--mu);cursor:pointer;transition:all .15s}
+.lb.on{background:var(--dk);color:#fff;border-color:var(--dk)}
+.nb{padding:8px 18px;background:var(--tr);color:#fff;font-size:0.78rem;font-weight:600;border-radius:6px;text-decoration:none;transition:opacity .2s}
+.nb:hover{opacity:.85}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;min-height:100vh;display:grid;
+  grid-template-columns:1fr 1fr;padding-top:56px;overflow:hidden;
+}
+#mesh-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-l{
+  position:relative;z-index:1;padding:72px 56px;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--bd);
+}
+.tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:0.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tr);margin-bottom:28px;
+}
+.tag::before{content:'';width:24px;height:1.5px;background:var(--tr)}
+h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.8rem,4.5vw,5rem);
+  font-weight:800;line-height:1.0;letter-spacing:-.025em;
+  color:var(--dk);margin-bottom:22px;
+}
+.grad{
+  background:linear-gradient(100deg,var(--tr) 0%,var(--lv) 45%,var(--tl) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-p{font-size:1rem;line-height:1.75;color:var(--md);max-width:440px;margin-bottom:36px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
+.btn-dark{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--dk);color:#fff;font-size:0.84rem;font-weight:600;
+  padding:12px 24px;border-radius:8px;text-decoration:none;
+  border:1.5px solid var(--dk);transition:all .25s;
+}
+.btn-dark:hover{background:var(--tr);border-color:var(--tr)}
+.btn-line{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--dk);font-size:0.84rem;font-weight:600;
+  padding:11px 20px;border-radius:8px;text-decoration:none;
+  border:1.5px solid var(--bd);transition:all .25s;
+}
+.btn-line:hover{border-color:var(--dk)}
+.dest-row{display:flex;gap:8px;flex-wrap:wrap}
+.dest-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.7rem;font-weight:600;padding:6px 14px;
+  border-radius:6px;border:1px solid;cursor:pointer;
+  transition:all .2s;
+}
+.dc-alp{color:var(--tl);border-color:rgba(30,138,120,.3);background:var(--tl3)}
+.dc-alp:hover{background:var(--tl);color:#fff;border-color:var(--tl)}
+.dc-avi{color:var(--tr);border-color:rgba(200,118,58,.3);background:var(--tr3)}
+.dc-avi:hover{background:var(--tr);color:#fff;border-color:var(--tr)}
+.dc-lub{color:var(--lv);border-color:rgba(122,95,175,.3);background:var(--lv3)}
+.dc-lub:hover{background:var(--lv);color:#fff;border-color:var(--lv)}
+
+/* Colonne droite hero */
+.hero-r{
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  padding:56px 40px;background:var(--cb);
+}
+.hero-card-stack{position:relative;width:100%;max-width:340px}
+.hcard{
+  background:#fff;border:1px solid var(--bd);border-radius:16px;
+  overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.07);
+  transform-style:preserve-3d;
+  transition:transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s;
+  cursor:pointer;
+}
+.hcard:hover{box-shadow:0 20px 60px rgba(0,0,0,.12)}
+.hcard-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden}
+.hi-lub{background:linear-gradient(145deg,#E8F2D8,#C5DBAC)}
+.hcard-body{padding:20px}
+.hcard-region{font-size:0.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.hcard-name{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--dk);margin-bottom:4px}
+.hcard-loc{font-size:0.72rem;color:var(--mu);margin-bottom:12px}
+.hcard-meta{display:flex;gap:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.hm{font-size:0.7rem;color:var(--md)}
+
+/* Floating mini cards */
+.mini{
+  position:absolute;background:#fff;border:1px solid var(--bd);
+  border-radius:10px;padding:12px 16px;box-shadow:0 6px 24px rgba(0,0,0,.1);
+  pointer-events:none;
+}
+.mini-1{top:-24px;right:-28px;animation:float1 4s ease-in-out infinite}
+.mini-2{bottom:-20px;left:-28px;animation:float2 5s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+.mini-l{font-size:.6rem;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.mini-v{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--dk);line-height:1}
+.mini-s{font-size:.68rem;font-weight:600;color:var(--tr);margin-top:2px}
+
+/* ─── STATS ─── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.st{padding:28px 40px;border-right:1px solid var(--bd)}
+.st:last-child{border-right:none}
+.st-n{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:var(--dk);line-height:1;margin-bottom:4px}
+.st-l{font-size:.72rem;color:var(--mu)}
+
+/* ─── LOGEMENTS ─── */
+.section{padding:80px 40px;max-width:1280px;margin:0 auto}
+.sec-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;gap:24px}
+.sec-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tr);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sec-tag::before{content:'';width:18px;height:1.5px;background:var(--tr)}
+.sec-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-.02em}
+
+/* Filtres */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px}
+.filter-btn{
+  padding:7px 18px;font-size:.75rem;font-weight:600;border-radius:100px;
+  border:1.5px solid var(--bd);background:#fff;color:var(--md);
+  cursor:pointer;transition:all .2s;
+}
+.filter-btn:hover{border-color:var(--dk);color:var(--dk)}
+.filter-btn.active{background:var(--dk);color:#fff;border-color:var(--dk)}
+.filter-btn[data-f="alpes"].active{background:var(--tl);border-color:var(--tl)}
+.filter-btn[data-f="avignon"].active{background:var(--tr);border-color:var(--tr)}
+.filter-btn[data-f="luberon"].active{background:var(--lv);border-color:var(--lv)}
+
+/* Grille cards */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pcard{
+  background:#fff;border:1px solid var(--bd);border-radius:14px;overflow:hidden;
+  cursor:pointer;transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s,border-color .2s;
+  transform-style:preserve-3d;will-change:transform;
+}
+.pcard:hover{box-shadow:0 16px 48px rgba(0,0,0,.1);border-color:rgba(200,118,58,.3)}
+.pcard.hidden{display:none}
+.pcard-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+.pi-alp{background:linear-gradient(145deg,#D8EAF5,#B0CCDE)}
+.pi-avi{background:linear-gradient(145deg,#F5E8D8,#E0C5A0)}
+.pi-lub{background:linear-gradient(145deg,#E8F2D8,#C5DBAC)}
+.pcard-accent{position:absolute;top:0;left:0;right:0;height:3px}
+.pcard-body{padding:20px}
+.pcard-region{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.pcard-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--dk);margin-bottom:6px;line-height:1.2}
+.pcard-desc{font-size:.78rem;color:var(--md);line-height:1.6;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--bd)}
+.pc-meta{display:flex;gap:10px}
+.pc-m{font-size:.68rem;color:var(--mu)}
+.pc-price{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--dk)}
+.pc-price sub{font-family:'Inter';font-size:.6rem;font-weight:400;color:var(--mu)}
+
+/* ─── PLANS ─── */
+.plans-section{background:var(--dk);padding:80px 40px;overflow:hidden}
+.plans-inner{max-width:1280px;margin:0 auto}
+.plans-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tr2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.plans-tag::before{content:'';width:18px;height:1.5px;background:var(--tr2)}
+.plans-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:#fff;margin-bottom:6px}
+.plans-sub{font-size:.88rem;color:rgba(255,255,255,.45);margin-bottom:40px}
+
+.plan-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px}
+.plan-tab{
+  padding:8px 18px;font-size:.75rem;font-weight:600;border-radius:6px;
+  background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s;
+}
+.plan-tab:hover{background:rgba(255,255,255,.1);color:#fff}
+.plan-tab.active{background:var(--tr);color:#fff;border-color:var(--tr)}
+
+.plan-viewer{
+  display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start;
+}
+.plan-canvas-wrap{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:32px;
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+}
+
+/* Floor selector */
+.floor-tabs{display:flex;gap:4px}
+.floor-tab{
+  padding:5px 14px;font-size:.7rem;font-weight:600;border-radius:4px;
+  background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .2s;
+}
+.floor-tab.active{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2)}
+
+/* Vue toggle */
+.view-toggle{
+  display:flex;gap:0;border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden;
+}
+.vt-btn{
+  padding:6px 14px;font-size:.68rem;font-weight:600;
+  background:transparent;color:rgba(255,255,255,.4);
+  border:none;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;
+}
+.vt-btn.on{background:rgba(255,255,255,.1);color:#fff}
+
+/* Plan SVG container */
+.plan-3d-wrap{
+  perspective:900px;perspective-origin:50% 10%;
+  display:flex;align-items:center;justify-content:center;
+  min-height:280px;width:100%;
+}
+.plan-3d-inner{
+  transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.23,1,.32,1);
+}
+.plan-3d-inner.iso{transform:rotateX(52deg) rotateZ(-42deg) scale(.9)}
+.plan-3d-inner.flat{transform:rotateX(0deg) rotateZ(0deg) scale(1)}
+
+/* Plan info sidebar */
+.plan-info{display:flex;flex-direction:column;gap:12px}
+.plan-prop-name{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:4px}
+.plan-prop-loc{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:20px}
+.plan-room-list{display:flex;flex-direction:column;gap:6px}
+.plan-room-item{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;padding:10px 14px;
+}
+.plan-room-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.plan-room-name{font-size:.78rem;color:rgba(255,255,255,.75);font-weight:500}
+.plan-room-sz{font-size:.68rem;color:rgba(255,255,255,.35);margin-left:auto}
+.plan-book-btn{
+  display:block;background:var(--tr);color:#fff;text-align:center;
+  font-size:.82rem;font-weight:700;padding:13px;border-radius:10px;
+  text-decoration:none;margin-top:8px;transition:opacity .2s;
+}
+.plan-book-btn:hover{opacity:.85}
+
+/* Legend */
+.plan-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:.62rem;color:rgba(255,255,255,.4)}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* ─── RÉGIONS ─── */
+.regions{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.reg{
+  padding:48px 40px;border-right:1px solid var(--bd);
+  cursor:pointer;transition:background .2s;position:relative;overflow:hidden;
+}
+.reg:last-child{border-right:none}
+.reg:hover{background:var(--cb)}
+.reg::after{
+  content:attr(data-arrow);
+  position:absolute;bottom:32px;right:32px;
+  font-size:1.2rem;opacity:0;transition:all .3s;transform:translateX(-8px);
+}
+.reg:hover::after{opacity:1;transform:translateX(0)}
+.reg-num{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;line-height:1;opacity:.06;margin-bottom:-20px}
+.reg-icon{font-size:2rem;margin-bottom:14px}
+.reg-name{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:8px}
+.reg-sub{font-size:.8rem;color:var(--md);line-height:1.65;margin-bottom:16px}
+.reg-badge{display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:4px}
+.r-t .reg-num{color:var(--tl)}.r-t .reg-name{color:var(--tl)}.r-t .reg-badge{background:var(--tl3);color:var(--tl)}
+.r-v .reg-num{color:var(--tr)}.r-v .reg-name{color:var(--tr)}.r-v .reg-badge{background:var(--tr3);color:var(--tr)}
+.r-l .reg-num{color:var(--lv)}.r-l .reg-name{color:var(--lv)}.r-l .reg-badge{background:var(--lv3);color:var(--lv)}
+
+/* ─── BOOKING ─── */
+.booking{padding:80px 40px;max-width:1280px;margin:0 auto}
+.booking-box{
+  background:#fff;border:1px solid var(--bd);border-radius:20px;
+  display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+}
+.bk-l{padding:56px}
+.bk-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
+.bk-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.bk-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.bk-li{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--md)}
+.bk-li::before{content:'→';color:var(--tr);font-weight:700;flex-shrink:0}
+.bk-r{background:var(--tr);padding:56px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.bk-r::before{content:'✉';position:absolute;font-size:10rem;right:-20px;bottom:-20px;opacity:.06}
+.bk-r-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px}
+.bk-r-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.15}
+.bk-r-sub{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:28px}
+.bk-btn-w{display:block;background:#fff;color:var(--tr);font-size:.85rem;font-weight:700;text-align:center;padding:13px 28px;border-radius:8px;text-decoration:none;margin-bottom:10px;transition:opacity .2s}
+.bk-btn-w:hover{opacity:.9}
+.bk-email{font-size:.75rem;color:rgba(255,255,255,.55)}.bk-email a{color:#fff;font-weight:600}
+
+/* ─── FOOTER ─── */
+footer{padding:28px 40px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--mu)}
+footer .logo{font-size:.95rem}
+
+/* ─── REVEAL ─── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ─── NOTE ─── */
+.note{
+  position:fixed;bottom:24px;right:24px;background:#fff;border:1px solid var(--bd);
+  border-radius:12px;padding:16px 20px;max-width:260px;
+  box-shadow:0 8px 32px rgba(0,0,0,.1);z-index:300;
+}
+.nt{font-size:.75rem;font-weight:700;color:var(--tr);margin-bottom:8px}
+.note ul{padding-left:12px}.note li{font-size:.68rem;color:var(--md);margin-bottom:3px;line-height:1.4}
+.nc{position:absolute;top:8px;right:12px;background:none;border:none;color:var(--mu);cursor:pointer;font-size:.9rem}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-sq">4AR</div>
+    4AR Locations
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Accueil</a></li>
+    <li><a href="#">Logements</a></li>
+    <li><a href="#">Plans</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lang">
+      <button class="lb on">FR</button>
+      <button class="lb">EN</button>
+      <button class="lb">DE</button>
+    </div>
+    <a href="#" class="nb">Réserver →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="mesh-canvas"></canvas>
+  <div class="hero-l">
+    <div class="tag">Famille Arougon · 5 logements</div>
+    <h1>Provence<br/>&amp; <span class="grad">Alpes</span><br/>en direct</h1>
+    <p class="hero-p">Des séjours authentiques entre garrigue provençale et sommets alpins. Réservez directement — sans commission, avec la famille.</p>
+    <div class="ctas">
+      <a href="#" class="btn-dark">Voir les logements →</a>
+      <a href="#" class="btn-line">Réserver en direct</a>
+    </div>
+    <div class="dest-row">
+      <span class="dest-chip dc-alp">⛷ Risoul 1850</span>
+      <span class="dest-chip dc-avi">🏛 Avignon</span>
+      <span class="dest-chip dc-lub">🌿 Luberon × 3</span>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="hero-card-stack" id="hero-card">
+      <div class="mini mini-1">
+        <div class="mini-l">Logements</div>
+        <div class="mini-v">5</div>
+        <div class="mini-s">3 régions</div>
+      </div>
+      <div class="hcard" id="tilt-card">
+        <div class="hcard-img hi-lub">🏡</div>
+        <div class="hcard-body">
+          <div class="hcard-region" style="color:var(--lv)">🌿 Luberon</div>
+          <div class="hcard-name">Maison de Mémé</div>
+          <div class="hcard-loc">📍 Lauris, Vaucluse</div>
+          <div class="hcard-meta">
+            <span class="hm">👥 8</span>
+            <span class="hm">🚪 4 ch.</span>
+            <span class="hm">🛏 5 lits</span>
+            <span class="hm">🚿 2 sdb</span>
+          </div>
+        </div>
+      </div>
+      <div class="mini mini-2">
+        <div class="mini-l">Commission</div>
+        <div class="mini-v">0 €</div>
+        <div class="mini-s">Réservation directe</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="st"><div class="st-n" data-count="5">0</div><div class="st-l">Logements d'exception</div></div>
+  <div class="st"><div class="st-n" data-count="3">0</div><div class="st-l">Régions : Alpes, Avignon, Luberon</div></div>
+  <div class="st"><div class="st-n">0 €</div><div class="st-l">Commission en réservation directe</div></div>
+  <div class="st"><div class="st-n" style="font-size:1.5rem;line-height:1.5">FR·EN·DE</div><div class="st-l">Langues disponibles</div></div>
+</div>
+
+<!-- LOGEMENTS -->
+<div class="section reveal">
+  <div class="sec-top">
+    <div>
+      <div class="sec-tag">Nos logements</div>
+      <h2 class="sec-title">5 adresses, une seule famille</h2>
+    </div>
+    <a href="#" class="btn-line" style="white-space:nowrap">Tous les logements →</a>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-f="all">Tous (5)</button>
+    <button class="filter-btn" data-f="alpes">⛷ Alpes (1)</button>
+    <button class="filter-btn" data-f="avignon">🏛 Avignon (1)</button>
+    <button class="filter-btn" data-f="luberon">🌿 Luberon (3)</button>
+  </div>
+  <div class="cards-grid">
+    <div class="pcard tilt" data-region="alpes">
+      <div class="pcard-img pi-alp">⛷️<div class="pcard-accent" style="background:linear-gradient(90deg,var(--tl),var(--tl2))"></div></div>
+      <div class="pcard-body">
+        <div class="pcard-region" style="color:var(--tl)">Hautes-Alpes</div>
+        <div class="pcard-name">Appartement Risoul 1850</div>
+        <div class="pcard-desc">26 m² avec balcon et casier à skis, tout près des pistes. Résidence Altaïr, 3ème étage avec ascenseur.</div>
+        <div class="pcard-foot"><div class="pc-meta"><span class="pc-m">👥 6</span><span class="pc-m">🛏 6 lits</span><span class="pc-m">🚿 1 sdb</span></div><div class="pc-price">75–180€<sub>/nuit</sub></div></div>
+      </div>
+    </div>
+    <div class="pcard tilt" data-region="avignon">
+      <div class="pcard-img pi-avi">🏛️<div class="pcard-accent" style="background:linear-gradient(90deg,var(--tr),var(--tr2))"></div></div>
+      <div class="pcard-body">
+        <div class="pcard-region" style="color:var(--tr)">Vaucluse · Avignon</div>
+        <div class="pcard-name">Appartement Intramuros</div>
+        <div class="pcard-desc">Studio 20 m² rénové dans une ruelle calme à l'intérieur des remparts. Juillet–Août uniquement.</div>
+        <div class="pcard-foot"><div class="pc-meta"><span class="pc-m">👥 2</span><span class="pc-m">🛏 2 lits</span><span class="pc-m">🚿 1 sdb</span></div><div class="pc-price" style="font-size:.78rem;color:var(--mu)">Sur demande</div></div>
+      </div>
+    </div>
+    <div class="pcard tilt" data-region="luberon">
+      <div class="pcard-img pi-lub">🏡<div class="pcard-accent" style="background:linear-gradient(90deg,var(--lv),var(--lv2))"></div></div>
+      <div class="pcard-body">
+        <div class="pcard-region" style="color:var(--lv)">Luberon · Lauris</div>
+        <div class="pcard-name">Maison de Mémé</div>
+        <div class="pcard-desc">Maison de caractère au cœur du village, 3 niveaux, cuisine équipée, WiFi. Combinable avec les voisines.</div>
+        <div class="pcard-foot"><div class="pc-meta"><span class="pc-m">👥 8</span><span class="pc-m">🛏 5 lits</span><span class="pc-m">🚿 2 sdb</span></div><div class="pc-price">142€<sub>/nuit</sub></div></div>
+      </div>
+    </div>
+    <div class="pcard tilt" data-region="luberon">
+      <div class="pcard-img pi-lub">🎨<div class="pcard-accent" style="background:linear-gradient(90deg,var(--lv),var(--lv2))"></div></div>
+      <div class="pcard-body">
+        <div class="pcard-region" style="color:var(--lv)">Luberon · Lauris</div>
+        <div class="pcard-name">L'Atelier</div>
+        <div class="pcard-desc">Maison entièrement refaite, 2 suites parentales, espace extérieur au 2ème étage. 5 km de Lourmarin.</div>
+        <div class="pcard-foot"><div class="pc-meta"><span class="pc-m">👥 4</span><span class="pc-m">🛏 2 lits</span><span class="pc-m">🚿 2 sdb</span></div><div class="pc-price">115€<sub>/nuit</sub></div></div>
+      </div>
+    </div>
+    <div class="pcard tilt" data-region="luberon">
+      <div class="pcard-img pi-lub">🌸<div class="pcard-accent" style="background:linear-gradient(90deg,var(--lv),var(--lv2))"></div></div>
+      <div class="pcard-body">
+        <div class="pcard-region" style="color:var(--lv)">Luberon · Lauris</div>
+        <div class="pcard-name">Maison d'Alain</div>
+        <div class="pcard-desc">Maison restaurée sur petite place ombragée, salle voûtée, grande terrasse 1er étage.</div>
+        <div class="pcard-foot"><div class="pc-meta"><span class="pc-m">👥 8</span><span class="pc-m">🛏 2 lits</span><span class="pc-m">🚿 3 sdb</span></div><div class="pc-price">200€<sub>/nuit</sub></div></div>
+      </div>
+    </div>
+    <div class="pcard" style="background:var(--cb);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;gap:10px">
+      <div style="font-size:2rem">🏘️</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem">Combinez les maisons</div>
+      <div style="font-size:.75rem;color:var(--mu);line-height:1.6">Les 3 maisons de Lauris sont<br/>combinables pour grands groupes</div>
+      <a href="#" class="btn-dark" style="font-size:.75rem;padding:9px 18px;margin-top:4px">Demander un devis</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PLANS 3D ═══ -->
+<div class="plans-section">
+  <div class="plans-inner reveal">
+    <div class="plans-tag">Plans interactifs</div>
+    <h2 class="plans-title">Visualisez chaque logement</h2>
+    <p class="plans-sub">Plans d'étage interactifs · Basculez en vue 3D isométrique · Navigation par niveau</p>
+
+    <div class="plan-tabs">
+      <button class="plan-tab active" data-prop="risoul">Risoul 1850</button>
+      <button class="plan-tab" data-prop="avignon">Avignon</button>
+      <button class="plan-tab" data-prop="meme">Maison de Mémé</button>
+      <button class="plan-tab" data-prop="atelier">L'Atelier</button>
+      <button class="plan-tab" data-prop="alain">Maison d'Alain</button>
+    </div>
+
+    <div class="plan-viewer">
+      <div class="plan-canvas-wrap">
+        <div style="width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div class="floor-tabs" id="floor-tabs"></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="view-toggle">
+              <button class="vt-btn on" id="btn-flat" onclick="setView('flat')">⬜ Plan</button>
+              <button class="vt-btn" id="btn-iso" onclick="setView('iso')">⬡ 3D</button>
+            </div>
+          </div>
+        </div>
+        <div class="plan-3d-wrap">
+          <div class="plan-3d-inner flat" id="plan3d">
+            <svg id="plan-svg" viewBox="0 0 420 300" width="420" height="300" style="display:block"></svg>
+          </div>
+        </div>
+        <div class="plan-legend" id="plan-legend"></div>
+      </div>
+
+      <div class="plan-info" id="plan-info"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RÉGIONS -->
+<div class="regions reveal">
+  <div class="reg r-t" data-arrow="→">
+    <div class="reg-num">01</div>
+    <div class="reg-icon">⛰️</div>
+    <div class="reg-name">Les Alpes</div>
+    <div class="reg-sub">Ski, air pur, panoramas grandioses. Risoul 1850 dans les Hautes-Alpes.</div>
+    <span class="reg-badge">1 logement</span>
+  </div>
+  <div class="reg r-v" data-arrow="→">
+    <div class="reg-num">02</div>
+    <div class="reg-icon">🏰</div>
+    <div class="reg-name">Avignon</div>
+    <div class="reg-sub">Cité des Papes, festival, remparts historiques. Disponible juillet–août.</div>
+    <span class="reg-badge">1 logement</span>
+  </div>
+  <div class="reg r-l" data-arrow="→">
+    <div class="reg-num">03</div>
+    <div class="reg-icon">🌿</div>
+    <div class="reg-name">Le Luberon</div>
+    <div class="reg-sub">Village de Lauris, lavande, cigales. Trois maisons à combiner.</div>
+    <span class="reg-badge">3 maisons</span>
+  </div>
+</div>
+
+<!-- BOOKING -->
+<div class="booking reveal">
+  <div class="booking-box">
+    <div class="bk-l">
+      <div class="bk-tag">Pourquoi réserver en direct ?</div>
+      <div class="bk-title">Moins de frais,<br/>plus de contact</div>
+      <ul class="bk-list">
+        <li class="bk-li">Aucun frais de service Airbnb ou Abritel</li>
+        <li class="bk-li">Contact direct avec la famille Arougon</li>
+        <li class="bk-li">Flexibilité sur les dates et conditions</li>
+        <li class="bk-li">Tarifs négociables pour les longs séjours</li>
+        <li class="bk-li">Combinez plusieurs maisons à Lauris</li>
+      </ul>
+    </div>
+    <div class="bk-r">
+      <div class="bk-r-tag">Réservation directe</div>
+      <div class="bk-r-title">Envoyez votre demande</div>
+      <div class="bk-r-sub">La famille Arougon vous répond rapidement. Réservation sans intermédiaire.</div>
+      <a href="#" class="bk-btn-w">Envoyer une demande</a>
+      <div class="bk-email">ou : <a href="mailto:loc4ar@gmail.com">loc4ar@gmail.com</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a class="logo" href="#" style="text-decoration:none;display:flex;align-items:center;gap:8px;color:var(--dk)">
+    <div class="logo-sq" style="width:22px;height:22px;font-size:.5rem">4AR</div>
+    4AR Locations
+  </a>
+  <span>© 2025 Famille Arougon · Tous droits réservés</span>
+  <div style="display:flex;gap:20px">
+    <a href="#" style="color:var(--mu);text-decoration:none">Mentions légales</a>
+    <a href="mailto:loc4ar@gmail.com" style="color:var(--tr);text-decoration:none">loc4ar@gmail.com</a>
+  </div>
+</footer>
+
+<!-- NOTE -->
+<div class="note" id="note">
+  <button class="nc" onclick="document.getElementById('note').style.display='none'">✕</button>
+  <div class="nt">🎨 Concept v4 — Interactif</div>
+  <ul>
+    <li>Maillage animé en arrière-plan (canvas)</li>
+    <li>Cartes avec <strong>effet 3D tilt</strong> (souris)</li>
+    <li>Filtres logements animés</li>
+    <li>Plans d'étage <strong>SVG en vue 3D</strong></li>
+    <li>Basculer entre vue plane ↔ isométrique</li>
+    <li>Navigation par étage (RDC / 1er / 2ème)</li>
+    <li>Compteurs animés au scroll</li>
+    <li>Animations reveal au scroll</li>
+  </ul>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DONNÉES DES PLANS
+// ══════════════════════════════════════════
+const ROOM_COLORS = {
+  living:    { fill:'#E8F5E9', stroke:'#2E7D52', label:'Séjour / Salon' },
+  bedroom:   { fill:'#E3F0FB', stroke:'#1A5FA8', label:'Chambre' },
+  kitchen:   { fill:'#FFF8E1', stroke:'#C67C00', label:'Cuisine' },
+  bathroom:  { fill:'#E0F5F5', stroke:'#00796B', label:'Salle de bain / eau' },
+  wc:        { fill:'#F3E5F5', stroke:'#7B1FA2', label:'WC' },
+  corridor:  { fill:'#FAFAFA', stroke:'#9E9E9E', label:'Couloir / dégagement' },
+  exterior:  { fill:'#F1F8E9', stroke:'#558B2F', label:'Terrasse / Balcon' },
+  dressing:  { fill:'#FBE9E7', stroke:'#BF360C', label:'Dressing' },
+  storage:   { fill:'#EFEBE9', stroke:'#795548', label:'Rangement' },
+};
+
+const PLANS = {
+  risoul: {
+    name:'Appartement Risoul 1850', loc:'Risoul 1850, Hautes-Alpes',
+    floors:[
+      { label:'Niveau unique', rooms:[
+        { x:10,  y:10,  w:340, h:55,  label:'Balcon',              type:'exterior'  },
+        { x:10,  y:75,  w:220, h:100, label:'Séjour (2 lits gigognes)', type:'living' },
+        { x:240, y:75,  w:110, h:100, label:'Kitchenette',          type:'kitchen'   },
+        { x:10,  y:185, w:175, h:80,  label:'Coin nuit (lits superposés)', type:'bedroom' },
+        { x:195, y:185, w:115, h:80,  label:'Salle de bain',        type:'bathroom'  },
+        { x:320, y:185, w:50,  h:80,  label:'WC',                   type:'wc'        },
+      ]}
+    ]
+  },
+  avignon: {
+    name:'Appartement Avignon', loc:'Avignon, Vaucluse',
+    floors:[
+      { label:'Studio unique', rooms:[
+        { x:10,  y:10,  w:250, h:140, label:'Pièce principale (banquette 2 lits)', type:'living' },
+        { x:10,  y:160, w:150, h:80,  label:'Grand dressing',       type:'dressing'  },
+        { x:270, y:10,  w:110, h:110, label:'Salle de bain + WC',   type:'bathroom'  },
+        { x:270, y:130, w:110, h:110, label:'Kitchenette',          type:'kitchen'   },
+      ]}
+    ]
+  },
+  meme: {
+    name:'Maison de Mémé', loc:'Lauris, Luberon',
+    floors:[
+      { label:'RDC', rooms:[
+        { x:10,  y:10,  w:240, h:130, label:'Grand séjour',         type:'living'    },
+        { x:260, y:10,  w:150, h:130, label:'Cuisine équipée',      type:'kitchen'   },
+        { x:10,  y:150, w:280, h:60,  label:'Couloir / entrée',     type:'corridor'  },
+        { x:300, y:150, w:110, h:60,  label:'WC',                   type:'wc'        },
+      ]},
+      { label:'1er étage', rooms:[
+        { x:10,  y:10,  w:120, h:90,  label:'Salon TV',             type:'living'    },
+        { x:140, y:10,  w:130, h:90,  label:'Chambre (2 lits simples)', type:'bedroom' },
+        { x:280, y:10,  w:130, h:90,  label:'Chambre (lit double)', type:'bedroom'   },
+        { x:10,  y:110, w:80,  h:80,  label:'WC',                   type:'wc'        },
+        { x:100, y:110, w:100, h:80,  label:'Dressing',             type:'dressing'  },
+        { x:210, y:110, w:200, h:80,  label:'Salle d\'eau',         type:'bathroom'  },
+      ]},
+      { label:'2ème étage', rooms:[
+        { x:10,  y:10,  w:185, h:120, label:'Chambre double',       type:'bedroom'   },
+        { x:205, y:10,  w:185, h:120, label:'Chambre double',       type:'bedroom'   },
+        { x:10,  y:140, w:200, h:80,  label:'Salle d\'eau + WC',   type:'bathroom'  },
+        { x:220, y:140, w:170, h:80,  label:'Terrasse sous toits',  type:'exterior'  },
+      ]}
+    ]
+  },
+  atelier: {
+    name:"L'Atelier", loc:'Lauris, Luberon',
+    floors:[
+      { label:'RDC', rooms:[
+        { x:10,  y:10,  w:240, h:140, label:'Séjour',               type:'living'    },
+        { x:260, y:10,  w:150, h:140, label:'Cuisine équipée',      type:'kitchen'   },
+        { x:10,  y:160, w:110, h:60,  label:'WC',                   type:'wc'        },
+        { x:130, y:160, w:110, h:60,  label:'Couloir',              type:'corridor'  },
+      ]},
+      { label:'1er étage', rooms:[
+        { x:10,  y:10,  w:110, h:80,  label:'Rangement / Lave-linge', type:'storage' },
+        { x:130, y:10,  w:70,  h:80,  label:'WC',                   type:'wc'        },
+        { x:10,  y:100, w:300, h:120, label:'Suite parentale (lit double)', type:'bedroom' },
+        { x:320, y:10,  w:90,  h:210, label:'Salle d\'eau + dressing', type:'bathroom' },
+      ]},
+      { label:'2ème étage', rooms:[
+        { x:10,  y:10,  w:240, h:150, label:'Suite parentale (lit double)', type:'bedroom' },
+        { x:260, y:10,  w:150, h:150, label:'Terrasse',             type:'exterior'  },
+      ]}
+    ]
+  },
+  alain: {
+    name:"Maison d'Alain", loc:'Lauris, Luberon',
+    floors:[
+      { label:'RDC', rooms:[
+        { x:10,  y:10,  w:240, h:130, label:'Salle à manger voûtée', type:'living'  },
+        { x:260, y:10,  w:150, h:130, label:'Cuisine équipée',      type:'kitchen'   },
+        { x:10,  y:150, w:180, h:70,  label:'Couloir / entrée',     type:'corridor'  },
+        { x:200, y:150, w:110, h:70,  label:'WC',                   type:'wc'        },
+      ]},
+      { label:'1er étage', rooms:[
+        { x:10,  y:10,  w:180, h:100, label:'Chambre double',       type:'bedroom'   },
+        { x:200, y:10,  w:100, h:100, label:'Salle de bain',        type:'bathroom'  },
+        { x:310, y:10,  w:100, h:100, label:'Salle de bain',        type:'bathroom'  },
+        { x:10,  y:120, w:180, h:100, label:'Chambre double',       type:'bedroom'   },
+        { x:200, y:120, w:100, h:100, label:'Chambre double',       type:'bedroom'   },
+        { x:310, y:120, w:100, h:100, label:'Salle de bain',        type:'bathroom'  },
+        { x:10,  y:230, w:400, h:60,  label:'Grande terrasse',      type:'exterior'  },
+      ]}
+    ]
+  }
+};
+
+// ══════════════════════════════════════════
+// RENDU PLAN SVG
+// ══════════════════════════════════════════
+let currentProp = 'risoul';
+let currentFloor = 0;
+let currentView = 'flat';
+
+function renderPlan(propId, floorIdx) {
+  const prop = PLANS[propId];
+  if(!prop) return;
+  const floor = prop.floors[floorIdx];
+  if(!floor) return;
+  const svg = document.getElementById('plan-svg');
+  svg.innerHTML = '';
+
+  // Calcul viewBox automatique
+  let maxX = 0, maxY = 0;
+  floor.rooms.forEach(r => { maxX = Math.max(maxX, r.x + r.w + 10); maxY = Math.max(maxY, r.y + r.h + 10); });
+  svg.setAttribute('viewBox', `0 0 ${maxX} ${maxY}`);
+  svg.setAttribute('width', Math.min(maxX, 420));
+  svg.setAttribute('height', Math.min(maxY, 300));
+
+  // Fond
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('x','0');bg.setAttribute('y','0');bg.setAttribute('width',maxX);bg.setAttribute('height',maxY);
+  bg.setAttribute('fill','#1A2030');svg.appendChild(bg);
+
+  // Grille
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const pat = document.createElementNS('http://www.w3.org/2000/svg','pattern');
+  pat.setAttribute('id','grid');pat.setAttribute('width','20');pat.setAttribute('height','20');
+  pat.setAttribute('patternUnits','userSpaceOnUse');
+  const pl = document.createElementNS('http://www.w3.org/2000/svg','path');
+  pl.setAttribute('d','M 20 0 L 0 0 0 20');
+  pl.setAttribute('fill','none');pl.setAttribute('stroke','rgba(255,255,255,0.04)');pl.setAttribute('stroke-width','0.5');
+  pat.appendChild(pl);defs.appendChild(pat);svg.appendChild(defs);
+  const gridrect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  gridrect.setAttribute('width','100%');gridrect.setAttribute('height','100%');
+  gridrect.setAttribute('fill','url(#grid)');svg.appendChild(gridrect);
+
+  // Pièces
+  floor.rooms.forEach(room => {
+    const col = ROOM_COLORS[room.type] || ROOM_COLORS.living;
+    // Fond pièce
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', room.x); rect.setAttribute('y', room.y);
+    rect.setAttribute('width', room.w); rect.setAttribute('height', room.h);
+    rect.setAttribute('fill', col.fill + 'CC');
+    rect.setAttribute('stroke', col.stroke);
+    rect.setAttribute('stroke-width', '1.5');
+    rect.setAttribute('rx', '3');
+    svg.appendChild(rect);
+
+    // Label — centré dans la pièce
+    if(room.w > 40 && room.h > 25) {
+      const words = room.label.split(' ');
+      const lineH = 10;
+      const lines = [];
+      let line = '';
+      const maxW = room.w - 8;
+      words.forEach(w => {
+        const test = line ? line + ' ' + w : w;
+        if(test.length * 5.5 > maxW && line) { lines.push(line); line = w; }
+        else line = test;
+      });
+      if(line) lines.push(line);
+
+      const totalH = lines.length * lineH;
+      const startY = room.y + room.h/2 - totalH/2 + lineH/2;
+      lines.forEach((ln, i) => {
+        const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x', room.x + room.w/2);
+        t.setAttribute('y', startY + i * lineH);
+        t.setAttribute('text-anchor','middle');
+        t.setAttribute('fill', col.stroke);
+        t.setAttribute('font-size', room.w < 80 ? '7' : '8.5');
+        t.setAttribute('font-family','Inter,sans-serif');
+        t.setAttribute('font-weight','600');
+        t.textContent = ln;
+        svg.appendChild(t);
+      });
+    }
+  });
+
+  // Boussole / nord
+  const compass = document.createElementNS('http://www.w3.org/2000/svg','text');
+  compass.setAttribute('x', maxX - 16);
+  compass.setAttribute('y', 20);
+  compass.setAttribute('text-anchor','middle');
+  compass.setAttribute('fill','rgba(255,255,255,0.25)');
+  compass.setAttribute('font-size','10');
+  compass.setAttribute('font-family','Inter,sans-serif');
+  compass.setAttribute('font-weight','700');
+  compass.textContent = 'N↑';
+  svg.appendChild(compass);
+
+  // Légende
+  renderLegend(floor);
+  // Info sidebar
+  renderInfo(propId);
+}
+
+function renderLegend(floor) {
+  const leg = document.getElementById('plan-legend');
+  const types = [...new Set(floor.rooms.map(r => r.type))];
+  leg.innerHTML = types.map(t => {
+    const col = ROOM_COLORS[t] || ROOM_COLORS.living;
+    return `<div class="leg-item"><div class="leg-dot" style="background:${col.fill};border:1px solid ${col.stroke}"></div>${col.label}</div>`;
+  }).join('');
+}
+
+function renderInfo(propId) {
+  const prop = PLANS[propId];
+  const floor = prop.floors[currentFloor];
+  const info = document.getElementById('plan-info');
+  const roomsHTML = floor.rooms.map(r => {
+    const col = ROOM_COLORS[r.type] || ROOM_COLORS.living;
+    const sz = Math.round(r.w * r.h * 0.0035);
+    return `<div class="plan-room-item">
+      <div class="plan-room-dot" style="background:${col.fill};border:1px solid ${col.stroke}"></div>
+      <span class="plan-room-name">${r.label}</span>
+      ${sz > 3 ? `<span class="plan-room-sz">~${sz}m²</span>` : ''}
+    </div>`;
+  }).join('');
+  info.innerHTML = `
+    <div class="plan-prop-name">${prop.name}</div>
+    <div class="plan-prop-loc">📍 ${prop.loc}</div>
+    <div class="plan-room-list">${roomsHTML}</div>
+    <a href="#" class="plan-book-btn">Réserver ce logement →</a>
+  `;
+}
+
+function renderFloorTabs(propId) {
+  const prop = PLANS[propId];
+  const tabs = document.getElementById('floor-tabs');
+  tabs.innerHTML = prop.floors.map((f, i) =>
+    `<button class="floor-tab${i === currentFloor ? ' active' : ''}" onclick="setFloor(${i})">${f.label}</button>`
+  ).join('');
+}
+
+function setProp(propId) {
+  currentProp = propId;
+  currentFloor = 0;
+  document.querySelectorAll('.plan-tab').forEach(t => t.classList.toggle('active', t.dataset.prop === propId));
+  renderFloorTabs(propId);
+  renderPlan(propId, 0);
+}
+
+function setFloor(idx) {
+  currentFloor = idx;
+  document.querySelectorAll('.floor-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  renderPlan(currentProp, idx);
+}
+
+function setView(v) {
+  currentView = v;
+  const el = document.getElementById('plan3d');
+  el.className = `plan-3d-inner ${v}`;
+  document.getElementById('btn-flat').classList.toggle('on', v === 'flat');
+  document.getElementById('btn-iso').classList.toggle('on', v === 'iso');
+}
+
+// Plan tabs click
+document.querySelectorAll('.plan-tab').forEach(t => {
+  t.addEventListener('click', () => setProp(t.dataset.prop));
+});
+
+// Init plan
+setProp('risoul');
+
+// ══════════════════════════════════════════
+// MESH CANVAS ANIMÉ
+// ══════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('mesh-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, dots, mouse = {x:-999, y:-999};
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+    dots = Array.from({length: 60}, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3,
+      r: Math.random()*2+1
+    }));
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  canvas.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    dots.forEach(d => {
+      d.x += d.vx; d.y += d.vy;
+      if(d.x < 0 || d.x > W) d.vx *= -1;
+      if(d.y < 0 || d.y > H) d.vy *= -1;
+    });
+    // Lines
+    for(let i=0; i<dots.length; i++) {
+      for(let j=i+1; j<dots.length; j++) {
+        const dx = dots[i].x - dots[j].x;
+        const dy = dots[i].y - dots[j].y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < 110) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(200,118,58,${(1-dist/110)*0.12})`;
+          ctx.lineWidth = .5;
+          ctx.moveTo(dots[i].x, dots[i].y);
+          ctx.lineTo(dots[j].x, dots[j].y);
+          ctx.stroke();
+        }
+      }
+      // Mouse attract
+      const mx = dots[i].x - mouse.x;
+      const my = dots[i].y - mouse.y;
+      const md = Math.sqrt(mx*mx+my*my);
+      if(md < 120) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(200,118,58,${(1-md/120)*0.25})`;
+        ctx.lineWidth = .8;
+        ctx.moveTo(dots[i].x, dots[i].y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+      }
+    }
+    // Dots
+    dots.forEach(d => {
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(200,118,58,0.25)';
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ══════════════════════════════════════════
+// 3D TILT SUR LES CARDS
+// ══════════════════════════════════════════
+document.querySelectorAll('.tilt,.hcard').forEach(card => {
+  const MAX = card.classList.contains('hcard') ? 12 : 8;
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    card.style.transform = `perspective(700px) rotateX(${-y*MAX}deg) rotateY(${x*MAX}deg) translateY(-6px) scale(1.01)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+  });
+});
+
+// ══════════════════════════════════════════
+// FILTRES LOGEMENTS
+// ══════════════════════════════════════════
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.f;
+    document.querySelectorAll('.pcard[data-region]').forEach(c => {
+      const show = f === 'all' || c.dataset.region === f;
+      c.style.display = show ? '' : 'none';
+      c.style.animation = show ? 'fadeIn .35s ease forwards' : '';
+    });
+  });
+});
+
+// ══════════════════════════════════════════
+// COMPTEURS ANIMÉS
+// ══════════════════════════════════════════
+const counters = document.querySelectorAll('[data-count]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      const target = +e.target.dataset.count;
+      let n = 0;
+      const step = target / 40;
+      const t = setInterval(() => {
+        n = Math.min(n + step, target);
+        e.target.textContent = Math.round(n);
+        if(n >= target) clearInterval(t);
+      }, 30);
+      obs.unobserve(e.target);
+    }
+  });
+});
+counters.forEach(c => obs.observe(c));
+
+// ══════════════════════════════════════════
+// REVEAL AU SCROLL
+// ══════════════════════════════════════════
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: .12});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ══════════════════════════════════════════
+// STYLE ANIMATION FADEIN
+// ══════════════════════════════════════════
+const style = document.createElement('style');
+style.textContent = `@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>

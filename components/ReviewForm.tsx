@@ -31,7 +31,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
       const res = await fetch('/api/review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ propertyName, ...form, rating }),
+        body: JSON.stringify({ propertyId, propertyName, ...form, rating }),
       });
       if (res.ok) {
         setSubmitted(true);
@@ -62,7 +62,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
       <div className="bg-[#6B7C45]/10 border border-[#6B7C45]/30 rounded-xl p-5 text-center">
         <div className="text-3xl mb-2">🙏</div>
         <p className="font-bold text-[#2C2416] text-sm">Merci pour votre avis !</p>
-        <p className="text-[#5C4F3A] text-xs mt-1">Il sera affiché après validation.</p>
+        <p className="text-[#5C4F3A] text-xs mt-1">Il est maintenant visible sur cette page.</p>
       </div>
     );
   }
@@ -137,7 +137,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
           {loading ? 'Envoi...' : 'Envoyer mon avis'}
         </button>
 
-        <p className="text-xs text-[#9B8A74] text-center">Votre avis sera affiché après validation.</p>
+        <p className="text-xs text-[#9B8A74] text-center">Votre avis sera visible immédiatement sur cette page.</p>
       </form>
     </div>
   );

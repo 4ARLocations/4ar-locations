@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { addBooking, type Booking } from '@/lib/redis';
 
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
@@ -58,6 +59,23 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // ── Enregistrer la réservation pour les notifications automatiques ──
+    // (seulement si les dates sont fournies et l'email aussi)
+    if (checkin && checkout && email) {
+      const booking: Booking = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        propertyId: property?.toLowerCase().replace(/\s+/g, '-') ?? 'unknown',
+        propertyName: property ?? '',
+        guestName: name,
+        guestEmail: email,
+        checkin,
+        checkout,
+        guests: guests ?? '',
+        createdAt: new Date().toISOString(),
+      };
+      await addBooking(booking).catch((e) => console.error('addBooking failed:', e));
     }
 
     return NextResponse.json({ success: true });

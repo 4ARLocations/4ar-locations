@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
 

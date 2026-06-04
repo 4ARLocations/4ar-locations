@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4AR Locations — Concept v3 Éditorial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand:     #F5F0E8;
+      --cream:    #FDFAF6;
+      --white:    #FFFFFF;
+      --terra:    #C96B38;
+      --terra-lt: #F2E4D8;
+      --teal:     #2A8C7E;    /* vert-bleu alpin */
+      --teal-lt:  #D5EFEB;
+      --sky:      #4A8CC4;    /* bleu ciel Alpes */
+      --lav:      #8B6BAF;    /* lavande Provence */
+      --lav-lt:   #EBE5F5;
+      --dark:     #1C1710;
+      --mid:      #5C4F3A;
+      --muted:    #9B8A74;
+      --border:   #E5DDD0;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════ NAV ═══════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(253,250,246,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: var(--dark);
+      display: flex; align-items: center; gap: 10px;
+    }
+    /* Petit carré de couleur pour le logo */
+    .logo-mark {
+      width: 22px; height: 22px;
+      background: var(--terra);
+      border-radius: 4px;
+      display: grid; place-items: center;
+      font-size: 0.55rem;
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav-c { display: flex; align-items: center; gap: 32px; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--dark); }
+    .lang { display: flex; gap: 2px; }
+    .lb { padding: 3px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 3px; border: 1px solid var(--border); color: var(--muted); background: none; cursor: pointer; transition: all .15s; }
+    .lb.on { background: var(--dark); color: white; border-color: var(--dark); }
+    .nav-btn {
+      padding: 8px 18px; font-size: 0.78rem; font-weight: 600;
+      background: var(--terra); color: white; border-radius: 6px;
+      text-decoration: none; transition: opacity .2s;
+    }
+    .nav-btn:hover { opacity: .85; }
+
+    /* ═══════════════ HERO — grille éditoriale ═══════════════ */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      grid-template-rows: 1fr auto;
+      padding-top: 58px;
+    }
+
+    /* Colonne gauche — texte */
+    .hero-left {
+      padding: 64px 56px 56px;
+      display: flex; flex-direction: column; justify-content: center;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    /* Numéro de fond décoratif */
+    .hero-bg-num {
+      position: absolute;
+      font-family: 'DM Serif Display', serif;
+      font-size: 28rem;
+      line-height: 1;
+      color: var(--terra);
+      opacity: 0.04;
+      right: -60px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 28px;
+    }
+    .eyebrow-line {
+      flex: none;
+      width: 32px; height: 1.5px;
+      background: var(--terra);
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: var(--dark);
+      margin-bottom: 24px;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--terra);
+    }
+    h1 .alp {
+      font-style: italic;
+      color: var(--teal);
+    }
+
+    .hero-p {
+      font-size: 1rem; line-height: 1.75;
+      color: var(--mid); max-width: 440px;
+      margin-bottom: 40px;
+    }
+
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+    .btn-fill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--dark); color: white;
+      font-size: 0.85rem; font-weight: 600; padding: 13px 26px;
+      border-radius: 8px; text-decoration: none; transition: all .25s;
+      border: 1.5px solid var(--dark);
+    }
+    .btn-fill:hover { background: var(--terra); border-color: var(--terra); }
+    .btn-stroke {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--dark);
+      font-size: 0.85rem; font-weight: 600; padding: 12px 22px;
+      border-radius: 8px; text-decoration: none;
+      border: 1.5px solid var(--border); transition: all .25s;
+    }
+    .btn-stroke:hover { border-color: var(--dark); }
+
+    /* Chips de destinations */
+    .dest-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.72rem; font-weight: 600;
+      padding: 6px 14px; border-radius: 6px; border: 1px solid;
+    }
+    .c-alp { color: var(--teal); border-color: rgba(42,140,126,0.35); background: var(--teal-lt); }
+    .c-avi { color: var(--terra); border-color: rgba(201,107,56,0.35); background: var(--terra-lt); }
+    .c-lub { color: var(--lav); border-color: rgba(139,107,175,0.35); background: var(--lav-lt); }
+
+    /* Colonne droite — carte empilée + blocs couleur */
+    .hero-right {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    /* Bloc couleur terracotta en haut */
+    .hero-block-top {
+      background: var(--terra);
+      display: flex; align-items: flex-end;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-block-top::before {
+      content: '⛷';
+      position: absolute;
+      font-size: 8rem;
+      top: -20px; right: 20px;
+      opacity: 0.15;
+    }
+    .block-stat { color: white; }
+    .block-stat-num { font-family: 'DM Serif Display', serif; font-size: 3.5rem; line-height: 1; }
+    .block-stat-label { font-size: 0.75rem; font-weight: 500; opacity: 0.75; margin-top: 4px; }
+
+    /* Bloc teal en bas */
+    .hero-block-bot {
+      background: var(--teal);
+      display: flex; align-items: center;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      border-top: 2px solid rgba(255,255,255,0.1);
+    }
+    .hero-block-bot::before {
+      content: '🌿';
+      position: absolute;
+      font-size: 7rem;
+      bottom: -20px; right: 10px;
+      opacity: 0.15;
+    }
+    .block-card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px 20px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+    .bc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .bc-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+    .bc-price { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--dark); }
+    .bc-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--dark); margin-bottom: 4px; }
+    .bc-loc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
+    .bc-meta { display: flex; gap: 12px; }
+    .bc-m { font-size: 0.68rem; color: var(--mid); }
+
+    /* Bande bas héro — chiffres horizontaux */
+    .hero-stats {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+    }
+    .hs { padding: 28px 40px; border-right: 1px solid var(--border); }
+    .hs:last-child { border-right: none; }
+    .hs-num { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--dark); line-height: 1; margin-bottom: 4px; }
+    .hs-lbl { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+
+    /* ═══════════════ SECTION LOGEMENTS ═══════════════ */
+    .section { padding: 80px 40px; max-width: 1280px; margin: 0 auto; }
+    .s-eyebrow {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .s-eyebrow::after { content: ''; flex: none; width: 24px; height: 1.5px; background: var(--terra); }
+    .s-title { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--dark); margin-bottom: 0; }
+
+    .props-layout {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+
+    /* Grande card featured */
+    .card-feat {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      grid-row: 1 / 3;
+      display: flex; flex-direction: column;
+      cursor: pointer;
+      transition: box-shadow .25s, transform .25s;
+    }
+    .card-feat:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+
+    .feat-img {
+      height: 280px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      position: relative;
+    }
+    .feat-img-lub { background: linear-gradient(145deg, #EAF2D8, #C8DEBB); }
+    .feat-img-alp { background: linear-gradient(145deg, #D4EAF5, #A8CDE8); }
+
+    .feat-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+    .feat-region { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+    .feat-name { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--dark); margin-bottom: 8px; line-height: 1.15; }
+    .feat-desc { font-size: 0.82rem; color: var(--mid); line-height: 1.65; margin-bottom: 20px; flex: 1; }
+    .feat-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); }
+    .feat-meta { display: flex; gap: 14px; }
+    .f-m { font-size: 0.72rem; color: var(--muted); }
+    .feat-price { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--dark); }
+    .feat-price span { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 400; color: var(--muted); }
+
+    /* Petites cards */
+    .card-sm {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex; gap: 16px; align-items: center;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .card-sm:hover { border-color: var(--terra); box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+    .card-sm-icon {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .ic-lub { background: var(--lav-lt); }
+    .ic-avi { background: var(--terra-lt); }
+    .ic-alp { background: var(--teal-lt); }
+
+    .csm-body { flex: 1; min-width: 0; }
+    .csm-region { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+    .csm-name { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--dark); margin-bottom: 4px; }
+    .csm-meta { font-size: 0.7rem; color: var(--muted); }
+    .csm-price { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--dark); text-align: right; flex-shrink: 0; }
+    .csm-price span { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 0.62rem; color: var(--muted); font-weight: 400; text-align: right; }
+
+    /* ═══════════════ BANDE RÉGIONS ═══════════════ */
+    .regions-full {
+      background: var(--sand);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 40px;
+    }
+    .rf-inner { max-width: 1280px; margin: 0 auto; }
+    .rf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin-top: 48px;
+    }
+    .rf-tile {
+      padding: 40px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .rf-tile:last-child { border-right: none; }
+    .rf-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 6rem; line-height: 1;
+      opacity: 0.08; margin-bottom: -20px;
+      display: block;
+    }
+    .r-t .rf-num { color: var(--teal); }
+    .r-v .rf-num { color: var(--terra); }
+    .r-l .rf-num { color: var(--lav); }
+    .rf-icon { font-size: 2rem; margin-bottom: 14px; }
+    .rf-name { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--dark); margin-bottom: 8px; }
+    .rf-sub { font-size: 0.82rem; color: var(--mid); line-height: 1.65; margin-bottom: 16px; }
+    .rf-badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 4px;
+    }
+    .r-t .rf-badge { background: var(--teal-lt); color: var(--teal); }
+    .r-v .rf-badge { background: var(--terra-lt); color: var(--terra); }
+    .r-l .rf-badge { background: var(--lav-lt); color: var(--lav); }
+
+    /* ═══════════════ BANDE RÉSA ═══════════════ */
+    .resa {
+      padding: 80px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .resa-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .resa-left {
+      padding: 56px;
+      background: white;
+    }
+    .resa-right {
+      background: var(--terra);
+      padding: 56px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .resa-right::before {
+      content: '✉️';
+      position: absolute; font-size: 12rem;
+      right: -30px; bottom: -30px;
+      opacity: 0.08;
+    }
+    .resa-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .resa-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; line-height: 1.1; color: var(--dark); margin-bottom: 16px; }
+    .resa-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .resa-li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem; color: var(--mid);
+    }
+    .resa-li::before {
+      content: '→';
+      font-weight: 700; color: var(--terra);
+      flex-shrink: 0;
+    }
+
+    .resa-r-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 14px; }
+    .resa-r-title { font-family: 'DM Serif Display', serif; font-size: 2rem; color: white; margin-bottom: 8px; line-height: 1.2; }
+    .resa-r-sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.6; margin-bottom: 28px; }
+    .btn-white-fill {
+      display: inline-block; background: white; color: var(--terra);
+      font-size: 0.88rem; font-weight: 700; padding: 14px 28px;
+      border-radius: 8px; text-decoration: none; transition: opacity .2s;
+      margin-bottom: 10px;
+    }
+    .btn-white-fill:hover { opacity: .9; }
+    .resa-email { font-size: 0.78rem; color: rgba(255,255,255,0.6); }
+
+    /* ═══════════════ FOOTER ═══════════════ */
+    footer {
+      padding: 28px 40px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.75rem; color: var(--muted);
+    }
+    footer .logo { font-size: 1rem; }
+
+    /* Note concept */
+    .note {
+      position: fixed; bottom: 24px; right: 24px;
+      background: white; border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 22px;
+      max-width: 280px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1); z-index: 200;
+    }
+    .nt { font-size: 0.78rem; font-weight: 700; color: var(--terra); margin-bottom: 10px; }
+    .note ul { padding-left: 14px; }
+    .note li { font-size: 0.72rem; color: var(--mid); margin-bottom: 4px; line-height: 1.4; }
+    .nx { position: absolute; top: 10px; right: 14px; background: none; border: none; color: var(--muted); font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">4AR</div>
+    4AR Locations
+  </div>
+  <div class="nav-c">
+    <ul class="nav-links">
+      <li><a href="#">Accueil</a></li>
+      <li><a href="#">Logements</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="lang">
+      <button class="lb on">FR</button>
+      <button class="lb">EN</button>
+      <button class="lb">DE</button>
+    </div>
+    <a href="#" class="nav-btn">Réserver</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- Gauche : texte éditorial -->
+  <div class="hero-left">
+    <div class="hero-bg-num">5</div>
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      Famille Arougon · Depuis 2018
+    </div>
+    <h1>
+      Séjours<br/>
+      <em>Provençaux</em><br/>
+      &amp; <span class="alp">Alpins</span>
+    </h1>
+    <p class="hero-p">
+      5 logements d'exception entre garrigue, cité papale et sommets enneigés. Réservez directement — sans commission, sans intermédiaire.
+    </p>
+    <div class="hero-btns">
+      <a href="#" class="btn-fill">Découvrir les logements →</a>
+      <a href="#" class="btn-stroke">Réserver en direct</a>
+    </div>
+    <div class="dest-chips">
+      <span class="chip c-alp">⛷ Risoul 1850</span>
+      <span class="chip c-avi">🏛 Avignon</span>
+      <span class="chip c-lub">🌿 Luberon × 3</span>
+    </div>
+  </div>
+
+  <!-- Droite : blocs couleur + card flottante -->
+  <div class="hero-right">
+    <div class="hero-block-top">
+      <div class="block-stat">
+        <div class="block-stat-num">5</div>
+        <div class="block-stat-label">logements — 3 destinations</div>
+      </div>
+    </div>
+    <div class="hero-block-bot">
+      <div class="block-card">
+        <div class="bc-top">
+          <span class="bc-tag" style="color:var(--lav)">🌿 Luberon</span>
+          <span class="bc-price">142€ <small style="font-size:0.65rem;color:var(--muted);font-family:'Space Grotesk';">/nuit</small></span>
+        </div>
+        <div class="bc-name">Maison de Mémé</div>
+        <div class="bc-loc">📍 Lauris, Vaucluse</div>
+        <div class="bc-meta">
+          <span class="bc-m">👥 8</span>
+          <span class="bc-m">🚪 4 ch.</span>
+          <span class="bc-m">🛏 5 lits</span>
+          <span class="bc-m">🚿 2 sdb</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats basse -->
+  <div class="hero-stats">
+    <div class="hs">
+      <div class="hs-num">5</div>
+      <div class="hs-lbl">Logements disponibles</div>
+    </div>
+    <div class="hs">
+      <div class="hs-num">3</div>
+      <div class="hs-lbl">Régions d'exception</div>
+    </div>
+    <div class="hs">
+      <div class="hs-num">0 €</div>
+      <div class="hs-lbl">De commission en direct</div>
+    </div>
+    <div class="hs">
+      <div class="hs-num" style="font-size:1.5rem;line-height:1.45">FR · EN · DE</div>
+      <div class="hs-lbl">Langues disponibles</div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGEMENTS -->
+<div class="section">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:48px">
+    <div>
+      <div class="s-eyebrow">Nos logements</div>
+      <h2 class="s-title">5 adresses, une seule famille</h2>
+    </div>
+    <a href="#" class="btn-stroke" style="white-space:nowrap">Tous les logements →</a>
+  </div>
+
+  <div class="props-layout">
+
+    <!-- Grande card — Maison de Mémé -->
+    <div class="card-feat">
+      <div class="feat-img feat-img-lub">🏡</div>
+      <div class="feat-body">
+        <div class="feat-region" style="color:var(--lav)">Luberon · Lauris</div>
+        <div class="feat-name">Maison de Mémé</div>
+        <div class="feat-desc">Maison de caractère au cœur du village de Lauris. 3 niveaux, cuisine entièrement équipée, WiFi, vue sur les toits provençaux. Possibilité de combiner avec les maisons voisines pour les grands groupes.</div>
+        <div class="feat-footer">
+          <div class="feat-meta">
+            <span class="f-m">👥 8</span>
+            <span class="f-m">🚪 4 ch.</span>
+            <span class="f-m">🛏 5 lits</span>
+            <span class="f-m">🚿 2 sdb</span>
+          </div>
+          <div class="feat-price">142€ <span>/nuit</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 petites cards -->
+    <div class="card-sm">
+      <div class="card-sm-icon ic-alp">⛷️</div>
+      <div class="csm-body">
+        <div class="csm-region" style="color:var(--teal)">Hautes-Alpes</div>
+        <div class="csm-name">Appartement Risoul 1850</div>
+        <div class="csm-meta">👥 6 · 🛏 6 lits · 🚿 1 sdb</div>
+      </div>
+      <div class="csm-price">75–180€<span>/nuit</span></div>
+    </div>
+
+    <div class="card-sm">
+      <div class="card-sm-icon ic-avi">🏛️</div>
+      <div class="csm-body">
+        <div class="csm-region" style="color:var(--terra)">Vaucluse · Avignon</div>
+        <div class="csm-name">Appartement Intramuros</div>
+        <div class="csm-meta">👥 2 · 🛏 2 lits · 🚿 1 sdb</div>
+      </div>
+      <div class="csm-price" style="font-size:0.78rem;color:var(--muted)">Sur demande<span>/nuit</span></div>
+    </div>
+
+    <div class="card-sm">
+      <div class="card-sm-icon ic-lub">🎨</div>
+      <div class="csm-body">
+        <div class="csm-region" style="color:var(--lav)">Luberon · Lauris</div>
+        <div class="csm-name">L'Atelier</div>
+        <div class="csm-meta">👥 4 · 🛏 2 lits · 🚿 2 sdb</div>
+      </div>
+      <div class="csm-price">115€<span>/nuit</span></div>
+    </div>
+
+    <div class="card-sm">
+      <div class="card-sm-icon ic-lub">🌸</div>
+      <div class="csm-body">
+        <div class="csm-region" style="color:var(--lav)">Luberon · Lauris</div>
+        <div class="csm-name">Maison d'Alain</div>
+        <div class="csm-meta">👥 8 · 🛏 2 lits · 🚿 3 sdb</div>
+      </div>
+      <div class="csm-price">200€<span>/nuit</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RÉGIONS -->
+<div class="regions-full">
+  <div class="rf-inner">
+    <div class="s-eyebrow">3 destinations</div>
+    <h2 class="s-title">Choisissez votre univers</h2>
+    <div class="rf-grid">
+
+      <div class="rf-tile r-t">
+        <span class="rf-num">01</span>
+        <div class="rf-icon">⛰️</div>
+        <div class="rf-name">Les Alpes</div>
+        <div class="rf-sub">Ski, air pur, panoramas grandioses. La station Risoul 1850 dans les Hautes-Alpes vous accueille en toutes saisons.</div>
+        <span class="rf-badge">1 logement</span>
+      </div>
+
+      <div class="rf-tile r-v">
+        <span class="rf-num">02</span>
+        <div class="rf-icon">🏰</div>
+        <div class="rf-name">Avignon</div>
+        <div class="rf-sub">Cité des Papes, festival, marchés colorés. Un studio au cœur des remparts, disponible en juillet et août.</div>
+        <span class="rf-badge">1 logement</span>
+      </div>
+
+      <div class="rf-tile r-l">
+        <span class="rf-num">03</span>
+        <div class="rf-icon">🌿</div>
+        <div class="rf-name">Le Luberon</div>
+        <div class="rf-sub">Village perché de Lauris, lavande, cigales, Lourmarin à 5 km. Trois maisons à combiner pour vos grandes réunions de famille.</div>
+        <span class="rf-badge">3 maisons</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- RÉSERVATION DIRECTE -->
+<div class="resa">
+  <div class="resa-box">
+    <div class="resa-left">
+      <div class="resa-label">Pourquoi réserver en direct ?</div>
+      <div class="resa-title">Moins de frais,<br/>plus de contact</div>
+      <ul class="resa-list">
+        <li>Aucun frais de service Airbnb ou Abritel</li>
+        <li>Contact direct avec les propriétaires</li>
+        <li>Flexibilité sur les dates et conditions</li>
+        <li>Tarifs négociables pour les longs séjours</li>
+        <li>Combinez plusieurs maisons à Lauris</li>
+      </ul>
+    </div>
+    <div class="resa-right">
+      <div class="resa-r-tag">Réservation directe</div>
+      <div class="resa-r-title">Envoyez-nous votre demande</div>
+      <div class="resa-r-sub">Remplissez le formulaire ou écrivez-nous directement. La famille Arougon vous répond rapidement.</div>
+      <a href="#" class="btn-white-fill">Envoyer une demande</a>
+      <div class="resa-email">ou par email : <a href="mailto:loc4ar@gmail.com" style="color:white;font-weight:600">loc4ar@gmail.com</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">
+    <div class="logo-mark" style="width:18px;height:18px;font-size:0.45rem;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;background:var(--terra);color:white;font-weight:700;margin-right:8px">4AR</div>
+    4AR Locations
+  </div>
+  <span>© 2025 Famille Arougon · Tous droits réservés</span>
+  <div style="display:flex;gap:20px">
+    <a href="#" style="color:var(--muted);text-decoration:none">Mentions légales</a>
+    <a href="mailto:loc4ar@gmail.com" style="color:var(--terra);text-decoration:none">loc4ar@gmail.com</a>
+  </div>
+</footer>
+
+<!-- NOTE -->
+<div class="note" id="note">
+  <button class="nx" onclick="document.getElementById('note').style.display='none'">✕</button>
+  <div class="nt">🎨 Concept v3 — Éditorial</div>
+  <ul>
+    <li>Crème chaud (#FDFAF6), très lisible</li>
+    <li>Typo <strong>DM Serif Display</strong> (élégant + moderne)</li>
+    <li>Hero en grille 2 colonnes asymétrique</li>
+    <li>Blocs couleur pleins (terra + teal) dans le hero</li>
+    <li>Cards grande + petites (hiérarchie éditoriale)</li>
+    <li>Régions avec numéros transparents géants</li>
+    <li>Section résa en split bicolore</li>
+    <li>Palette : Terracotta / Teal alpin / Lavande</li>
+  </ul>
+</div>
+
+</body>
+</html>
