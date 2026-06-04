@@ -26,9 +26,16 @@ function HomeContent({ locale }: { locale: string }) {
         <div className="absolute inset-0 bg-gradient-to-r from-[#1A1008]/85 via-[#1A1008]/65 to-[#1A1008]/30" />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-24 md:py-36 w-full">
           <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-[#C8763A] font-bold text-3xl md:text-4xl">4AR</span>
-              <span className="text-[#8A9E5A] font-bold text-3xl md:text-4xl">Locations</span>
+            {/* Grand logo illustré visible dans le hero */}
+            <div className="mb-6">
+              <Image
+                src="/images/logo-4ar.svg"
+                alt="4AR Locations"
+                width={340}
+                height={278}
+                className="w-64 md:w-80 h-auto drop-shadow-lg"
+                priority
+              />
             </div>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">{t('hero.tagline')}</h1>
             <p className="text-lg md:text-xl text-[#E8DCC8] mb-8 opacity-90">{t('hero.subtitle')}</p>

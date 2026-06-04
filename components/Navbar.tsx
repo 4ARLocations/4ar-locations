@@ -19,12 +19,12 @@ export default function Navbar({ locale }: { locale: string }) {
         {/* Logo */}
         <Link href={localePath('')} className="flex items-center">
           <Image
-            src="/images/logo-4ar.svg"
+            src="/images/logo-4ar-nav.svg"
             alt="4AR Locations"
-            width={160}
-            height={61}
+            width={220}
+            height={52}
             priority
-            className="h-12 w-auto"
+            className="h-11 w-auto"
           />
         </Link>
 
