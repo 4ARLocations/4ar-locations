@@ -35,12 +35,11 @@ function BiensContent({ locale }: { locale: string }) {
           style={{
             backgroundImage: "url('/images/bg-risoul-mountain.jpg')",
             backgroundSize: 'cover',
-            backgroundPosition: 'center 35%',
+            backgroundPosition: 'center 20%',
             backgroundAttachment: 'fixed',
           }}
         >
-          {/* Voile crème légèrement bleutée pour ambiance alpine */}
-          <div className="absolute inset-0 bg-[#EEF3F7]/84 pointer-events-none" />
+          <div className="absolute inset-0 bg-[#EEF3F7]/70 pointer-events-none" />
 
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-6">
@@ -64,12 +63,11 @@ function BiensContent({ locale }: { locale: string }) {
           style={{
             backgroundImage: "url('/images/bg-avignon.jpg')",
             backgroundSize: 'cover',
-            backgroundPosition: 'center 45%',
+            backgroundPosition: 'center 55%',
             backgroundAttachment: 'fixed',
           }}
         >
-          {/* Voile crème légèrement chaude pour ambiance provençale */}
-          <div className="absolute inset-0 bg-[#F8F2E8]/84 pointer-events-none" />
+          <div className="absolute inset-0 bg-[#F8F2E8]/70 pointer-events-none" />
 
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-6">
@@ -91,11 +89,11 @@ function BiensContent({ locale }: { locale: string }) {
         style={{
           backgroundImage: "url('/images/bg-lauris-chateau.jpg')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center 40%',
+          backgroundPosition: 'center 25%',
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="absolute inset-0 bg-[#FAF7F2]/87 pointer-events-none" />
+        <div className="absolute inset-0 bg-[#FAF7F2]/72 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
 
           <div className="flex items-center gap-3 mb-6">

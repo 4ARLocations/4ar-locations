@@ -52,12 +52,11 @@ function HomeContent({ locale }: { locale: string }) {
         style={{
           backgroundImage: "url('/images/bg-risoul-mountain.jpg')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center 40%',
+          backgroundPosition: 'center 30%',
           backgroundAttachment: 'fixed',
         }}
       >
-        {/* Voile crème — laisse 12% de la photo visible */}
-        <div className="absolute inset-0 bg-[#FAF7F2]/88 pointer-events-none" />
+        <div className="absolute inset-0 bg-[#FAF7F2]/72 pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-16">
           <div className="text-center max-w-3xl mx-auto mb-12">

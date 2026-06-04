@@ -72,11 +72,11 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
         style={{
           backgroundImage: `url('${regionBg}')`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center 40%',
+          backgroundPosition: 'center 25%',
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="absolute inset-0 bg-[#FAF7F2]/88" />
+        <div className="absolute inset-0 bg-[#FAF7F2]/72" />
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-6">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-[#9B8A74] mb-5">
