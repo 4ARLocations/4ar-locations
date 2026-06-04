@@ -29,10 +29,9 @@ function MonthGrid({
   ];
   while (cells.length % 7 !== 0) cells.push(null);
 
-  const SOURCE_COLORS: Record<string, string> = {
-    airbnb: '#FF5A5F', booking: '#003580', direct: '#C8763A',
-    blocked: '#9B8A74', family: '#6B7C45',
-  };
+  // Côté visiteur : couleur unique pour toutes les dates indisponibles
+  // (peu importe la source — Airbnb, Booking, direct, etc.)
+  const UNAVAILABLE_COLOR = '#C8763A';
 
   return (
     <div className="flex-1 min-w-[220px]">
@@ -59,12 +58,11 @@ function MonthGrid({
             );
           }
           if (block) {
-            const color = SOURCE_COLORS[block.source] ?? '#9B8A74';
             return (
               <div
                 key={date}
                 className="h-7 flex items-center justify-center text-xs text-white font-medium rounded-sm"
-                style={{ backgroundColor: color + 'cc' }}
+                style={{ backgroundColor: UNAVAILABLE_COLOR + 'bb' }}
                 title="Non disponible"
               >
                 {parseInt(date.slice(8))}
@@ -91,7 +89,6 @@ function MonthGrid({
 
 export default async function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
   const blocks = await getBlocks(propertyId);
-  if (blocks.length === 0) return null; // Ne pas afficher si aucune donnée
 
   const today = new Date();
   const todayStr = today.toISOString().slice(0, 10);
@@ -104,7 +101,6 @@ export default async function AvailabilityCalendar({ propertyId }: { propertyId:
 
   // Filtrer les blocs futurs (ou en cours)
   const futureBlocks = blocks.filter((b) => b.end >= todayStr);
-  if (futureBlocks.length === 0) return null;
 
   return (
     <div className="mt-8">
@@ -116,7 +112,9 @@ export default async function AvailabilityCalendar({ propertyId }: { propertyId:
         Disponibilités
       </h2>
       <p className="text-xs text-[#9B8A74] mb-4">
-        Les dates colorées sont déjà réservées — contactez-nous pour vérifier vos dates.
+        {futureBlocks.length > 0
+          ? 'Les dates en orange sont déjà réservées — contactez-nous pour vérifier vos dates.'
+          : 'Aucune réservation enregistrée pour les prochains mois — contactez-nous pour vérifier les disponibilités.'}
       </p>
 
       <div className="bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl p-4">
