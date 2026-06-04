@@ -105,10 +105,97 @@ function BiensContent({ locale }: { locale: string }) {
             <div className="flex-1 h-px bg-[#E8DCC8] ml-2" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {luberon.map((p) => (
               <PropertyCard key={p.id} property={p} locale={locale} />
             ))}
+          </div>
+
+          {/* ── BLOC GRAND GROUPE ── */}
+          <div className="mb-8 rounded-2xl overflow-hidden shadow-md border border-[#C8763A]/25">
+            {/* En-tête coloré */}
+            <div className="bg-gradient-to-r from-[#2C2416] to-[#4A3828] px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">🏘️</span>
+                <div>
+                  <h3 className="text-white font-bold text-lg leading-tight">
+                    Vous êtes un grand groupe ?
+                  </h3>
+                  <p className="text-white/60 text-sm mt-0.5">
+                    Combinez 2 ou 3 maisons pour accueillir jusqu'à <strong className="text-[#E8914A]">20 personnes</strong>
+                  </p>
+                </div>
+              </div>
+              <Link
+                href={`/${locale}/contact?combine=true`}
+                className="flex-shrink-0 bg-[#C8763A] hover:bg-[#A85E28] text-white font-bold px-6 py-2.5 rounded-xl transition-colors text-sm"
+              >
+                Demander une réservation →
+              </Link>
+            </div>
+
+            {/* Corps — 3 combinaisons possibles */}
+            <div className="bg-white/85 backdrop-blur-sm px-6 py-5">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#9B8A74] mb-4">
+                Les combinaisons possibles
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* Combinaison 1 : Mémé + Atelier */}
+                <div className="border border-[#E8DCC8] rounded-xl p-4 bg-[#FAF7F2] hover:border-[#C8763A]/40 transition-colors">
+                  <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">Mémé</span>
+                    <span className="text-[#9B8A74] text-xs">+</span>
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">L'Atelier</span>
+                  </div>
+                  <div className="flex items-end gap-1">
+                    <span className="text-2xl font-bold text-[#2C2416]">12</span>
+                    <span className="text-sm text-[#9B8A74] mb-0.5">personnes max</span>
+                  </div>
+                  <div className="text-xs text-[#9B8A74] mt-1">8 + 4 voyageurs · 6 chambres</div>
+                </div>
+
+                {/* Combinaison 2 : Mémé + Alain */}
+                <div className="border border-[#E8DCC8] rounded-xl p-4 bg-[#FAF7F2] hover:border-[#C8763A]/40 transition-colors">
+                  <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">Mémé</span>
+                    <span className="text-[#9B8A74] text-xs">+</span>
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">Maison d'Alain</span>
+                  </div>
+                  <div className="flex items-end gap-1">
+                    <span className="text-2xl font-bold text-[#2C2416]">16</span>
+                    <span className="text-sm text-[#9B8A74] mb-0.5">personnes max</span>
+                  </div>
+                  <div className="text-xs text-[#9B8A74] mt-1">8 + 8 voyageurs · 8 chambres</div>
+                </div>
+
+                {/* Combinaison 3 : Les 3 */}
+                <div className="border-2 border-[#C8763A]/50 rounded-xl p-4 bg-[#C8763A]/5 relative">
+                  <div className="absolute -top-2.5 left-4">
+                    <span className="bg-[#C8763A] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide">
+                      Max
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">Mémé</span>
+                    <span className="text-[#9B8A74] text-xs">+</span>
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">Atelier</span>
+                    <span className="text-[#9B8A74] text-xs">+</span>
+                    <span className="text-xs font-bold bg-[#6B7C45]/10 text-[#6B7C45] px-2 py-0.5 rounded-full">Alain</span>
+                  </div>
+                  <div className="flex items-end gap-1">
+                    <span className="text-2xl font-bold text-[#C8763A]">20</span>
+                    <span className="text-sm text-[#9B8A74] mb-0.5">personnes max</span>
+                  </div>
+                  <div className="text-xs text-[#9B8A74] mt-1">8 + 4 + 8 voyageurs · 10 chambres</div>
+                </div>
+              </div>
+
+              <p className="text-xs text-[#9B8A74] mt-4 flex items-start gap-1.5">
+                <span>ℹ️</span>
+                Les disponibilités sont à vérifier auprès de 4AR Locations — contactez-nous pour organiser votre séjour en grand groupe.
+              </p>
+            </div>
           </div>
 
           {/* Découvrir Lauris */}
