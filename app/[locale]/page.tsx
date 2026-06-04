@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
+import LogoBadge from '@/components/LogoBadge';
 import { properties } from '@/lib/properties';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -24,24 +25,34 @@ function HomeContent({ locale }: { locale: string }) {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#1A1008]/85 via-[#1A1008]/65 to-[#1A1008]/30" />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-24 md:py-36 w-full">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-[#C8763A] font-bold text-3xl md:text-4xl">4AR</span>
-              <span className="text-[#8A9E5A] font-bold text-3xl md:text-4xl">Locations</span>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28 w-full">
+          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+
+            {/* Texte gauche */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex items-center gap-2 mb-4 justify-center md:justify-start">
+                <span className="text-[#C8763A] font-bold text-3xl md:text-4xl">4AR</span>
+                <span className="text-[#8A9E5A] font-bold text-3xl md:text-4xl">Locations</span>
+              </div>
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">{t('hero.tagline')}</h1>
+              <p className="text-lg md:text-xl text-[#E8DCC8] mb-8 opacity-90">{t('hero.subtitle')}</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                <Link href={`/${locale}/biens`}
+                  className="bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold px-6 py-3 rounded-xl transition-colors text-center">
+                  {t('hero.cta')}
+                </Link>
+                <Link href={`/${locale}/contact`}
+                  className="border-2 border-white/60 hover:border-white text-white font-semibold px-6 py-3 rounded-xl transition-colors text-center backdrop-blur-sm bg-white/5">
+                  {t('hero.cta_book')}
+                </Link>
+              </div>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">{t('hero.tagline')}</h1>
-            <p className="text-lg md:text-xl text-[#E8DCC8] mb-8 opacity-90">{t('hero.subtitle')}</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link href={`/${locale}/biens`}
-                className="bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold px-6 py-3 rounded-xl transition-colors text-center">
-                {t('hero.cta')}
-              </Link>
-              <Link href={`/${locale}/contact`}
-                className="border-2 border-white/60 hover:border-white text-white font-semibold px-6 py-3 rounded-xl transition-colors text-center backdrop-blur-sm bg-white/5">
-                {t('hero.cta_book')}
-              </Link>
+
+            {/* Badge photo droite */}
+            <div className="hidden md:flex flex-shrink-0 items-center justify-center">
+              <LogoBadge />
             </div>
+
           </div>
         </div>
       </section>
