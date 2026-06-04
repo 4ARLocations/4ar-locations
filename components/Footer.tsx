@@ -14,10 +14,52 @@ export default function Footer() {
         </div>
         <div>
           <h4 className="font-semibold mb-3 text-[#E8DCC8]">Destinations</h4>
-          <ul className="space-y-1 text-sm text-[#9B8A74]">
-            <li>Risoul 1850 — Hautes-Alpes</li>
-            <li>Avignon — Vaucluse</li>
-            <li>Lauris — Luberon</li>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Risoul+1850+Hautes-Alpes+France"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#9B8A74] hover:text-[#C8763A] transition-colors group"
+              >
+                <svg className="w-3.5 h-3.5 flex-shrink-0 group-hover:text-[#C8763A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Risoul 1850 — Hautes-Alpes
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Avignon+intramuros+Vaucluse+France"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#9B8A74] hover:text-[#C8763A] transition-colors group"
+              >
+                <svg className="w-3.5 h-3.5 flex-shrink-0 group-hover:text-[#C8763A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Avignon — Vaucluse
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Lauris+Luberon+Vaucluse+France"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#9B8A74] hover:text-[#C8763A] transition-colors group"
+              >
+                <svg className="w-3.5 h-3.5 flex-shrink-0 group-hover:text-[#C8763A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Lauris — Luberon
+              </a>
+            </li>
           </ul>
         </div>
         <div>
