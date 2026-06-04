@@ -22,6 +22,7 @@ function makeDevFallback() {
     set: async (key: string, val: unknown) => { store[key] = val; },
     get: async (key: string) => store[key] ?? null,
     exists: async (key: string) => (key in store ? 1 : 0),
+    del: async (...keys: string[]) => { keys.forEach((k) => delete store[k]); return keys.length; },
   };
 }
 

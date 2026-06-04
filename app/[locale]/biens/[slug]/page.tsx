@@ -7,6 +7,7 @@ import PropertyGallery from '@/components/PropertyGallery';
 import LaurisCombine from '@/components/LaurisCombine';
 import ReviewList from '@/components/ReviewList';
 import ReviewForm from '@/components/ReviewForm';
+import AvailabilityCalendar from '@/components/AvailabilityCalendar';
 
 export default async function PropertyPage({
   params,
@@ -204,6 +205,9 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                 <InfoRow icon="✉️" label="Réservation" value="Directe ou via Airbnb / Abritel" />
               </div>
             </div>
+
+            {/* CALENDRIER DISPONIBILITÉS */}
+            <AvailabilityCalendar propertyId={property.id} />
 
             {/* AVIS VOYAGEURS */}
             <div className="py-8">
