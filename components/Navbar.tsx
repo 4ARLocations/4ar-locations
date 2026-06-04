@@ -1,7 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 
 const localeLabels: Record<string, string> = { fr: '🇫🇷 FR', en: '🇬🇧 EN', de: '🇩🇪 DE' };
@@ -17,15 +16,9 @@ export default function Navbar({ locale }: { locale: string }) {
     <nav className="bg-white border-b border-[#E8DCC8] sticky top-0 z-50 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <Link href={localePath('')} className="flex items-center">
-          <Image
-            src="/images/logo-4ar-nav.svg"
-            alt="4AR Locations"
-            width={220}
-            height={52}
-            priority
-            className="h-11 w-auto"
-          />
+        <Link href={localePath('')} className="flex items-center gap-1.5">
+          <span className="text-[#C8763A] font-bold text-xl tracking-tight">4AR</span>
+          <span className="text-[#6B7C45] font-semibold text-xl">Locations</span>
         </Link>
 
         {/* Desktop nav */}
