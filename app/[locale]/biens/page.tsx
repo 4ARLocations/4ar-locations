@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
 
@@ -22,40 +23,81 @@ function BiensContent({ locale }: { locale: string }) {
         <p className="text-[#5C4F3A] text-lg">{t('subtitle')}</p>
       </div>
 
+      {/* ─── BANNIÈRE ALPES ─── */}
+      <div className="relative h-52 rounded-2xl overflow-hidden mb-6 shadow-sm">
+        <Image
+          src="/images/bg-risoul-mountain.jpg"
+          alt="Alpes du Sud — Risoul 1850"
+          fill
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A1520]/75 via-[#0A1520]/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-8">
+          <div className="text-white">
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/65 mb-1">Hautes-Alpes</p>
+            <h2 className="text-3xl font-bold leading-tight">⛷ Alpes du Sud</h2>
+            <p className="text-sm text-white/70 mt-1.5">Risoul 1850 · 1 logement</p>
+          </div>
+        </div>
+      </div>
+
       {/* Risoul & Avignon côte à côte */}
       <div className="mb-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-[#E8DCC8] shadow-sm">
           {/* Risoul */}
           <div className="p-6 bg-white">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🏔️</span>
-              <h2 className="text-xl font-bold text-[#2C2416]">Alpes du Sud</h2>
-            </div>
             <PropertyCard property={risoul} locale={locale} />
           </div>
 
-          {/* Séparateur vertical */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-[#E8DCC8]" />
+          {/* Séparateur */}
           <div className="block md:hidden h-px bg-[#E8DCC8] mx-6" />
 
           {/* Avignon */}
           <div className="p-6 bg-white border-t md:border-t-0 md:border-l border-[#E8DCC8]">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🏰</span>
-              <h2 className="text-xl font-bold text-[#2C2416]">Avignon</h2>
-            </div>
             <PropertyCard property={avignon} locale={locale} />
           </div>
         </div>
       </div>
 
-      {/* Luberon */}
-      <div className="mb-14">
-        <div className="flex items-center gap-3 mb-6">
-          <span className="text-3xl">🌿</span>
-          <h2 className="text-2xl font-bold text-[#2C2416]">Luberon — Lauris</h2>
-          <div className="flex-1 h-px bg-[#E8DCC8]" />
+      {/* ─── BANNIÈRE AVIGNON ─── */}
+      <div className="relative h-52 rounded-2xl overflow-hidden mb-6 shadow-sm">
+        <Image
+          src="/images/bg-palais.jpg"
+          alt="Avignon — Palais des Papes"
+          fill
+          className="object-cover object-[center_30%]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2A1008]/75 via-[#2A1008]/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-8">
+          <div className="text-white">
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/65 mb-1">Vaucluse</p>
+            <h2 className="text-3xl font-bold leading-tight">🏛 Avignon</h2>
+            <p className="text-sm text-white/70 mt-1.5">Cité des Papes · Intramuros · 1 logement</p>
+          </div>
         </div>
+      </div>
+
+      {/* Avignon seul (déjà dans le bloc ci-dessus mais on garde la cohérence visuelle) */}
+      {/* ─── BANNIÈRE LUBERON ─── */}
+      <div className="relative h-52 rounded-2xl overflow-hidden mb-6 shadow-sm">
+        <Image
+          src="/images/bg-lauris.jpg"
+          alt="Lauris — Village du Luberon"
+          fill
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0D1A08]/75 via-[#0D1A08]/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-8">
+          <div className="text-white">
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/65 mb-1">Vaucluse</p>
+            <h2 className="text-3xl font-bold leading-tight">🌿 Luberon — Lauris</h2>
+            <p className="text-sm text-white/70 mt-1.5">Village perché · 3 maisons · Combinables</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Maisons du Luberon */}
+      <div className="mb-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {luberon.map((p) => (
             <PropertyCard key={p.id} property={p} locale={locale} />
