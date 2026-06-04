@@ -1,177 +1,172 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 440">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400">
 
   <!-- Fond sombre -->
-  <rect width="400" height="440" fill="#1A1008"/>
+  <rect width="420" height="400" fill="#1A1008"/>
 
-  <!-- Cadre fin autour de l'illustration (comme dans la référence) -->
-  <rect x="58" y="48" width="284" height="178" fill="none" stroke="#C8763A" stroke-width="0.8" opacity="0.5"/>
+  <!-- Cadre illustration -->
+  <rect x="30" y="28" width="360" height="210" fill="none" stroke="#C8763A" stroke-width="0.8" opacity="0.4"/>
 
-  <!-- ══════════════════════════════════════════════
-       ILLUSTRATION LINE ART — panorama des 3 lieux
-       Couleur : or/terracotta #C8763A
-  ══════════════════════════════════════════════ -->
   <g fill="none" stroke="#C8763A" stroke-linecap="round" stroke-linejoin="round">
 
-    <!-- ── CHÂTEAU DE LAURIS (gauche) ─────────────── -->
+    <!-- ════════════════════════════════════
+         GAUCHE — CHÂTEAU DE LAURIS
+         Silhouette large et lisible
+    ════════════════════════════════════ -->
 
-    <!-- Falaise / éperon rocheux -->
-    <path d="M68 215 Q72 200 78 188 Q82 178 88 170 L95 162 L100 158" stroke-width="1.2"/>
+    <!-- Grande tour principale -->
+    <rect x="48" y="90" width="36" height="120" stroke-width="2"/>
+    <!-- Créneau sur la tour (bien visible) -->
+    <polyline points="44,90 44,78 52,78 52,86 60,86 60,78 68,78 68,86 76,86 76,78 84,78 84,86 88,86 88,90" stroke-width="1.8"/>
 
-    <!-- Corps principal château -->
-    <rect x="95" y="130" width="52" height="85" stroke-width="1.3"/>
+    <!-- Corps du château (aile droite) -->
+    <rect x="84" y="118" width="50" height="92" stroke-width="2"/>
+    <!-- Toit en pente -->
+    <polyline points="80,118 109,92 138,118" stroke-width="2"/>
 
-    <!-- Toit principal -->
-    <polyline points="91,130 121,103 150,130" stroke-width="1.4"/>
+    <!-- Grande fenêtre cintrée (tour) -->
+    <path d="M57 108 Q66 98 75 108 L75 130 L57 130 Z" stroke-width="1.5"/>
 
-    <!-- Tour gauche (plus haute) -->
-    <rect x="84" y="118" width="16" height="44" stroke-width="1.2"/>
-    <polyline points="81,118 92,104 103,118" stroke-width="1.2"/>
-    <!-- Créneau tour gauche -->
-    <polyline points="82,118 82,112 86,112 86,116 89,116 89,112 93,112 93,116 96,116 96,112 100,112 100,118" stroke-width="0.9"/>
+    <!-- Fenêtres aile -->
+    <rect x="92" y="130" width="13" height="18" rx="6" stroke-width="1.5"/>
+    <rect x="113" y="130" width="13" height="18" rx="6" stroke-width="1.5"/>
+    <rect x="92" y="158" width="13" height="15" stroke-width="1.4"/>
+    <rect x="113" y="158" width="13" height="15" stroke-width="1.4"/>
 
-    <!-- Tour droite (petite) -->
-    <rect x="142" y="142" width="14" height="32" stroke-width="1.1"/>
-    <polyline points="140,142 149,132 158,142" stroke-width="1.1"/>
-
-    <!-- Fenêtres façade principale -->
-    <rect x="103" y="140" width="9" height="12" rx="4" stroke-width="1"/>
-    <rect x="118" y="140" width="9" height="12" rx="4" stroke-width="1"/>
-    <rect x="133" y="140" width="9" height="12" rx="4" stroke-width="1"/>
-    <!-- Fenêtres 2e rang -->
-    <rect x="103" y="160" width="9" height="10" stroke-width="0.9"/>
-    <rect x="133" y="160" width="9" height="10" stroke-width="0.9"/>
     <!-- Porte cintrée -->
-    <path d="M115 215 L115 196 Q121 188 127 196 L127 215" stroke-width="1.1"/>
+    <path d="M100 210 L100 188 Q109 178 118 188 L118 210" stroke-width="1.6"/>
 
-    <!-- Terrasses (étages descendants vers la gauche) -->
-    <line x1="68" y1="185" x2="95" y2="185" stroke-width="1"/>
-    <line x1="72" y1="185" x2="72" y2="195" stroke-width="0.9"/>
-    <line x1="64" y1="195" x2="95" y2="195" stroke-width="1"/>
-    <line x1="68" y1="195" x2="68" y2="205" stroke-width="0.9"/>
-    <line x1="62" y1="205" x2="95" y2="205" stroke-width="1"/>
-    <!-- Végétation terrasses (cypres) -->
-    <line x1="74" y1="185" x2="74" y2="175" stroke-width="0.8"/>
-    <ellipse cx="74" cy="173" rx="3" ry="6" stroke-width="0.8"/>
-    <line x1="82" y1="195" x2="82" y2="184" stroke-width="0.8"/>
-    <ellipse cx="82" cy="182" rx="2.5" ry="5" stroke-width="0.8"/>
+    <!-- Terrasses (3 niveaux, bien lisibles) -->
+    <line x1="30" y1="170" x2="48" y2="170" stroke-width="1.6"/>
+    <line x1="30" y1="170" x2="30" y2="185" stroke-width="1.4"/>
+    <line x1="30" y1="185" x2="48" y2="185" stroke-width="1.6"/>
+    <line x1="36" y1="185" x2="36" y2="200" stroke-width="1.4"/>
+    <line x1="30" y1="200" x2="48" y2="200" stroke-width="1.6"/>
 
-    <!-- ── PONT SAINT-BÉNÉZET (centre) ────────────── -->
+    <!-- Cyprès sur terrasse (silhouette simple) -->
+    <ellipse cx="40" cy="163" rx="4" ry="10" stroke-width="1.4"/>
+    <line x1="40" y1="170" x2="40" y2="173" stroke-width="1.2"/>
 
-    <!-- Tablier du pont -->
-    <line x1="147" y1="175" x2="270" y2="175" stroke-width="1.5"/>
+    <!-- ════════════════════════════════════
+         CENTRE — PONT SAINT-BÉNÉZET
+         + PALAIS DES PAPES en fond
+    ════════════════════════════════════ -->
 
-    <!-- 4 arches -->
-    <path d="M152 175 Q161 158 170 175" stroke-width="1.3"/>
-    <path d="M172 175 Q181 158 190 175" stroke-width="1.3"/>
-    <path d="M192 175 Q201 158 210 175" stroke-width="1.3"/>
-    <path d="M212 175 Q221 158 230 175" stroke-width="1.3"/>
-    <path d="M232 175 Q241 158 250 175" stroke-width="1.3"/>
+    <!-- Palais des Papes — 2 grandes tours très lisibles -->
+    <!-- Tour gauche palais -->
+    <rect x="168" y="72" width="30" height="138" stroke-width="2"/>
+    <polyline points="164,72 164,60 170,60 170,66 176,66 176,60 182,60 182,66 188,66 188,60 194,60 194,66 200,66 200,72" stroke-width="1.6"/>
+    <!-- Fenêtre gothique tour gauche -->
+    <path d="M174 90 Q183 80 192 90 L192 112 L174 112 Z" stroke-width="1.4"/>
+    <path d="M174 122 Q183 112 192 122 L192 144 L174 144 Z" stroke-width="1.4"/>
 
-    <!-- Piliers entre arches -->
-    <line x1="170" y1="175" x2="170" y2="215" stroke-width="1.1"/>
-    <line x1="190" y1="175" x2="190" y2="215" stroke-width="1.1"/>
-    <line x1="210" y1="175" x2="210" y2="215" stroke-width="1.1"/>
-    <line x1="230" y1="175" x2="230" y2="215" stroke-width="1.1"/>
-    <line x1="250" y1="175" x2="250" y2="215" stroke-width="1.1"/>
+    <!-- Tour droite palais -->
+    <rect x="222" y="82" width="28" height="128" stroke-width="2"/>
+    <polyline points="218,82 218,70 224,70 224,76 230,76 230,70 236,70 236,76 242,76 242,70 248,70 248,76 250,76 250,82" stroke-width="1.6"/>
+    <!-- Fenêtre tour droite -->
+    <path d="M228 100 Q236 90 244 100 L244 120 L228 120 Z" stroke-width="1.4"/>
+    <path d="M228 130 Q236 120 244 130 L244 150 L228 150 Z" stroke-width="1.4"/>
 
-    <!-- Chapelle Saint-Nicolas sur le pont -->
-    <rect x="196" y="160" width="18" height="16" stroke-width="1"/>
-    <polyline points="193,160 205,149 217,160" stroke-width="1"/>
-    <!-- Petite croix sur la chapelle -->
-    <line x1="205" y1="149" x2="205" y2="143" stroke-width="0.9"/>
-    <line x1="202" y1="146" x2="208" y2="146" stroke-width="0.9"/>
-    <!-- Fenêtre chapelle -->
-    <path d="M200 164 Q205 160 210 164 L210 176 L200 176 Z" stroke-width="0.8"/>
+    <!-- Mur de liaison entre les tours -->
+    <line x1="198" y1="155" x2="222" y2="155" stroke-width="1.8"/>
+    <line x1="198" y1="155" x2="198" y2="210" stroke-width="1.6"/>
+    <line x1="222" y1="155" x2="222" y2="210" stroke-width="1.6"/>
+    <!-- Petite fenêtre sur le mur -->
+    <rect x="205" y="162" width="10" height="13" rx="4" stroke-width="1.3"/>
 
-    <!-- Eau du Rhône (lignes ondulées) -->
-    <path d="M152 190 Q165 186 178 190 Q191 194 204 190 Q217 186 230 190 Q243 194 256 190" stroke-width="0.8" opacity="0.8"/>
-    <path d="M158 200 Q172 196 186 200 Q200 204 214 200 Q228 196 242 200 Q256 204 265 200" stroke-width="0.7" opacity="0.6"/>
-    <path d="M152 210 Q168 207 184 210 Q200 213 216 210 Q232 207 248 210" stroke-width="0.6" opacity="0.5"/>
+    <!-- Pont Saint-Bénézet — 3 grandes arches -->
+    <line x1="134" y1="178" x2="270" y2="178" stroke-width="2"/>
+    <!-- Grande arche 1 -->
+    <path d="M138 178 Q158 148 178 178" stroke-width="2"/>
+    <!-- Grande arche 2 -->
+    <path d="M178 178 Q198 148 218 178" stroke-width="2"/>
+    <!-- Grande arche 3 -->
+    <path d="M218 178 Q238 148 258 178" stroke-width="2"/>
+    <!-- Piliers du pont -->
+    <line x1="178" y1="178" x2="178" y2="210" stroke-width="1.8"/>
+    <line x1="218" y1="178" x2="218" y2="210" stroke-width="1.8"/>
+    <line x1="258" y1="178" x2="258" y2="210" stroke-width="1.8"/>
 
-    <!-- ── PALAIS DES PAPES + AVIGNON (fond droit du pont) ── -->
+    <!-- Chapelle sur le pont -->
+    <rect x="188" y="162" width="22" height="18" stroke-width="1.6"/>
+    <polyline points="185,162 199,148 213,162" stroke-width="1.6"/>
+    <line x1="199" y1="148" x2="199" y2="141" stroke-width="1.4"/>
+    <line x1="195" y1="144" x2="203" y2="144" stroke-width="1.4"/>
 
-    <!-- Grande tour palais -->
-    <rect x="252" y="128" width="22" height="88" stroke-width="1.3"/>
-    <!-- Créneau grande tour -->
-    <polyline points="250,128 250,120 254,120 254,124 258,124 258,120 262,120 262,124 266,124 266,120 270,120 270,124 274,124 274,128" stroke-width="0.9"/>
-    <!-- Fenêtres palais -->
-    <path d="M256 142 Q261 136 266 142 L266 155 L256 155 Z" stroke-width="0.9"/>
-    <path d="M256 163 Q261 157 266 163 L266 175 L256 175 Z" stroke-width="0.9"/>
+    <!-- Eau (lignes larges et claires) -->
+    <path d="M134 192 Q158 186 182 192 Q206 198 230 192 Q254 186 270 192" stroke-width="1.2" opacity="0.85"/>
+    <path d="M138 204 Q162 198 186 204 Q210 210 234 204 Q258 198 268 204" stroke-width="1" opacity="0.65"/>
 
-    <!-- Tour secondaire palais -->
-    <rect x="268" y="140" width="16" height="75" stroke-width="1.1"/>
-    <polyline points="266,140 276,130 286,140" stroke-width="1"/>
-    <rect x="271" y="152" width="7" height="10" stroke-width="0.8"/>
-    <rect x="271" y="168" width="7" height="10" stroke-width="0.8"/>
-
-    <!-- Remparts / murs de liaison -->
-    <line x1="147" y1="215" x2="252" y2="215" stroke-width="1"/>
-    <line x1="274" y1="175" x2="332" y2="175" stroke-width="1.1"/>
-    <line x1="284" y1="175" x2="284" y2="215" stroke-width="1"/>
-
-    <!-- ── ALPES / RISOUL (arrière-plan droit) ────── -->
+    <!-- ════════════════════════════════════
+         DROITE — ALPES / RISOUL
+         3 grandes montagnes claires
+    ════════════════════════════════════ -->
 
     <!-- Montagne gauche -->
-    <polyline points="278,215 296,145 314,215" stroke-width="1.3"/>
-    <!-- Montagne centrale (la plus haute) -->
-    <polyline points="296,215 316,105 336,215" stroke-width="1.5"/>
-    <!-- Calotte neigeuse -->
-    <polyline points="310,130 316,105 322,130" stroke-width="1" opacity="0.9"/>
+    <polyline points="272,210 296,140 320,210" stroke-width="2"/>
+    <!-- Montagne centrale (plus haute) -->
+    <polyline points="290,210 318,88 346,210" stroke-width="2.2"/>
+    <!-- Calotte neigeuse bien visible -->
+    <polyline points="308,118 318,88 328,118" stroke-width="1.8"/>
     <!-- Montagne droite -->
-    <polyline points="318,215 332,140 346,215" stroke-width="1.2"/>
+    <polyline points="330,210 352,130 374,210" stroke-width="1.8"/>
 
-    <!-- Sapins base montagnes -->
-    <polyline points="286,215 289,205 292,215" stroke-width="0.9"/>
-    <polyline points="291,215 295,203 299,215" stroke-width="0.9"/>
-    <polyline points="336,215 339,207 342,215" stroke-width="0.9"/>
-    <polyline points="340,215 344,204 348,215" stroke-width="0.9"/>
+    <!-- Sapins base (triangles simples) -->
+    <polyline points="276,210 280,198 284,210" stroke-width="1.4"/>
+    <polyline points="283,210 288,196 293,210" stroke-width="1.4"/>
+    <polyline points="352,210 357,198 362,210" stroke-width="1.4"/>
+    <polyline points="360,210 365,196 370,210" stroke-width="1.4"/>
 
-    <!-- Remontées mécaniques (câble fin) -->
-    <line x1="296" y1="145" x2="332" y2="140" stroke-width="0.7" stroke-dasharray="3,2" opacity="0.5"/>
-    <circle cx="310" cy="143" r="2" stroke-width="0.9" opacity="0.6"/>
-    <circle cx="322" cy="141" r="2" stroke-width="0.9" opacity="0.6"/>
+    <!-- Chalet (simple et lisible) -->
+    <rect x="298" y="176" width="32" height="24" stroke-width="1.6"/>
+    <polyline points="294,176 314,160 334,176" stroke-width="1.6"/>
+    <!-- Fenêtres chalet -->
+    <rect x="302" y="182" width="8" height="7" stroke-width="1.2"/>
+    <rect x="316" y="182" width="8" height="7" stroke-width="1.2"/>
 
-    <!-- ── LIGNE DE SOL ────────────────────────────── -->
-    <line x1="68" y1="215" x2="348" y2="215" stroke-width="1.3"/>
+    <!-- ════════════════════════════
+         LIGNE DE SOL
+    ════════════════════════════ -->
+    <line x1="30" y1="210" x2="390" y2="210" stroke-width="1.8"/>
 
   </g>
 
-  <!-- ══════════════════════════════════════════════
-       TEXTE
-  ══════════════════════════════════════════════ -->
+  <!-- Labels des 3 lieux (en dessous de chaque section) -->
+  <text x="87" y="248" text-anchor="middle"
+    font-family="Georgia, serif" font-size="8" letter-spacing="2.5" font-weight="600"
+    fill="#C8763A" opacity="0.75">LAURIS</text>
 
-  <!-- "4AR" — grand, serif -->
-  <text
-    x="200" y="288"
+  <text x="210" y="248" text-anchor="middle"
+    font-family="Georgia, serif" font-size="8" letter-spacing="2.5" font-weight="600"
+    fill="#C8763A" opacity="0.75">AVIGNON</text>
+
+  <text x="330" y="248" text-anchor="middle"
+    font-family="Georgia, serif" font-size="8" letter-spacing="2.5" font-weight="600"
+    fill="#C8763A" opacity="0.75">RISOUL 1850</text>
+
+  <!-- Séparateurs verticaux fins -->
+  <line x1="154" y1="230" x2="154" y2="252" stroke="#C8763A" stroke-width="0.6" opacity="0.35"/>
+  <line x1="266" y1="230" x2="266" y2="252" stroke="#C8763A" stroke-width="0.6" opacity="0.35"/>
+
+  <!-- TEXTE PRINCIPAL -->
+  <text x="210" y="312"
     text-anchor="middle"
     font-family="Georgia, 'Times New Roman', serif"
-    font-size="52" font-weight="700"
-    fill="#C8763A"
-    letter-spacing="-1">4AR</text>
+    font-size="58" font-weight="700"
+    fill="#C8763A" letter-spacing="-1">4AR</text>
 
-  <!-- Ligne fine de séparation -->
-  <line x1="120" y1="300" x2="280" y2="300" stroke="#C8763A" stroke-width="0.8" opacity="0.5"/>
+  <line x1="100" y1="324" x2="320" y2="324" stroke="#C8763A" stroke-width="0.8" opacity="0.45"/>
 
-  <!-- "Locations" -->
-  <text
-    x="200" y="328"
+  <text x="210" y="352"
     text-anchor="middle"
     font-family="Georgia, 'Times New Roman', serif"
-    font-size="18" font-weight="400"
-    letter-spacing="8"
+    font-size="19" font-weight="400"
+    letter-spacing="9"
     fill="#FAF7F2">Locations</text>
 
-  <!-- Sous-titre destinations -->
-  <text
-    x="200" y="368"
+  <text x="210" y="385"
     text-anchor="middle"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="9" font-weight="400"
-    letter-spacing="3"
-    fill="#C8763A" opacity="0.7">PROVENCE  ·  ALPES  ·  AVIGNON</text>
-
-  <!-- Points décoratifs flanquant le sous-titre -->
-  <circle cx="80" cy="364" r="1.5" fill="#C8763A" opacity="0.4"/>
-  <circle cx="320" cy="364" r="1.5" fill="#C8763A" opacity="0.4"/>
+    font-family="Georgia, serif"
+    font-size="8.5" letter-spacing="3"
+    fill="#C8763A" opacity="0.65">PROVENCE  ·  ALPES  ·  AVIGNON</text>
 
 </svg>
