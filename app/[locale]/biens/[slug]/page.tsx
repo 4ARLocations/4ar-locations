@@ -53,7 +53,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
     ? '/images/bg-risoul-mountain.jpg'
     : property.region === 'avignon'
     ? '/images/bg-palais.jpg'
-    : '/images/bg-lauris-chateau.jpg';
+    : '/images/bg-lauris-mid.jpg';
 
   // Couleur d'accent selon la région
   const regionColor = property.region === 'alpes'
@@ -76,33 +76,33 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="absolute inset-0 bg-[#FAF7F2]/72" />
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-6">
+        {/* Gradient sombre → lisibilité des textes sur la photo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1008]/75 via-[#1A1008]/55 to-[#1A1008]/30" />
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-10">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-[#9B8A74] mb-5">
-            <Link href={`/${locale}/biens`} className="hover:text-[#C8763A] transition-colors flex items-center gap-1">
+          <nav className="flex items-center gap-2 text-sm text-white/65 mb-5">
+            <Link href={`/${locale}/biens`} className="hover:text-white transition-colors flex items-center gap-1">
               ← {t('properties.title')}
             </Link>
-            <span>/</span>
-            <span className="text-[#2C2416] font-medium truncate">{t(property.nameKey)}</span>
+            <span className="text-white/40">/</span>
+            <span className="text-white/85 font-medium truncate">{t(property.nameKey)}</span>
           </nav>
 
           {/* Titre + localisation */}
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className={`text-xs font-bold uppercase tracking-widest ${regionColor} bg-current/10 px-3 py-1 rounded-full border border-current/20`}
-                  style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
+                <span className="text-xs font-bold uppercase tracking-widest text-white bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/30">
                   {t(property.badgeKey)}
                 </span>
-                <span className="text-xs font-medium text-[#9B8A74] uppercase tracking-wide">
+                <span className="text-xs font-medium text-white/60 uppercase tracking-wide">
                   {t(property.typeKey)}
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-2 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight drop-shadow-sm">
                 {t(property.nameKey)}
               </h1>
-              <p className="text-[#9B8A74] flex items-center gap-1.5 text-sm">
+              <p className="text-white/70 flex items-center gap-1.5 text-sm">
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -113,26 +113,26 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
             </div>
 
             {/* Prix compact dans le header */}
-            <div className="text-right hidden sm:block">
+            <div className="text-right hidden sm:block bg-black/25 backdrop-blur-sm rounded-2xl px-5 py-3 border border-white/15">
               {property.priceOnRequest ? (
                 <div>
-                  <div className="text-sm text-[#9B8A74]">Entre</div>
-                  <div className="text-2xl font-bold text-[#C8763A]">
+                  <div className="text-xs text-white/55 uppercase tracking-wide mb-1">Entre</div>
+                  <div className="text-2xl font-bold text-[#E8A05A]">
                     {property.priceFrom}€ – {property.priceTo}€
-                    <span className="text-sm font-normal text-[#9B8A74]">/nuit</span>
+                    <span className="text-sm font-normal text-white/60">/nuit</span>
                   </div>
-                  <div className="text-xs text-[#C8763A] font-medium mt-0.5">Nous contacter pour les tarifs</div>
+                  <div className="text-xs text-white/55 mt-1">Nous contacter pour les tarifs</div>
                 </div>
               ) : property.priceFrom > 0 ? (
                 <div>
-                  <div className="text-sm text-[#9B8A74]">{t('home.from_price')}</div>
-                  <div className="text-2xl font-bold text-[#C8763A]">
+                  <div className="text-xs text-white/55 uppercase tracking-wide mb-1">{t('home.from_price')}</div>
+                  <div className="text-2xl font-bold text-[#E8A05A]">
                     {property.priceFrom}€
-                    <span className="text-sm font-normal text-[#9B8A74]">/nuit</span>
+                    <span className="text-sm font-normal text-white/60">/nuit</span>
                   </div>
                 </div>
               ) : (
-                <div className="text-base font-semibold text-[#9B8A74] italic">Sur demande</div>
+                <div className="text-base font-semibold text-white/70 italic">Sur demande</div>
               )}
             </div>
           </div>

@@ -88,9 +88,9 @@ function BiensContent({ locale }: { locale: string }) {
       <section
         className="relative py-12"
         style={{
-          backgroundImage: "url('/images/bg-lauris-chateau.jpg')",
+          backgroundImage: "url('/images/bg-lauris-mid.jpg')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center 25%',
+          backgroundPosition: 'center 40%',
           backgroundAttachment: 'fixed',
         }}
       >

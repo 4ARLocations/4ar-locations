@@ -69,7 +69,7 @@ function HomeContent({ locale }: { locale: string }) {
             {[
               { label: 'Risoul 1850', sub: 'Hautes-Alpes · ⛷ Station de ski', image: '/images/bg-risoul-mountain.jpg', href: `/${locale}/biens/risoul` },
               { label: 'Avignon', sub: 'Vaucluse · 🏛 Cité des Papes', image: '/images/bg-palais.jpg', href: `/${locale}/biens/avignon` },
-              { label: 'Lauris', sub: 'Luberon · 🌿 3 maisons', image: '/images/bg-lauris-chateau.jpg', href: `/${locale}/biens` },
+              { label: 'Lauris', sub: 'Luberon · 🌿 3 maisons', image: '/images/bg-lauris-mid.jpg', href: `/${locale}/biens` },
             ].map((d) => (
               <Link key={d.label} href={d.href} className="group block">
                 <div className="relative overflow-hidden rounded-2xl h-44 shadow-md">
