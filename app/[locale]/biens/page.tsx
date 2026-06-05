@@ -226,7 +226,6 @@ function BiensContent({ locale }: { locale: string }) {
         </div>
       </section>
 
-      <div className="pb-8" />
     </>
   );
 }
