@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useId } from 'react';
+import { useState, useRef, useCallback, useId, useEffect } from 'react';
 import Image from 'next/image';
 
 interface Props {
@@ -18,8 +18,26 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
   const [uploading, setUploading] = useState(false);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<number | null>(null); // index de la photo en grand
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadId = useId();
+
+  // ── Lightbox ──────────────────────────────────────────────────────────────
+  const openLightbox = useCallback((idx: number) => setLightbox(idx), []);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
+  const lightboxPrev = useCallback(() => setLightbox(i => i !== null ? (i - 1 + images.length) % images.length : null), [images.length]);
+  const lightboxNext = useCallback(() => setLightbox(i => i !== null ? (i + 1) % images.length : null), [images.length]);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxPrev();
+      if (e.key === 'ArrowRight') lightboxNext();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightbox, closeLightbox, lightboxPrev, lightboxNext]);
 
   // ── Drag & Drop pour réordonner ───────────────────────────────────────────
   const handleDragStart = (idx: number) => {
@@ -272,6 +290,16 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
 
                 {/* Overlay actions (au survol) */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
+                  {/* Bouton loupe */}
+                  <button
+                    onClick={e => { e.stopPropagation(); openLightbox(idx); }}
+                    className="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white rounded-lg p-1.5 transition-colors"
+                    title="Voir en grand"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
+                    </svg>
+                  </button>
                   {idx !== 0 && (
                     <button
                       onClick={() => setMain(idx)}
@@ -314,6 +342,67 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
             </div>
           ))}
         </div>
+
+        {/* Lightbox */}
+        {lightbox !== null && (
+          <div
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+            onClick={closeLightbox}
+          >
+            {/* Image */}
+            <div
+              className="relative max-w-5xl max-h-[90vh] w-full mx-4"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="relative w-full" style={{ maxHeight: '85vh' }}>
+                <img
+                  src={images[lightbox]}
+                  alt={`Photo ${lightbox + 1}`}
+                  className="w-full h-full object-contain rounded-xl shadow-2xl"
+                  style={{ maxHeight: '85vh' }}
+                />
+              </div>
+
+              {/* Compteur */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm px-3 py-1 rounded-full">
+                {lightbox + 1} / {images.length}
+              </div>
+
+              {/* Fermer */}
+              <button
+                onClick={closeLightbox}
+                className="absolute -top-4 -right-4 bg-white text-[#2C2416] rounded-full w-9 h-9 flex items-center justify-center font-bold hover:bg-gray-100 shadow-lg transition-colors text-lg"
+              >
+                ✕
+              </button>
+
+              {/* Précédent */}
+              {images.length > 1 && (
+                <button
+                  onClick={lightboxPrev}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors shadow-lg"
+                >
+                  ←
+                </button>
+              )}
+
+              {/* Suivant */}
+              {images.length > 1 && (
+                <button
+                  onClick={lightboxNext}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors shadow-lg"
+                >
+                  →
+                </button>
+              )}
+
+              {/* Nom du fichier */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 text-white/80 text-xs px-3 py-1 rounded-full truncate max-w-xs">
+                {images[lightbox].split('/').pop()}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Bouton bas */}
         <div className="mt-6 flex justify-end">
