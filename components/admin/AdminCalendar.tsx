@@ -333,7 +333,7 @@ export default function AdminCalendar({ initialBlocks }: Props) {
         </div>
 
         {/* ── VUE STATS ── */}
-        {activeTab === 'stats' && <StatsView blocks={blocks} />}
+        {activeTab === 'stats' && <StatsView blocks={blocks} onDeleteBlock={removeBlock} />}
 
         {/* ── VUE CALENDRIER ── */}
         {activeTab === 'calendar' && <>
@@ -538,30 +538,46 @@ function countNights(start: string, end: string): number {
   return Math.max(0, Math.round((e.getTime() - s.getTime()) / 86400000));
 }
 
-function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
+function StatsView({ blocks, onDeleteBlock }: { blocks: AvailabilityBlock[], onDeleteBlock: (block: AvailabilityBlock) => void }) {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
+  const today = new Date().toISOString().slice(0, 10);
 
   const RESERVATION_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct'];
+  const ALL_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct', 'family', 'blocked'];
   const SRC_COLOR: Record<string, string> = {
     airbnb:  '#FF5A5F',
     abritel: '#00A699',
     direct:  '#C8763A',
+    family:  '#6B7C45',
+    blocked: '#6B6B6B',
   };
   const SRC_LABEL: Record<string, string> = {
     airbnb:  'Airbnb',
     abritel: 'Abritel',
     direct:  'En direct',
+    family:  'Famille',
+    blocked: 'Bloqué',
   };
 
-  // Réservations de l'année sélectionnée
+  // ── Réservations de l'année sélectionnée (hors bloqué/famille)
   const yearBlocks = blocks.filter(b =>
     (b.start.startsWith(String(year)) || b.end.startsWith(String(year))) &&
+    RESERVATION_SOURCES.includes(b.source as BlockSource)
+  );
+  // Même filtre pour l'année précédente (comparatif)
+  const prevYear = year - 1;
+  const prevYearBlocks = blocks.filter(b =>
+    (b.start.startsWith(String(prevYear)) || b.end.startsWith(String(prevYear))) &&
     RESERVATION_SOURCES.includes(b.source as BlockSource)
   );
 
   const totalBookings = yearBlocks.length;
   const totalNights   = yearBlocks.reduce((acc, b) => acc + countNights(b.start, b.end), 0);
+  const prevTotal     = prevYearBlocks.length;
+  const prevNights    = prevYearBlocks.reduce((acc, b) => acc + countNights(b.start, b.end), 0);
+  const diffBookings  = totalBookings - prevTotal;
+  const diffNights    = totalNights - prevNights;
 
   // Par plateforme
   const byPlatform = RESERVATION_SOURCES.map(src => {
@@ -576,8 +592,8 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
   const monthlyData = Array.from({ length: 12 }, (_, m) => {
     const mb = yearBlocks.filter(b => b.start.startsWith(String(year)) && parseInt(b.start.slice(5, 7)) - 1 === m);
     return {
-      label: new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'short' }),
-      full:  new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'long' }),
+      label:   new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'short' }),
+      full:    new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'long' }),
       airbnb:  mb.filter(b => b.source === 'airbnb').length,
       abritel: mb.filter(b => b.source === 'abritel').length,
       direct:  mb.filter(b => b.source === 'direct').length,
@@ -588,17 +604,28 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
   const maxMonthly = Math.max(...monthlyData.map(m => m.total), 1);
   const bestMonth  = monthlyData.reduce((best, m) => m.total > best.total ? m : best, monthlyData[0]);
 
-  // Par logement
+  // Par logement + taux d'occupation
+  const daysInYear = (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 366 : 365;
   const byProperty = PROPERTIES.map(p => {
     const pb = yearBlocks.filter(b => b.propertyId === p.id);
     const nights = pb.reduce((a, b) => a + countNights(b.start, b.end), 0);
+    const occupancy = Math.round((nights / daysInYear) * 100);
     const perSrc = RESERVATION_SOURCES.map(src => ({
       src,
       count:  pb.filter(b => b.source === src).length,
       nights: pb.filter(b => b.source === src).reduce((a, b) => a + countNights(b.start, b.end), 0),
     }));
-    return { ...p, total: pb.length, nights, perSrc };
+    return { ...p, total: pb.length, nights, occupancy, perSrc };
   });
+
+  // Prochains séjours (toutes sources, à venir)
+  const upcoming = blocks
+    .filter(b => b.end >= today && RESERVATION_SOURCES.includes(b.source as BlockSource))
+    .sort((a, b) => a.start.localeCompare(b.start))
+    .slice(0, 5);
+
+  // Liste complète des réservations de l'année (triée par date)
+  const allYearBookings = [...yearBlocks].sort((a, b) => a.start.localeCompare(b.start));
 
   return (
     <div className="space-y-8 pb-10">
@@ -610,15 +637,62 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
         <button onClick={() => setYear(y => y + 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">→</button>
       </div>
 
+      {/* ── BLOC 0 : Prochains séjours ── */}
+      {upcoming.length > 0 && (
+        <div>
+          <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Prochains séjours</h2>
+          <div className="space-y-2">
+            {upcoming.map(b => {
+              const prop = PROPERTIES.find(p => p.id === b.propertyId);
+              const nights = countNights(b.start, b.end);
+              const isNow = b.start <= today && b.end >= today;
+              return (
+                <div key={b.id} className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${isNow ? 'border-white/20 bg-white/10' : 'border-white/5 bg-white/5'}`}>
+                  {isNow && <span className="text-[10px] font-bold bg-green-500 text-white px-2 py-0.5 rounded-full">EN COURS</span>}
+                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: SRC_COLOR[b.source] }} />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-white text-sm font-medium">{b.label || SRC_LABEL[b.source]}</span>
+                    <span className="text-white/40 text-xs ml-2">{prop?.emoji} {prop?.name}</span>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-white/70 text-xs">{b.start} → {b.end}</div>
+                    <div className="text-white/40 text-[10px]">{nights} nuit{nights > 1 ? 's' : ''}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* ── BLOC 1 : Vue globale ── */}
       <div>
-        <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Vue globale</h2>
+        <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Vue globale {year}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {/* Total réservations */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
             <div className="text-white/40 text-xs mb-2">Total réservations</div>
             <div className="text-white text-5xl font-bold">{totalBookings}</div>
-            <div className="text-white/30 text-xs mt-2">{totalNights} nuits au total</div>
+            <div className="flex items-center gap-1 mt-2">
+              {prevTotal > 0 && (
+                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${diffBookings >= 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                  {diffBookings >= 0 ? '+' : ''}{diffBookings} vs {prevYear}
+                </span>
+              )}
+              <span className="text-white/30 text-xs">{totalNights} nuits</span>
+            </div>
+          </div>
+          {/* Nuits totales */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="text-white/40 text-xs mb-2">Nuits réservées</div>
+            <div className="text-white text-5xl font-bold">{totalNights}</div>
+            <div className="flex items-center gap-1 mt-2">
+              {prevNights > 0 && (
+                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${diffNights >= 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                  {diffNights >= 0 ? '+' : ''}{diffNights} vs {prevYear}
+                </span>
+              )}
+            </div>
           </div>
           {/* Durée moyenne */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
@@ -631,30 +705,6 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
             <div className="text-white/40 text-xs mb-2">Meilleur mois</div>
             <div className="text-white text-2xl font-bold capitalize">{totalBookings > 0 ? bestMonth.full : '—'}</div>
             <div className="text-white/30 text-xs mt-2">{totalBookings > 0 ? `${bestMonth.total} réservation${bestMonth.total > 1 ? 's' : ''}` : ''}</div>
-          </div>
-          {/* Répartition plateforme — barre horizontale */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-            <div className="text-white/40 text-xs mb-3">Répartition par plateforme</div>
-            {totalBookings === 0 ? (
-              <p className="text-white/20 text-sm">Aucune réservation</p>
-            ) : (
-              <div className="space-y-2.5">
-                {byPlatform.map(p => (
-                  <div key={p.src}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span style={{ color: SRC_COLOR[p.src] }} className="font-semibold">{SRC_LABEL[p.src]}</span>
-                      <span className="text-white/60">{p.count} rés. · {p.nights} nuits</span>
-                    </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{ width: `${totalBookings > 0 ? (p.count / totalBookings) * 100 : 0}%`, backgroundColor: SRC_COLOR[p.src] }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -671,9 +721,17 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
               </div>
               <div className="text-white text-4xl font-bold mb-1">{p.count}</div>
               <div className="text-white/40 text-xs">réservation{p.count > 1 ? 's' : ''}</div>
-              <div className="mt-3 pt-3 border-t border-white/10">
-                <div className="text-white text-xl font-semibold">{p.nights}</div>
-                <div className="text-white/40 text-xs">nuit{p.nights > 1 ? 's' : ''}</div>
+              <div className="mt-3 pt-3 border-t border-white/10 flex justify-between items-end">
+                <div>
+                  <div className="text-white text-xl font-semibold">{p.nights}</div>
+                  <div className="text-white/40 text-xs">nuit{p.nights > 1 ? 's' : ''}</div>
+                </div>
+                {totalBookings > 0 && (
+                  <div className="text-right">
+                    <div className="text-white/60 text-sm font-semibold">{Math.round((p.count / totalBookings) * 100)}%</div>
+                    <div className="text-white/30 text-[10px]">du total</div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -690,8 +748,7 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
             <>
               <div className="flex items-end gap-1.5" style={{ height: '100px' }}>
                 {monthlyData.map((m, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group relative">
-                    {/* Tooltip */}
+                  <div key={i} className="flex-1 flex flex-col items-center h-full justify-end group relative">
                     {m.total > 0 && (
                       <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#1A1008] border border-white/20 rounded-lg px-2 py-1.5 text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
                         <div className="text-white font-bold mb-0.5">{m.full}</div>
@@ -701,29 +758,19 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
                         <div className="text-white/40 mt-0.5">{m.nights} nuits</div>
                       </div>
                     )}
-                    {/* Barres empilées */}
                     <div className="w-full flex flex-col-reverse gap-px" style={{ height: `${(m.total / maxMonthly) * 90}px`, minHeight: m.total > 0 ? '4px' : '0' }}>
                       {(['airbnb', 'abritel', 'direct'] as const).map(src => {
                         const count = m[src];
                         if (!count) return null;
-                        return (
-                          <div key={src} className="w-full rounded-sm flex-shrink-0"
-                            style={{ height: `${(count / m.total) * 100}%`, minHeight: '4px', backgroundColor: SRC_COLOR[src] }} />
-                        );
+                        return <div key={src} className="w-full rounded-sm flex-shrink-0" style={{ height: `${(count / m.total) * 100}%`, minHeight: '4px', backgroundColor: SRC_COLOR[src] }} />;
                       })}
                     </div>
                   </div>
                 ))}
               </div>
-              {/* Labels mois */}
               <div className="flex gap-1.5 mt-2">
-                {monthlyData.map((m, i) => (
-                  <div key={i} className="flex-1 text-center">
-                    <span className="text-white/30 text-[9px]">{m.label}</span>
-                  </div>
-                ))}
+                {monthlyData.map((m, i) => <div key={i} className="flex-1 text-center"><span className="text-white/30 text-[9px]">{m.label}</span></div>)}
               </div>
-              {/* Légende */}
               <div className="flex gap-4 mt-3 pt-3 border-t border-white/10 flex-wrap">
                 {RESERVATION_SOURCES.map(src => (
                   <div key={src} className="flex items-center gap-1.5">
@@ -737,38 +784,43 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
         </div>
       </div>
 
-      {/* ── BLOC 4 : Par logement ── */}
+      {/* ── BLOC 4 : Par logement + taux d'occupation ── */}
       <div>
         <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Par logement</h2>
         <div className="space-y-3">
           {byProperty.map(p => (
             <div key={p.id} className="bg-white/5 border border-white/10 rounded-2xl p-4">
-              {/* En-tête logement */}
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">{p.emoji}</span>
                   <span className="text-white font-semibold text-sm">{p.name}</span>
                 </div>
-                <div className="flex items-center gap-4 text-right">
+                <div className="flex items-center gap-5 text-right">
                   <div>
                     <div className="text-white font-bold text-xl">{p.total}</div>
                     <div className="text-white/30 text-[10px]">réservation{p.total > 1 ? 's' : ''}</div>
                   </div>
-                  <div className="border-l border-white/10 pl-4">
+                  <div className="border-l border-white/10 pl-5">
                     <div className="text-white font-bold text-xl">{p.nights}</div>
                     <div className="text-white/30 text-[10px]">nuit{p.nights > 1 ? 's' : ''}</div>
                   </div>
+                  <div className="border-l border-white/10 pl-5">
+                    <div className="text-white font-bold text-xl">{p.occupancy}%</div>
+                    <div className="text-white/30 text-[10px]">occupation</div>
+                  </div>
                 </div>
               </div>
+              {/* Barre taux d'occupation */}
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-3">
+                <div className="h-full rounded-full bg-[#C8763A] transition-all" style={{ width: `${p.occupancy}%` }} />
+              </div>
               {/* Détail par plateforme */}
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-2 flex-wrap">
                 {p.perSrc.map(s => (
-                  <div key={s.src} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg" style={{ backgroundColor: SRC_COLOR[s.src] + (s.count > 0 ? '25' : '0A') }}>
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.count > 0 ? SRC_COLOR[s.src] : 'rgba(255,255,255,0.15)' }} />
-                    <span className="text-xs" style={{ color: s.count > 0 ? SRC_COLOR[s.src] : 'rgba(255,255,255,0.25)' }}>
-                      {SRC_LABEL[s.src]}
-                    </span>
-                    <span className="text-xs font-bold" style={{ color: s.count > 0 ? 'white' : 'rgba(255,255,255,0.2)' }}>
+                  <div key={s.src} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ backgroundColor: SRC_COLOR[s.src] + (s.count > 0 ? '20' : '08') }}>
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: s.count > 0 ? SRC_COLOR[s.src] : 'rgba(255,255,255,0.15)' }} />
+                    <span className="text-xs" style={{ color: s.count > 0 ? SRC_COLOR[s.src] : 'rgba(255,255,255,0.2)' }}>{SRC_LABEL[s.src]}</span>
+                    <span className="text-xs font-bold" style={{ color: s.count > 0 ? 'white' : 'rgba(255,255,255,0.15)' }}>
                       {s.count > 0 ? `${s.count} · ${s.nights}n` : '—'}
                     </span>
                   </div>
@@ -777,8 +829,62 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
             </div>
           ))}
         </div>
-        {totalBookings === 0 && (
-          <p className="text-white/20 text-sm text-center py-8">Aucune réservation enregistrée pour {year}</p>
+        {totalBookings === 0 && <p className="text-white/20 text-sm text-center py-6">Aucune réservation pour {year}</p>}
+      </div>
+
+      {/* ── BLOC 5 : Liste complète des réservations ── */}
+      <div>
+        <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">
+          Liste des réservations {year} ({allYearBookings.length})
+        </h2>
+        {allYearBookings.length === 0 ? (
+          <p className="text-white/20 text-sm text-center py-6 bg-white/5 rounded-2xl">Aucune réservation pour {year}</p>
+        ) : (
+          <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-white/10 text-white/40 text-xs">
+                    <th className="text-left px-4 py-3 font-medium">Arrivée</th>
+                    <th className="text-left px-4 py-3 font-medium">Départ</th>
+                    <th className="text-left px-4 py-3 font-medium">Logement</th>
+                    <th className="text-left px-4 py-3 font-medium">Plateforme</th>
+                    <th className="text-left px-4 py-3 font-medium">Intitulé</th>
+                    <th className="text-center px-4 py-3 font-medium">Nuits</th>
+                    <th className="px-4 py-3" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {allYearBookings.map(b => {
+                    const prop = PROPERTIES.find(p => p.id === b.propertyId);
+                    const nights = countNights(b.start, b.end);
+                    const isPast = b.end < today;
+                    return (
+                      <tr key={b.id} className={`border-b border-white/5 hover:bg-white/5 transition-colors ${isPast ? 'opacity-50' : ''}`}>
+                        <td className="px-4 py-3 text-white/80 font-medium">{b.start}</td>
+                        <td className="px-4 py-3 text-white/60">{b.end}</td>
+                        <td className="px-4 py-3 text-white/70">{prop?.emoji} {prop?.name}</td>
+                        <td className="px-4 py-3">
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: SRC_COLOR[b.source] + '25', color: SRC_COLOR[b.source] }}>
+                            {SRC_LABEL[b.source]}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-white/50 text-xs">{b.label || '—'}</td>
+                        <td className="px-4 py-3 text-center text-white/60 font-semibold">{nights}</td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            onClick={() => onDeleteBlock(b)}
+                            className="text-white/20 hover:text-red-400 transition-colors text-xs px-2 py-1 rounded"
+                            title="Supprimer"
+                          >✕</button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
 
