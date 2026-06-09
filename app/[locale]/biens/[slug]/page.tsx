@@ -46,6 +46,62 @@ function InfoRow({ icon, label, value }: { icon: string; label: string; value: s
   );
 }
 
+function DescriptionBlock({ text }: { text: string }) {
+  // Split on sentence boundaries (". " or ".\n"), keep ⚠️ 🔹 markers as paragraph starters
+  const raw = text.trim();
+  // Split into sentences
+  const parts = raw.split(/\. (?=[A-ZÀÂÇÉÈÊËÎÏÔÙÛÜÆŒ🔹⚠️🏡])/);
+  // Group into paragraphs: first sentence alone as lead, then chunks of 2
+  const paragraphs: string[] = [];
+  if (parts.length <= 1) {
+    paragraphs.push(raw);
+  } else {
+    // Lead = first sentence
+    paragraphs.push(parts[0] + (parts.length > 1 ? '.' : ''));
+    // Remaining sentences grouped by 2
+    for (let i = 1; i < parts.length; i += 2) {
+      const chunk = parts.slice(i, i + 2);
+      paragraphs.push(chunk.map((s, idx) => (idx < chunk.length - 1 ? s + '.' : s)).join(' '));
+    }
+  }
+
+  // Check if last paragraph ends with a period
+  const ensurePeriod = (s: string) => (s.endsWith('.') || s.endsWith('?') || s.endsWith('!') ? s : s + '.');
+
+  return (
+    <div className="rounded-2xl bg-[#FAF7F2] border border-[#E8DCC8] px-6 py-5 space-y-4">
+      {paragraphs.map((para, i) => {
+        const isLead = i === 0;
+        const isNote = para.startsWith('⚠️') || para.startsWith('🔹');
+        if (isNote) {
+          // Extract emoji prefix and rest of text
+          const match = para.match(/^(⚠️|🔹)\s*/);
+          const prefix = match ? match[1] : '';
+          const body = para.slice(match ? match[0].length : 0);
+          return (
+            <div key={i} className="flex items-start gap-2.5 bg-[#C8763A]/8 border border-[#C8763A]/20 rounded-xl px-4 py-3">
+              <span className="text-base mt-0.5 flex-shrink-0">{prefix}</span>
+              <p className="text-sm text-[#5C4F3A] leading-relaxed">{body}</p>
+            </div>
+          );
+        }
+        return (
+          <p
+            key={i}
+            className={
+              isLead
+                ? 'text-[#2C2416] font-medium text-[1rem] leading-[1.8]'
+                : 'text-[#5C4F3A] text-[0.93rem] leading-[1.8]'
+            }
+          >
+            {ensurePeriod(para)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Page principale ─────────────────────────────────────────────
 
 function PropertyDetail({ locale, property, images }: { locale: string; property: (typeof properties)[0]; images: string[] }) {
@@ -178,9 +234,7 @@ function PropertyDetail({ locale, property, images }: { locale: string; property
                 <span className="w-1 h-6 rounded-full bg-[#C8763A] inline-block"></span>
                 À propos de ce logement
               </h2>
-              <p className="text-[#5C4F3A] leading-[1.85] text-[0.97rem]">
-                {t(property.descriptionKey)}
-              </p>
+              <DescriptionBlock text={t(property.descriptionKey)} />
             </div>
 
             {/* INFOS PRATIQUES */}
