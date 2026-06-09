@@ -58,7 +58,7 @@ function HomeContent({ locale }: { locale: string }) {
               {[
                 { num: '5', label: t('home.stat_properties') },
                 { num: '3', label: t('home.stat_destinations') },
-                { num: '10+', label: t('home.stat_experience') },
+                { num: '8+', label: t('home.stat_experience') },
               ].map((s) => (
                 <div key={s.label}>
                   <div className="text-2xl font-bold text-white">{s.num}</div>
