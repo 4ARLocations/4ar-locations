@@ -13,7 +13,7 @@ const PROPERTIES = [
 
 const SOURCES: { value: BlockSource; label: string; color: string }[] = [
   { value: 'airbnb',   label: 'Airbnb',              color: '#FF5A5F' },
-  { value: 'booking',  label: 'Booking.com',          color: '#003580' },
+  { value: 'abritel',  label: 'Abritel',             color: '#00A699' },
   { value: 'direct',   label: 'Réservation directe', color: '#C8763A' },
   { value: 'family',   label: 'Famille / Personnel', color: '#6B7C45' },
   { value: 'blocked',  label: 'Bloqué',              color: '#6B6B6B' },
@@ -57,6 +57,7 @@ export default function AdminCalendar({ initialBlocks }: Props) {
   const [source, setSource] = useState<BlockSource>('blocked');
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [activeTab, setActiveTab] = useState<'calendar' | 'stats'>('calendar');
 
   const propertyBlocks = blocks.filter((b) => b.propertyId === selectedProperty);
 
@@ -299,6 +300,33 @@ export default function AdminCalendar({ initialBlocks }: Props) {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
+
+        {/* Onglets vue principale */}
+        <div className="flex gap-1 mb-6 bg-white/5 rounded-xl p-1 w-fit">
+          <button
+            onClick={() => setActiveTab('calendar')}
+            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
+              activeTab === 'calendar' ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white/70'
+            }`}
+          >
+            📅 Calendrier
+          </button>
+          <button
+            onClick={() => setActiveTab('stats')}
+            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
+              activeTab === 'stats' ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white/70'
+            }`}
+          >
+            📊 Statistiques
+          </button>
+        </div>
+
+        {/* ── VUE STATS ── */}
+        {activeTab === 'stats' && <StatsView blocks={blocks} />}
+
+        {/* ── VUE CALENDRIER ── */}
+        {activeTab === 'calendar' && <>
+
         {/* Onglets logements */}
         <div className="flex flex-wrap gap-2 mb-6">
           {PROPERTIES.map((p) => (
@@ -485,6 +513,183 @@ export default function AdminCalendar({ initialBlocks }: Props) {
             </div>
           </div>
         </div>
+        </> /* fin activeTab === 'calendar' */}
+      </div>
+    </div>
+  );
+}
+
+// ── Composant Stats ───────────────────────────────────────────────────────────
+
+function countNights(start: string, end: string): number {
+  const s = new Date(start);
+  const e = new Date(end);
+  return Math.max(0, Math.round((e.getTime() - s.getTime()) / 86400000));
+}
+
+function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
+
+  const RESERVATION_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct'];
+  const SOURCE_COLORS_LOCAL: Record<string, string> = {
+    airbnb:  '#FF5A5F',
+    abritel: '#00A699',
+    direct:  '#C8763A',
+    blocked: '#6B6B6B',
+    family:  '#6B7C45',
+  };
+  const SOURCE_LABELS_LOCAL: Record<string, string> = {
+    airbnb:  'Airbnb',
+    abritel: 'Abritel',
+    direct:  'Direct',
+    blocked: 'Bloqué',
+    family:  'Famille',
+  };
+
+  // Filtrer les réservations de l'année (exclure bloqué/famille)
+  const yearBlocks = blocks.filter(b => {
+    const inYear = b.start.startsWith(String(year)) || b.end.startsWith(String(year));
+    return inYear && RESERVATION_SOURCES.includes(b.source as BlockSource);
+  });
+
+  // Stats globales
+  const totalBookings = yearBlocks.length;
+  const totalNights = yearBlocks.reduce((acc, b) => acc + countNights(b.start, b.end), 0);
+
+  // Par plateforme
+  const byPlatform = RESERVATION_SOURCES.map(src => {
+    const srcBlocks = yearBlocks.filter(b => b.source === src);
+    const nights = srcBlocks.reduce((acc, b) => acc + countNights(b.start, b.end), 0);
+    return { src, count: srcBlocks.length, nights };
+  });
+
+  // Par logement
+  const byProperty = PROPERTIES.map(p => {
+    const pBlocks = yearBlocks.filter(b => b.propertyId === p.id);
+    const nights = pBlocks.reduce((acc, b) => acc + countNights(b.start, b.end), 0);
+    const bySource = RESERVATION_SOURCES.map(src => ({
+      src,
+      count: pBlocks.filter(b => b.source === src).length,
+      nights: pBlocks.filter(b => b.source === src).reduce((acc, b) => acc + countNights(b.start, b.end), 0),
+    }));
+    return { ...p, total: pBlocks.length, nights, bySource };
+  }).filter(p => p.total > 0 || true);
+
+  // Par mois (pour le graphique)
+  const monthlyData = Array.from({ length: 12 }, (_, m) => {
+    const monthBlocks = yearBlocks.filter(b => {
+      const bMonth = parseInt(b.start.slice(5, 7)) - 1;
+      return b.start.startsWith(String(year)) && bMonth === m;
+    });
+    return {
+      month: new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'short' }),
+      airbnb: monthBlocks.filter(b => b.source === 'airbnb').length,
+      abritel: monthBlocks.filter(b => b.source === 'abritel').length,
+      direct: monthBlocks.filter(b => b.source === 'direct').length,
+      total: monthBlocks.length,
+    };
+  });
+  const maxMonthly = Math.max(...monthlyData.map(m => m.total), 1);
+
+  return (
+    <div className="space-y-6">
+      {/* Sélecteur année */}
+      <div className="flex items-center gap-3">
+        <button onClick={() => setYear(y => y - 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-sm">←</button>
+        <span className="text-white font-bold text-lg">{year}</span>
+        <button onClick={() => setYear(y => y + 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-sm">→</button>
+      </div>
+
+      {/* Cartes résumé */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white/5 rounded-2xl p-4">
+          <div className="text-white/40 text-xs mb-1">Réservations totales</div>
+          <div className="text-white text-3xl font-bold">{totalBookings}</div>
+        </div>
+        <div className="bg-white/5 rounded-2xl p-4">
+          <div className="text-white/40 text-xs mb-1">Nuits réservées</div>
+          <div className="text-white text-3xl font-bold">{totalNights}</div>
+        </div>
+        {byPlatform.filter(p => p.count > 0).map(p => (
+          <div key={p.src} className="rounded-2xl p-4" style={{ backgroundColor: SOURCE_COLORS_LOCAL[p.src] + '22', border: `1px solid ${SOURCE_COLORS_LOCAL[p.src]}44` }}>
+            <div className="text-white/60 text-xs mb-1">{SOURCE_LABELS_LOCAL[p.src]}</div>
+            <div className="text-white text-3xl font-bold">{p.count}</div>
+            <div className="text-white/40 text-xs mt-1">{p.nights} nuits</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Graphique mensuel */}
+      <div className="bg-white/5 rounded-2xl p-5">
+        <h3 className="text-white font-semibold mb-4 text-sm">Réservations par mois</h3>
+        <div className="flex items-end gap-1.5 h-32">
+          {monthlyData.map((m, i) => (
+            <div key={i} className="flex-1 flex flex-col items-center gap-1">
+              <div className="w-full flex flex-col-reverse gap-px" style={{ height: '100px' }}>
+                {(['airbnb', 'abritel', 'direct'] as const).map(src => {
+                  const count = m[src];
+                  if (!count) return null;
+                  const h = (count / maxMonthly) * 100;
+                  return (
+                    <div
+                      key={src}
+                      title={`${SOURCE_LABELS_LOCAL[src]}: ${count}`}
+                      style={{ height: `${h}px`, backgroundColor: SOURCE_COLORS_LOCAL[src], minHeight: count > 0 ? '4px' : '0' }}
+                      className="w-full rounded-sm transition-all"
+                    />
+                  );
+                })}
+              </div>
+              <span className="text-white/40 text-[9px]">{m.month}</span>
+            </div>
+          ))}
+        </div>
+        {/* Légende */}
+        <div className="flex gap-4 mt-3 flex-wrap">
+          {RESERVATION_SOURCES.map(src => (
+            <div key={src} className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: SOURCE_COLORS_LOCAL[src] }} />
+              <span className="text-white/50 text-xs">{SOURCE_LABELS_LOCAL[src]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tableau par logement */}
+      <div className="bg-white/5 rounded-2xl p-5">
+        <h3 className="text-white font-semibold mb-4 text-sm">Détail par logement</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-white/40 text-xs border-b border-white/10">
+                <th className="text-left pb-2 font-medium">Logement</th>
+                <th className="text-center pb-2 font-medium">Total</th>
+                <th className="text-center pb-2 font-medium" style={{ color: SOURCE_COLORS_LOCAL.airbnb }}>Airbnb</th>
+                <th className="text-center pb-2 font-medium" style={{ color: SOURCE_COLORS_LOCAL.abritel }}>Abritel</th>
+                <th className="text-center pb-2 font-medium" style={{ color: SOURCE_COLORS_LOCAL.direct }}>Direct</th>
+                <th className="text-center pb-2 font-medium">Nuits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {byProperty.map(p => (
+                <tr key={p.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <td className="py-2.5 text-white/80">{p.emoji} {p.name}</td>
+                  <td className="py-2.5 text-center text-white font-bold">{p.total}</td>
+                  {p.bySource.map(s => (
+                    <td key={s.src} className="py-2.5 text-center" style={{ color: s.count > 0 ? SOURCE_COLORS_LOCAL[s.src] : 'rgba(255,255,255,0.2)' }}>
+                      {s.count > 0 ? s.count : '—'}
+                    </td>
+                  ))}
+                  <td className="py-2.5 text-center text-white/50">{p.nights}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {totalBookings === 0 && (
+          <p className="text-white/30 text-sm text-center py-6">Aucune réservation enregistrée pour {year}</p>
+        )}
       </div>
     </div>
   );

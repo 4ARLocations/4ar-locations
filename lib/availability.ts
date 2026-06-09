@@ -4,7 +4,7 @@
  */
 import { redis } from './redis';
 
-export type BlockSource = 'airbnb' | 'booking' | 'direct' | 'blocked' | 'family';
+export type BlockSource = 'airbnb' | 'abritel' | 'direct' | 'blocked' | 'family';
 
 export interface AvailabilityBlock {
   id: string;
@@ -51,7 +51,7 @@ export function isDateBlocked(date: string, blocks: AvailabilityBlock[]): boolea
 /** Couleur selon la source */
 export const SOURCE_COLORS: Record<BlockSource, string> = {
   airbnb:  '#FF5A5F',
-  booking: '#003580',
+  abritel: '#00A699',
   direct:  '#C8763A',
   blocked: '#6B6B6B',
   family:  '#6B7C45',
@@ -59,7 +59,7 @@ export const SOURCE_COLORS: Record<BlockSource, string> = {
 
 export const SOURCE_LABELS: Record<BlockSource, string> = {
   airbnb:  'Airbnb',
-  booking: 'Booking.com',
+  abritel: 'Abritel',
   direct:  'Réservation directe',
   blocked: 'Bloqué',
   family:  'Famille / Personnel',
