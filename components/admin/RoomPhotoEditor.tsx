@@ -2,7 +2,39 @@
 
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
-import { FLOOR_PLAN_ROOMS, type RoomDef, type FloorDef } from '@/lib/floor-plan-rooms';
+import { FLOOR_PLAN_DATA } from '@/lib/floor-plan-data';
+
+// Adapter: RoomDef / FloorDef shape for admin UI (mapped from new data structure)
+type RoomDef = { id: string; label: string; icon: string; x: number; y: number; w: number; h: number; fill: string; defaultPhotos: string[] };
+type FloorDef = { id: string; label: string; viewBox: string; width: number; height: number; rooms: RoomDef[] };
+
+function buildFloorDefs(propertyId: string): FloorDef[] {
+  const data = FLOOR_PLAN_DATA[propertyId];
+  if (!data) return [];
+  return data.floors.map(f => ({
+    id: f.id,
+    label: f.label,
+    viewBox: `0 0 ${f.buildingW * 60 + 56} ${f.buildingH * 60 + 56}`,
+    width: f.buildingW * 60 + 56,
+    height: f.buildingH * 60 + 56,
+    rooms: f.rooms.map(r => ({
+      id: r.id,
+      label: r.label,
+      icon: r.fill === '#EEF4E8' ? '🛏️'
+        : r.fill === '#E8F0F8' ? '🚿'
+        : r.fill === '#E2EDD8' ? '☀️'
+        : r.fill === '#F0EBE3' ? '📦'
+        : r.fill === '#E8E0D8' ? '↕️'
+        : '🛋️',
+      x: 28 + r.x * 60,
+      y: 28 + r.y * 60,
+      w: r.w * 60,
+      h: r.h * 60,
+      fill: r.fill,
+      defaultPhotos: r.defaultPhotos,
+    })),
+  }));
+}
 
 interface Props {
   propertyId: string;
@@ -77,7 +109,7 @@ function RoomSelectShape({
 // ─── Composant principal ─────────────────────────────────────────────────────
 
 export default function RoomPhotoEditor({ propertyId, propertyImages, initialRoomPhotos }: Props) {
-  const floors = FLOOR_PLAN_ROOMS[propertyId];
+  const floors = buildFloorDefs(propertyId);
   const [activeFloorIdx, setActiveFloorIdx] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState<RoomDef | null>(null);
   // roomPhotos : { roomId: ['/images/...', ...] }

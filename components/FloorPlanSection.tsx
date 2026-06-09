@@ -1,8 +1,7 @@
 import { redis } from '@/lib/redis';
-import FloorPlanInteractive from './FloorPlanInteractive';
-import { FLOOR_PLAN_ROOMS } from '@/lib/floor-plan-rooms';
+import FloorPlanDraw from './FloorPlanDraw';
+import { FLOOR_PLAN_DATA } from '@/lib/floor-plan-data';
 
-// Plans disponibles UNIQUEMENT pour ces deux logements
 const FLOOR_PLAN_PROPERTIES = new Set(['lauris-meme', 'lauris-atelier']);
 
 interface Props {
@@ -10,11 +9,9 @@ interface Props {
 }
 
 export default async function FloorPlanSection({ propertyId }: Props) {
-  // Afficher seulement pour Mémé et Atelier
   if (!FLOOR_PLAN_PROPERTIES.has(propertyId)) return null;
-  if (!FLOOR_PLAN_ROOMS[propertyId]) return null;
+  if (!FLOOR_PLAN_DATA[propertyId]) return null;
 
-  // Charger les associations pièce → photos depuis Redis (override admin)
   let roomPhotos: Record<string, string[]> | undefined;
   try {
     const raw = await redis.get(`floorplan-rooms:${propertyId}`);
@@ -22,8 +19,8 @@ export default async function FloorPlanSection({ propertyId }: Props) {
       roomPhotos = raw as Record<string, string[]>;
     }
   } catch {
-    // Silently fall back to defaults in floor-plan-rooms.ts
+    // Silently fall back to defaults
   }
 
-  return <FloorPlanInteractive propertyId={propertyId} roomPhotos={roomPhotos} />;
+  return <FloorPlanDraw propertyId={propertyId} roomPhotos={roomPhotos} />;
 }
