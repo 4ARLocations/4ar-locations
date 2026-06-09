@@ -11,8 +11,9 @@ export default function LaurisCombine({
   locale: string;
 }) {
   const t = useTranslations();
+  const tc = useTranslations('lauris_combine');
 
-  // Les autres maisons de Lauris disponibles (avec Airbnb ou lien)
+  // Les autres maisons de Lauris disponibles (avec photos)
   const otherLauris = properties.filter(
     (p) => p.region === 'luberon' && p.id !== currentProperty.id && p.images.length > 0
   );
@@ -28,11 +29,10 @@ export default function LaurisCombine({
         <span className="text-3xl shrink-0">🏘️</span>
         <div>
           <h3 className="text-xl font-bold text-[#2C2416]">
-            Vous êtes plus de {currentProperty.guests} personnes ?
+            {tc('group_title', { guests: currentProperty.guests })}
           </h3>
           <p className="text-[#5C4F3A] mt-1">
-            Combinez plusieurs maisons à Lauris — jusqu'à <strong>{totalGuests} personnes</strong> en tout.
-            Contactez-nous pour vérifier les disponibilités.
+            {tc('group_text', { total: totalGuests })}
           </p>
         </div>
       </div>
@@ -58,11 +58,13 @@ export default function LaurisCombine({
             <div className="flex-1 min-w-0">
               <p className="font-bold text-[#2C2416] text-sm truncate">{t(p.nameKey)}</p>
               <div className="flex items-center gap-3 text-xs text-[#9B8A74] mt-1">
-                <span>👥 {p.guests} pers.</span>
-                <span>🛏 {p.bedrooms} ch.</span>
+                <span>👥 {p.guests} {tc('guests_abbr')}</span>
+                <span>🛏 {p.bedrooms} {tc('rooms_abbr')}</span>
               </div>
               {p.priceFrom > 0 && (
-                <p className="text-xs text-[#C8763A] font-semibold mt-1">{p.priceFrom}€/nuit</p>
+                <p className="text-xs text-[#C8763A] font-semibold mt-1">
+                  {p.priceFrom}€{tc('per_night')}
+                </p>
               )}
             </div>
           </div>
@@ -75,13 +77,13 @@ export default function LaurisCombine({
           href={`/${locale}/contact?bien=${currentProperty.id}&combine=true`}
           className="flex-1 bg-[#C8763A] hover:bg-[#A85E28] text-white text-center font-bold py-3 px-5 rounded-xl transition-colors"
         >
-          Demander une réservation combinée
+          {tc('cta_combined')}
         </Link>
         <Link
           href={`/${locale}/biens`}
           className="flex-1 border border-[#C8763A] text-[#C8763A] text-center font-semibold py-3 px-5 rounded-xl hover:bg-[#C8763A] hover:text-white transition-colors"
         >
-          Voir toutes les maisons
+          {tc('cta_all')}
         </Link>
       </div>
     </div>

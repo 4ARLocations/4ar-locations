@@ -41,7 +41,7 @@ function ContactForm() {
   const validateDates = (checkin: string, checkout: string, property = form.property) => {
     if (!checkin || !checkout) { setDateError(''); return true; }
     if (checkout <= checkin) {
-      setDateError('La date de départ doit être après la date d\'arrivée.');
+      setDateError(t('date_error_order'));
       return false;
     }
     // Vérification durée minimale
@@ -49,13 +49,13 @@ function ContactForm() {
     if (prop?.minNights) {
       const nights = Math.round((new Date(checkout).getTime() - new Date(checkin).getTime()) / 86400000);
       if (nights < prop.minNights) {
-        setDateError(`La durée minimale de séjour est de ${prop.minNights} nuits pour ce logement.`);
+        setDateError(t('date_error_min_nights', { nights: prop.minNights }));
         return false;
       }
     }
     if (property === 'avignon') {
       if (!isInJulyAugust(checkin) || !isInJulyAugust(checkout)) {
-        setDateError('L\'appartement d\'Avignon est uniquement disponible en juillet et août.');
+        setDateError(t('date_error_avignon'));
         return false;
       }
     }
@@ -101,12 +101,12 @@ function ContactForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setServerError(data.error || 'Une erreur est survenue, veuillez réessayer.');
+        setServerError(data.error || t('error_generic'));
       } else {
         setSubmitted(true);
       }
     } catch {
-      setServerError('Impossible d\'envoyer la demande. Vérifiez votre connexion.');
+      setServerError(t('error_connection'));
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ function ContactForm() {
     return (
       <div className="text-center py-16 bg-white rounded-2xl border border-[#E8DCC8] shadow-md p-8">
         <div className="text-6xl mb-4">✅</div>
-        <h3 className="text-xl font-bold text-[#2C2416] mb-2">Demande envoyée !</h3>
+        <h3 className="text-xl font-bold text-[#2C2416] mb-2">{t('submitted_title')}</h3>
         <p className="text-[#5C4F3A]">{t('form_success')}</p>
       </div>
     );
@@ -132,10 +132,8 @@ function ContactForm() {
         <div className="flex items-start gap-3 bg-[#C8763A]/10 border border-[#C8763A]/30 rounded-xl p-4">
           <span className="text-2xl shrink-0">🏘️</span>
           <div>
-            <p className="font-bold text-[#2C2416] text-sm">Demande de réservation combinée</p>
-            <p className="text-[#5C4F3A] text-sm mt-0.5">
-              Précisez dans le message le nombre de personnes et les maisons souhaitées — nous vérifierons les disponibilités pour vous.
-            </p>
+            <p className="font-bold text-[#2C2416] text-sm">{t('combined_title')}</p>
+            <p className="text-[#5C4F3A] text-sm mt-0.5">{t('combined_text')}</p>
           </div>
         </div>
       )}
@@ -181,7 +179,7 @@ function ContactForm() {
       {isAvignon && (
         <div className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
           <span className="text-blue-500 text-lg shrink-0">ℹ️</span>
-          <p className="text-blue-700 text-sm">L'appartement d'Avignon est <strong>disponible uniquement en juillet et août</strong>.</p>
+          <p className="text-blue-700 text-sm" dangerouslySetInnerHTML={{ __html: t('avignon_warning') }} />
         </div>
       )}
 
@@ -222,7 +220,7 @@ function ContactForm() {
         <div className="flex items-center gap-2 bg-[#6B7C45]/10 border border-[#6B7C45]/20 rounded-lg px-4 py-2">
           <span className="text-[#6B7C45]">🗓️</span>
           <p className="text-sm text-[#5C4F3A]">
-            Séjour de <strong>{Math.round((new Date(form.checkout).getTime() - new Date(form.checkin).getTime()) / 86400000)} nuit(s)</strong>
+            <strong>{t('stay_duration', { n: Math.round((new Date(form.checkout).getTime() - new Date(form.checkin).getTime()) / 86400000) })}</strong>
           </p>
         </div>
       )}
@@ -255,7 +253,7 @@ function ContactForm() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Envoi en cours...
+            {t('sending')}
           </>
         ) : t('form_submit')}
       </button>
@@ -277,7 +275,7 @@ export default function ContactPage() {
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-[#C8763A]/10 border border-[#C8763A]/30 rounded-xl p-4 text-center">
-            <p className="text-xs text-[#5C4F3A] mb-1 font-medium uppercase tracking-wide">Email direct</p>
+            <p className="text-xs text-[#5C4F3A] mb-1 font-medium uppercase tracking-wide">{t('email_label')}</p>
             <a href="mailto:loc4ar@gmail.com" className="text-[#C8763A] font-bold text-sm hover:underline break-all">
               loc4ar@gmail.com
             </a>
@@ -293,7 +291,7 @@ export default function ContactPage() {
 
         {/* Formulaire */}
         <div className="lg:col-span-2">
-          <Suspense fallback={<div className="text-center py-8 text-[#9B8A74]">Chargement...</div>}>
+          <Suspense fallback={<div className="text-center py-8 text-[#9B8A74]">{t('loading')}</div>}>
             <ContactForm />
           </Suspense>
         </div>

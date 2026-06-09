@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export default function PropertyGallery({ images, name }: { images: string[]; name: string }) {
+  const t = useTranslations('properties');
   const [current, setCurrent] = useState(0);
   const [lightbox, setLightbox] = useState(false);
 
@@ -54,7 +56,7 @@ export default function PropertyGallery({ images, name }: { images: string[]; na
               sizes="20vw"
             />
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">+{images.length - 3} photos</span>
+              <span className="text-white font-bold text-sm">{t('more_photos', { n: images.length - 3 })}</span>
             </div>
           </div>
         )}

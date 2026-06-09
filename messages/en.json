@@ -16,7 +16,15 @@
     "properties_title": "Our properties",
     "airbnb_link": "View on Airbnb",
     "book_direct": "Book directly",
-    "from_price": "From"
+    "from_price": "From",
+    "stat_properties": "Properties",
+    "stat_destinations": "Destinations",
+    "stat_experience": "Years of experience",
+    "welcome_subtitle": "welcomes you",
+    "direct_booking": "Direct booking",
+    "dest_risoul_sub": "Hautes-Alpes · ⛷️",
+    "dest_avignon_sub": "Vaucluse · 🏛️",
+    "dest_lauris_sub": "3 houses · 🌿"
   },
   "properties": {
     "title": "All our properties",
@@ -25,7 +33,15 @@
     "bedrooms": "bedrooms",
     "beds": "beds",
     "bathrooms": "bathrooms",
-    "per_night": "/ night"
+    "per_night": "/ night",
+    "per_night_short": "/night",
+    "price_between": "Between",
+    "price_and": "and",
+    "cleaning_fee_short": "+ €{n} cleaning",
+    "min_nights_short": "min. {n} nights",
+    "on_request": "On request",
+    "contact_for_rates": "Contact us for rates",
+    "more_photos": "+{n} photos"
   },
   "contact": {
     "title": "Contact & Direct Booking",
@@ -45,11 +61,35 @@
     "advantage_1": "No Airbnb service fees",
     "advantage_2": "Direct contact with the owners",
     "advantage_3": "Flexibility on dates and conditions",
-    "advantage_4": "Negotiable rates for long stays"
+    "advantage_4": "Negotiable rates for long stays",
+    "date_error_order": "The check-out date must be after the check-in date.",
+    "date_error_min_nights": "The minimum stay for this property is {nights} nights.",
+    "date_error_avignon": "The Avignon apartment is only available in July and August.",
+    "error_generic": "An error occurred, please try again.",
+    "error_connection": "Unable to send your request. Please check your connection.",
+    "submitted_title": "Request sent!",
+    "combined_title": "Combined booking request",
+    "combined_text": "Please specify in your message the number of guests and the houses you want — we will check availability for you.",
+    "avignon_warning": "The Avignon apartment is available <strong>in July and August only</strong>.",
+    "stay_duration": "{n} night(s)",
+    "sending": "Sending...",
+    "email_label": "Direct email",
+    "loading": "Loading..."
   },
   "footer": {
     "tagline": "Family holiday rentals in Provence & the Alps",
-    "rights": "All rights reserved"
+    "rights": "All rights reserved",
+    "destinations_heading": "Destinations",
+    "contact_heading": "Contact"
+  },
+  "lauris_combine": {
+    "group_title": "More than {guests} guests?",
+    "group_text": "Combine several houses in Lauris — up to {total} guests in total. Contact us to check availability.",
+    "guests_abbr": "guests",
+    "rooms_abbr": "bed.",
+    "per_night": "/night",
+    "cta_combined": "Request a combined booking",
+    "cta_all": "View all properties"
   },
   "property_risoul": {
     "name": "Risoul 1850 Apartment",
@@ -87,6 +127,8 @@
     "badge": "Luberon"
   },
   "review": {
+    "reviews_title": "Guest reviews",
+    "reviews_count": "{count} reviews",
     "leave_review": "Leave a review of your stay",
     "title": "Your review of your stay",
     "thank_you": "Thank you for your review!",
@@ -109,6 +151,11 @@
     "error_comment": "Please write a comment.",
     "error_generic": "An error occurred, please try again.",
     "error_connection": "Unable to send. Please check your connection."
+  },
+  "floor_plan": {
+    "title": "Floor plan",
+    "hint": "Click an orange dot to see a photo of the room.",
+    "no_photo": "No photo available"
   },
   "availability": {
     "title": "Availability",

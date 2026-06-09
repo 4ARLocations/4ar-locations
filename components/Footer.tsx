@@ -13,7 +13,7 @@ export default function Footer() {
           <p className="text-sm text-[#9B8A74]">{t('tagline')}</p>
         </div>
         <div>
-          <h4 className="font-semibold mb-3 text-[#E8DCC8]">Destinations</h4>
+          <h4 className="font-semibold mb-3 text-[#E8DCC8]">{t('destinations_heading')}</h4>
           <ul className="space-y-2 text-sm">
             <li>
               <a
@@ -63,7 +63,7 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="font-semibold mb-3 text-[#E8DCC8]">Contact</h4>
+          <h4 className="font-semibold mb-3 text-[#E8DCC8]">{t('contact_heading')}</h4>
           <a
             href="mailto:loc4ar@gmail.com"
             className="text-sm text-[#9B8A74] hover:text-[#C8763A] transition-colors"

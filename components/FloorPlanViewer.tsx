@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import type { FloorPlanFloor, Hotspot } from '@/lib/floor-plans';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function FloorPlanViewer({ floors, propertyName }: Props) {
+  const t = useTranslations('floor_plan');
   const [activeFloor, setActiveFloor] = useState(0);
   const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | null>(null);
 
@@ -23,7 +25,7 @@ export default function FloorPlanViewer({ floors, propertyName }: Props) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
             d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
         </svg>
-        Plan du logement
+        {t('title')}
       </h2>
 
       {/* Onglets d'étages */}
@@ -96,7 +98,7 @@ export default function FloorPlanViewer({ floors, propertyName }: Props) {
 
         {floor.hotspots.length === 0 && (
           <p className="px-4 py-3 text-xs text-[#B0A090] border-t border-[#F0EBE3]">
-            Cliquez sur un point orange pour voir la pièce en photo.
+            {t('hint')}
           </p>
         )}
       </div>
@@ -123,7 +125,7 @@ export default function FloorPlanViewer({ floors, propertyName }: Props) {
               </div>
             ) : (
               <div className="flex items-center justify-center h-48 bg-[#F5F1EB] text-[#9B8A74] text-sm">
-                Pas de photo disponible
+                {t('no_photo')}
               </div>
             )}
             <div className="px-5 py-4 flex items-center justify-between">

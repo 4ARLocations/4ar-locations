@@ -1,4 +1,5 @@
-import { getReviews, type Review } from '@/lib/redis';
+import { getReviews } from '@/lib/redis';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -12,20 +13,25 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-function formatDate(dateStr: string) {
+function formatDate(dateStr: string, locale: string) {
   if (!dateStr) return '';
-  // Format: "2024-08" → "Août 2024"
   if (dateStr.includes('-')) {
     const [year, month] = dateStr.split('-');
-    const monthNames = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    return `${monthNames[parseInt(month)]} ${year}`;
+    const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+    // Utilise Intl.DateTimeFormat pour les noms de mois localisés
+    const localeMap: Record<string, string> = { fr: 'fr-FR', en: 'en-GB', de: 'de-DE' };
+    const monthName = date.toLocaleString(localeMap[locale] ?? 'fr-FR', { month: 'long' });
+    return `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}`;
   }
   return dateStr;
 }
 
 export default async function ReviewList({ propertyId }: { propertyId: string }) {
-  const propertyReviews = await getReviews(propertyId);
+  const [propertyReviews, t, locale] = await Promise.all([
+    getReviews(propertyId),
+    getTranslations('review'),
+    getLocale(),
+  ]);
 
   if (propertyReviews.length === 0) return null;
 
@@ -38,12 +44,12 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
         <div>
           <h2 className="text-xl font-bold text-[#2C2416] flex items-center gap-2">
             <span>⭐</span>
-            <span>Avis des voyageurs</span>
+            <span>{t('reviews_title')}</span>
           </h2>
           <div className="flex items-center gap-2 mt-1">
             <StarRating rating={Math.round(avgRating)} />
             <span className="text-sm font-semibold text-[#2C2416]">{avgRating.toFixed(1)}</span>
-            <span className="text-sm text-[#9B8A74]">· {propertyReviews.length} avis</span>
+            <span className="text-sm text-[#9B8A74]">· {t('reviews_count', { count: propertyReviews.length })}</span>
           </div>
         </div>
       </div>
@@ -61,7 +67,7 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
                 <div>
                   <p className="font-semibold text-[#2C2416] text-sm">{review.author}</p>
                   {review.date && (
-                    <p className="text-xs text-[#9B8A74]">{formatDate(review.date)}</p>
+                    <p className="text-xs text-[#9B8A74]">{formatDate(review.date, locale)}</p>
                   )}
                 </div>
               </div>

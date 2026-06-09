@@ -55,9 +55,9 @@ function HomeContent({ locale }: { locale: string }) {
             {/* Stats rapides */}
             <div className="flex flex-wrap gap-6 mt-12 pt-8 border-t border-white/15">
               {[
-                { num: '5', label: 'Logements' },
-                { num: '3', label: 'Destinations' },
-                { num: '10+', label: 'Ans d\'expérience' },
+                { num: '5', label: t('home.stat_properties') },
+                { num: '3', label: t('home.stat_destinations') },
+                { num: '10+', label: t('home.stat_experience') },
               ].map((s) => (
                 <div key={s.label}>
                   <div className="text-2xl font-bold text-white">{s.num}</div>
@@ -81,7 +81,7 @@ function HomeContent({ locale }: { locale: string }) {
               </p>
               <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-5 leading-snug">
                 La famille Arougon<br />
-                <span className="text-[#C8763A]">vous accueille</span>
+                <span className="text-[#C8763A]">{t('home.welcome_subtitle')}</span>
               </h2>
               <p className="text-[#5C4F3A] text-base leading-relaxed mb-8">
                 {t('about.text')}
@@ -110,9 +110,9 @@ function HomeContent({ locale }: { locale: string }) {
             {/* Photo + carte destinations */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: 'Risoul 1850', sub: 'Hautes-Alpes · ⛷️', image: '/images/bg-risoul-mountain.jpg', href: `/${locale}/biens/risoul`, span: false },
-                { label: 'Avignon', sub: 'Vaucluse · 🏛️', image: '/images/bg-palais.jpg', href: `/${locale}/biens/avignon`, span: false },
-                { label: 'Lauris · Luberon', sub: '3 maisons · 🌿', image: '/images/bg-lauris-mid.jpg', href: `/${locale}/biens`, span: true },
+                { label: 'Risoul 1850', sub: t('home.dest_risoul_sub'), image: '/images/bg-risoul-mountain.jpg', href: `/${locale}/biens/risoul`, span: false },
+                { label: 'Avignon', sub: t('home.dest_avignon_sub'), image: '/images/bg-palais.jpg', href: `/${locale}/biens/avignon`, span: false },
+                { label: 'Lauris · Luberon', sub: t('home.dest_lauris_sub'), image: '/images/bg-lauris-mid.jpg', href: `/${locale}/biens`, span: true },
               ].map((d) => (
                 <Link key={d.label} href={d.href} className={`group block ${d.span ? 'col-span-2' : ''}`}>
                   <div className={`relative overflow-hidden rounded-2xl shadow-sm ${d.span ? 'h-40' : 'h-48'}`}>
@@ -166,7 +166,7 @@ function HomeContent({ locale }: { locale: string }) {
           className="object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-br from-[#2C4A1A]/90 via-[#3A5A28]/80 to-[#1A3010]/85" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8AC870] mb-3">Réservation directe</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8AC870] mb-3">{t('home.direct_booking')}</p>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('contact.advantage_title')}</h2>
           <p className="text-white/65 mb-10 max-w-xl mx-auto">{t('home.intro_text')}</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 text-left">
