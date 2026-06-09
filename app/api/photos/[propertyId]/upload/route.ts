@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 import { properties } from '@/lib/properties';
+import { verifyToken, COOKIE_NAME } from '@/lib/auth';
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ propertyId: string }> }
 ) {
   const { propertyId } = await params;
-  const cookie = req.cookies.get('admin_auth');
-  if (!cookie?.value) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+  const token = req.cookies.get(COOKIE_NAME)?.value;
+  if (!token || !verifyToken(token)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
 
   const property = properties.find(p => p.id === propertyId);
   if (!property) return NextResponse.json({ error: 'Not found' }, { status: 404 });

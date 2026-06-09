@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/lib/redis';
 import { properties } from '@/lib/properties';
+import { verifyToken, COOKIE_NAME } from '@/lib/auth';
 
 function redisKey(propertyId: string) {
   return `property-photos:${propertyId}`;
@@ -31,8 +32,8 @@ export async function PUT(
   { params }: { params: Promise<{ propertyId: string }> }
 ) {
   const { propertyId } = await params;
-  const cookie = req.cookies.get('admin_auth');
-  if (!cookie?.value) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+  const token = req.cookies.get(COOKIE_NAME)?.value;
+  if (!token || !verifyToken(token)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
 
   const property = properties.find(p => p.id === propertyId);
   if (!property) return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -53,8 +54,8 @@ export async function DELETE(
   { params }: { params: Promise<{ propertyId: string }> }
 ) {
   const { propertyId } = await params;
-  const cookie = req.cookies.get('admin_auth');
-  if (!cookie?.value) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+  const token = req.cookies.get(COOKIE_NAME)?.value;
+  if (!token || !verifyToken(token)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
 
   try {
     await redis.del(`property-photos:${propertyId}`);
