@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 export default function Footer() {
   const t = useTranslations('footer');
@@ -6,9 +7,18 @@ export default function Footer() {
     <footer className="bg-[#2C2416] text-[#E8DCC8]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-[#C8763A] font-bold text-xl">4AR</span>
-            <span className="text-[#8A9E5A] font-semibold text-xl">Locations</span>
+          <div className="flex items-center gap-3 mb-3">
+            <Image
+              src="/images/logo-compass.png"
+              alt="4AR Locations"
+              width={44}
+              height={44}
+              className="object-contain"
+            />
+            <div>
+              <span className="text-[#C8763A] font-bold text-xl">4AR</span>
+              <span className="text-[#8A9E5A] font-semibold text-xl"> Locations</span>
+            </div>
           </div>
           <p className="text-sm text-[#9B8A74]">{t('tagline')}</p>
         </div>
