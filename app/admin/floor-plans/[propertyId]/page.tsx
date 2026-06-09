@@ -1,11 +1,13 @@
 import { redirect } from 'next/navigation';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { redis } from '@/lib/redis';
-import { defaultFloorPlans, PropertyFloorPlan } from '@/lib/floor-plans';
+import { FLOOR_PLAN_ROOMS } from '@/lib/floor-plan-rooms';
 import { properties } from '@/lib/properties';
-import FloorPlanEditor from '@/components/admin/FloorPlanEditor';
+import RoomPhotoEditor from '@/components/admin/RoomPhotoEditor';
 
 export const dynamic = 'force-dynamic';
+
+const ALLOWED = new Set(['lauris-meme', 'lauris-atelier']);
 
 export default async function FloorPlanEditorPage({
   params,
@@ -17,21 +19,29 @@ export default async function FloorPlanEditorPage({
 
   const { propertyId } = await params;
 
-  const property = properties.find((p) => p.id === propertyId);
-  if (!property || !defaultFloorPlans[propertyId]) {
+  if (!ALLOWED.has(propertyId) || !FLOOR_PLAN_ROOMS[propertyId]) {
     redirect('/admin/floor-plans');
   }
 
-  // Charger depuis Redis ou utiliser le défaut
-  const raw = await redis.get(`floorplan:${propertyId}`);
-  const stored = raw as PropertyFloorPlan | null;
-  const floorPlan = stored?.propertyId ? stored : defaultFloorPlans[propertyId];
+  const property = properties.find((p) => p.id === propertyId);
+  if (!property) redirect('/admin/floor-plans');
+
+  // Charger les associations pièce → photos depuis Redis
+  let initialRoomPhotos: Record<string, string[]> = {};
+  try {
+    const raw = await redis.get(`floorplan-rooms:${propertyId}`);
+    if (raw && typeof raw === 'object') {
+      initialRoomPhotos = raw as Record<string, string[]>;
+    }
+  } catch {
+    // Défaut : vide (utilise les defaultPhotos de floor-plan-rooms.ts)
+  }
 
   return (
-    <FloorPlanEditor
+    <RoomPhotoEditor
       propertyId={propertyId}
-      initialFloorPlan={floorPlan}
       propertyImages={property.images}
+      initialRoomPhotos={initialRoomPhotos}
     />
   );
 }
