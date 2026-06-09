@@ -569,6 +569,25 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
     return { src, count: s.length, nights: s.reduce((a, b) => a + countNights(b.start, b.end), 0) };
   });
 
+  // Durée moyenne de séjour
+  const avgNights = totalBookings > 0 ? Math.round(totalNights / totalBookings * 10) / 10 : 0;
+
+  // Meilleur mois
+  const monthlyData = Array.from({ length: 12 }, (_, m) => {
+    const mb = yearBlocks.filter(b => b.start.startsWith(String(year)) && parseInt(b.start.slice(5, 7)) - 1 === m);
+    return {
+      label: new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'short' }),
+      full:  new Date(year, m, 1).toLocaleDateString('fr-FR', { month: 'long' }),
+      airbnb:  mb.filter(b => b.source === 'airbnb').length,
+      abritel: mb.filter(b => b.source === 'abritel').length,
+      direct:  mb.filter(b => b.source === 'direct').length,
+      total:   mb.length,
+      nights:  mb.reduce((a, b) => a + countNights(b.start, b.end), 0),
+    };
+  });
+  const maxMonthly = Math.max(...monthlyData.map(m => m.total), 1);
+  const bestMonth  = monthlyData.reduce((best, m) => m.total > best.total ? m : best, monthlyData[0]);
+
   // Par logement
   const byProperty = PROPERTIES.map(p => {
     const pb = yearBlocks.filter(b => b.propertyId === p.id);
@@ -594,12 +613,24 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
       {/* ── BLOC 1 : Vue globale ── */}
       <div>
         <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Vue globale</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {/* Total réservations */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
             <div className="text-white/40 text-xs mb-2">Total réservations</div>
             <div className="text-white text-5xl font-bold">{totalBookings}</div>
             <div className="text-white/30 text-xs mt-2">{totalNights} nuits au total</div>
+          </div>
+          {/* Durée moyenne */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="text-white/40 text-xs mb-2">Durée moyenne</div>
+            <div className="text-white text-5xl font-bold">{avgNights}</div>
+            <div className="text-white/30 text-xs mt-2">nuits par séjour</div>
+          </div>
+          {/* Meilleur mois */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="text-white/40 text-xs mb-2">Meilleur mois</div>
+            <div className="text-white text-2xl font-bold capitalize">{totalBookings > 0 ? bestMonth.full : '—'}</div>
+            <div className="text-white/30 text-xs mt-2">{totalBookings > 0 ? `${bestMonth.total} réservation${bestMonth.total > 1 ? 's' : ''}` : ''}</div>
           </div>
           {/* Répartition plateforme — barre horizontale */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
@@ -649,7 +680,64 @@ function StatsView({ blocks }: { blocks: AvailabilityBlock[] }) {
         </div>
       </div>
 
-      {/* ── BLOC 3 : Par logement ── */}
+      {/* ── BLOC 3 : Graphique mensuel ── */}
+      <div>
+        <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Activité mensuelle</h2>
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+          {totalBookings === 0 ? (
+            <p className="text-white/20 text-sm text-center py-4">Aucune réservation pour {year}</p>
+          ) : (
+            <>
+              <div className="flex items-end gap-1.5" style={{ height: '100px' }}>
+                {monthlyData.map((m, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group relative">
+                    {/* Tooltip */}
+                    {m.total > 0 && (
+                      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#1A1008] border border-white/20 rounded-lg px-2 py-1.5 text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <div className="text-white font-bold mb-0.5">{m.full}</div>
+                        {m.airbnb > 0  && <div style={{ color: SRC_COLOR.airbnb  }}>{m.airbnb} Airbnb</div>}
+                        {m.abritel > 0 && <div style={{ color: SRC_COLOR.abritel }}>{m.abritel} Abritel</div>}
+                        {m.direct > 0  && <div style={{ color: SRC_COLOR.direct  }}>{m.direct} Direct</div>}
+                        <div className="text-white/40 mt-0.5">{m.nights} nuits</div>
+                      </div>
+                    )}
+                    {/* Barres empilées */}
+                    <div className="w-full flex flex-col-reverse gap-px" style={{ height: `${(m.total / maxMonthly) * 90}px`, minHeight: m.total > 0 ? '4px' : '0' }}>
+                      {(['airbnb', 'abritel', 'direct'] as const).map(src => {
+                        const count = m[src];
+                        if (!count) return null;
+                        return (
+                          <div key={src} className="w-full rounded-sm flex-shrink-0"
+                            style={{ height: `${(count / m.total) * 100}%`, minHeight: '4px', backgroundColor: SRC_COLOR[src] }} />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Labels mois */}
+              <div className="flex gap-1.5 mt-2">
+                {monthlyData.map((m, i) => (
+                  <div key={i} className="flex-1 text-center">
+                    <span className="text-white/30 text-[9px]">{m.label}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Légende */}
+              <div className="flex gap-4 mt-3 pt-3 border-t border-white/10 flex-wrap">
+                {RESERVATION_SOURCES.map(src => (
+                  <div key={src} className="flex items-center gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SRC_COLOR[src] }} />
+                    <span className="text-white/40 text-xs">{SRC_LABEL[src]}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* ── BLOC 4 : Par logement ── */}
       <div>
         <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Par logement</h2>
         <div className="space-y-3">
