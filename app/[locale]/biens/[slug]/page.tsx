@@ -50,9 +50,11 @@ function DescriptionBlock({ text }: { text: string }) {
   const raw = text.trim();
   let paragraphs: string[] = [];
 
-  if (raw.includes('\n')) {
-    // Text has explicit paragraph breaks — use them directly
-    paragraphs = raw.split(/\n+/).map((s) => s.trim()).filter(Boolean);
+  if (raw.includes('\n\n')) {
+    // Split on double newlines (paragraph breaks); keep single \n as line breaks within paragraphs
+    paragraphs = raw.split(/\n\n+/).map((s) => s.trim()).filter(Boolean);
+  } else if (raw.includes('\n')) {
+    paragraphs = raw.split(/\n/).map((s) => s.trim()).filter(Boolean);
   } else {
     // Fallback: split on sentence boundaries and group by 2
     const parts = raw.split(/\. (?=[A-ZÀÂÇÉÈÊËÎÏÔÙÛÜÆŒ🔹⚠️🏡])/).filter(Boolean);
@@ -75,7 +77,6 @@ function DescriptionBlock({ text }: { text: string }) {
         const isLead = i === 0;
         const isNote = para.startsWith('⚠️') || para.startsWith('🔹');
         if (isNote) {
-          // Extract emoji prefix and rest of text
           const match = para.match(/^(⚠️|🔹)\s*/);
           const prefix = match ? match[1] : '';
           const body = para.slice(match ? match[0].length : 0);
@@ -86,6 +87,8 @@ function DescriptionBlock({ text }: { text: string }) {
             </div>
           );
         }
+        // Render lines within a paragraph as <br>-separated spans
+        const lines = para.split('\n');
         return (
           <p
             key={i}
@@ -95,7 +98,12 @@ function DescriptionBlock({ text }: { text: string }) {
                 : 'text-[#5C4F3A] text-[0.93rem] leading-[1.8]'
             }
           >
-            {ensurePeriod(para)}
+            {lines.map((line, li) => (
+              <span key={li}>
+                {li > 0 && <br />}
+                {li === lines.length - 1 ? ensurePeriod(line) : line}
+              </span>
+            ))}
           </p>
         );
       })}
