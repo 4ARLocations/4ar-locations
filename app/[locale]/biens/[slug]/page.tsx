@@ -8,6 +8,7 @@ import LaurisCombine from '@/components/LaurisCombine';
 import ReviewList from '@/components/ReviewList';
 import ReviewForm from '@/components/ReviewForm';
 import AvailabilityCalendar from '@/components/AvailabilityCalendar';
+import FloorPlanSection from '@/components/FloorPlanSection';
 
 export default async function PropertyPage({
   params,
@@ -206,6 +207,9 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                 <InfoRow icon="✉️" label={td('booking_info')} value={td('booking_info_value')} />
               </div>
             </div>
+
+            {/* PLAN INTERACTIF */}
+            <FloorPlanSection propertyId={property.id} propertyName={t(property.nameKey)} />
 
             {/* CALENDRIER DISPONIBILITÉS */}
             <AvailabilityCalendar propertyId={property.id} />

@@ -264,7 +264,18 @@ export default function AdminCalendar({ initialBlocks }: Props) {
           <span className="text-white/30 mx-2">·</span>
           <span className="text-white/60 text-sm">Gestion des disponibilités</span>
         </div>
-        <button
+        <div className="flex items-center gap-4">
+          <a
+            href="/admin/floor-plans"
+            className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            Plans interactifs
+          </a>
+          <button
           onClick={logout}
           className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
         >
@@ -274,6 +285,7 @@ export default function AdminCalendar({ initialBlocks }: Props) {
           </svg>
           Déconnexion
         </button>
+        </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
