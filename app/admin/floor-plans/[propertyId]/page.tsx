@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { redis } from '@/lib/redis';
-import { FLOOR_PLAN_ROOMS } from '@/lib/floor-plan-rooms';
+import { FLOOR_HOTSPOTS } from '@/lib/floor-plan-hotspots';
 import { properties } from '@/lib/properties';
-import RoomPhotoEditor from '@/components/admin/RoomPhotoEditor';
+import HotspotPositionEditor from '@/components/admin/HotspotPositionEditor';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,30 +18,16 @@ export default async function FloorPlanEditorPage({
   if (!ok) redirect('/admin/login');
 
   const { propertyId } = await params;
+  if (!ALLOWED.has(propertyId) || !FLOOR_HOTSPOTS[propertyId]) redirect('/admin/floor-plans');
 
-  if (!ALLOWED.has(propertyId) || !FLOOR_PLAN_ROOMS[propertyId]) {
-    redirect('/admin/floor-plans');
-  }
-
-  const property = properties.find((p) => p.id === propertyId);
+  const property = properties.find(p => p.id === propertyId);
   if (!property) redirect('/admin/floor-plans');
 
-  // Charger les associations pièce → photos depuis Redis
-  let initialRoomPhotos: Record<string, string[]> = {};
+  let initialPositions: Record<string, { x: number; y: number }> = {};
   try {
-    const raw = await redis.get(`floorplan-rooms:${propertyId}`);
-    if (raw && typeof raw === 'object') {
-      initialRoomPhotos = raw as Record<string, string[]>;
-    }
-  } catch {
-    // Défaut : vide (utilise les defaultPhotos de floor-plan-rooms.ts)
-  }
+    const raw = await redis.get(`hotspot-positions:${propertyId}`);
+    if (raw && typeof raw === 'object') initialPositions = raw as Record<string, { x: number; y: number }>;
+  } catch { /* use defaults */ }
 
-  return (
-    <RoomPhotoEditor
-      propertyId={propertyId}
-      propertyImages={property.images}
-      initialRoomPhotos={initialRoomPhotos}
-    />
-  );
+  return <HotspotPositionEditor propertyId={propertyId} initialPositions={initialPositions} />;
 }
