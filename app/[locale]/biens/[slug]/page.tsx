@@ -47,21 +47,22 @@ function InfoRow({ icon, label, value }: { icon: string; label: string; value: s
 }
 
 function DescriptionBlock({ text }: { text: string }) {
-  // Split on sentence boundaries (". " or ".\n"), keep ⚠️ 🔹 markers as paragraph starters
   const raw = text.trim();
-  // Split into sentences
-  const parts = raw.split(/\. (?=[A-ZÀÂÇÉÈÊËÎÏÔÙÛÜÆŒ🔹⚠️🏡])/);
-  // Group into paragraphs: first sentence alone as lead, then chunks of 2
-  const paragraphs: string[] = [];
-  if (parts.length <= 1) {
-    paragraphs.push(raw);
+  let paragraphs: string[] = [];
+
+  if (raw.includes('\n')) {
+    // Text has explicit paragraph breaks — use them directly
+    paragraphs = raw.split(/\n+/).map((s) => s.trim()).filter(Boolean);
   } else {
-    // Lead = first sentence
-    paragraphs.push(parts[0] + (parts.length > 1 ? '.' : ''));
-    // Remaining sentences grouped by 2
-    for (let i = 1; i < parts.length; i += 2) {
-      const chunk = parts.slice(i, i + 2);
-      paragraphs.push(chunk.map((s, idx) => (idx < chunk.length - 1 ? s + '.' : s)).join(' '));
+    // Fallback: split on sentence boundaries and group by 2
+    const parts = raw.split(/\. (?=[A-ZÀÂÇÉÈÊËÎÏÔÙÛÜÆŒ🔹⚠️🏡])/).filter(Boolean);
+    if (parts.length <= 1) {
+      paragraphs.push(raw);
+    } else {
+      paragraphs.push(parts[0].trim());
+      for (let i = 1; i < parts.length; i += 2) {
+        paragraphs.push(parts.slice(i, i + 2).join('. ').trim());
+      }
     }
   }
 
