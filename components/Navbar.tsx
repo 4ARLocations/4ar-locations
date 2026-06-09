@@ -17,8 +17,8 @@ export default function Navbar({ locale }: { locale: string }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href={localePath('')} className="flex items-center gap-1.5">
-          <span className="text-[#C8763A] font-bold text-xl tracking-tight">4AR</span>
-          <span className="text-[#6B7C45] font-semibold text-xl">Locations</span>
+          <span className="text-[#C8763A] text-xl tracking-tight font-serif">4AR</span>
+          <span className="text-[#6B7C45] text-xl font-serif">Locations</span>
         </Link>
 
         {/* Desktop nav */}
