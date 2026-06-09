@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface ReviewFormProps {
   propertyId: string;
@@ -7,6 +8,7 @@ interface ReviewFormProps {
 }
 
 export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps) {
+  const t = useTranslations('review');
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
@@ -21,10 +23,12 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
     comment: '',
   });
 
+  const ratingLabels = ['', t('rating_1'), t('rating_2'), t('rating_3'), t('rating_4'), t('rating_5')];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating === 0) { setError('Veuillez choisir une note.'); return; }
-    if (!form.comment.trim()) { setError('Veuillez écrire un commentaire.'); return; }
+    if (rating === 0) { setError(t('error_rating')); return; }
+    if (!form.comment.trim()) { setError(t('error_comment')); return; }
     setError('');
     setLoading(true);
     try {
@@ -36,10 +40,10 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
       if (res.ok) {
         setSubmitted(true);
       } else {
-        setError('Une erreur est survenue, veuillez réessayer.');
+        setError(t('error_generic'));
       }
     } catch {
-      setError('Impossible d\'envoyer. Vérifiez votre connexion.');
+      setError(t('error_connection'));
     } finally {
       setLoading(false);
     }
@@ -52,7 +56,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
         className="w-full flex items-center justify-center gap-2 border border-dashed border-[#C8763A]/40 text-[#C8763A] rounded-xl py-3 px-4 hover:bg-[#C8763A]/5 transition-colors text-sm font-medium"
       >
         <span>✍️</span>
-        <span>Laisser un avis sur votre séjour</span>
+        <span>{t('leave_review')}</span>
       </button>
     );
   }
@@ -61,8 +65,8 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
     return (
       <div className="bg-[#6B7C45]/10 border border-[#6B7C45]/30 rounded-xl p-5 text-center">
         <div className="text-3xl mb-2">🙏</div>
-        <p className="font-bold text-[#2C2416] text-sm">Merci pour votre avis !</p>
-        <p className="text-[#5C4F3A] text-xs mt-1">Il est maintenant visible sur cette page.</p>
+        <p className="font-bold text-[#2C2416] text-sm">{t('thank_you')}</p>
+        <p className="text-[#5C4F3A] text-xs mt-1">{t('published')}</p>
       </div>
     );
   }
@@ -72,14 +76,14 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
   return (
     <div className="bg-white border border-[#E8DCC8] rounded-2xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="font-bold text-[#2C2416] text-sm">Votre avis sur votre séjour</h4>
+        <h4 className="font-bold text-[#2C2416] text-sm">{t('title')}</h4>
         <button onClick={() => setOpen(false)} className="text-[#9B8A74] hover:text-[#2C2416] text-lg leading-none">✕</button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Étoiles */}
         <div>
-          <label className="block text-xs font-medium text-[#5C4F3A] mb-2">Note *</label>
+          <label className="block text-xs font-medium text-[#5C4F3A] mb-2">{t('rating')}</label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -95,7 +99,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
             ))}
             {rating > 0 && (
               <span className="ml-2 text-xs text-[#9B8A74] self-center">
-                {['', 'Décevant', 'Passable', 'Bien', 'Très bien', 'Excellent !'][rating]}
+                {ratingLabels[rating]}
               </span>
             )}
           </div>
@@ -104,12 +108,12 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
         {/* Nom + Email */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-[#5C4F3A] mb-1">Prénom *</label>
+            <label className="block text-xs font-medium text-[#5C4F3A] mb-1">{t('first_name')}</label>
             <input required type="text" value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })}
               className={inputClass} placeholder="Marie" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#5C4F3A] mb-1">Email (optionnel)</label>
+            <label className="block text-xs font-medium text-[#5C4F3A] mb-1">{t('email')}</label>
             <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
               className={inputClass} placeholder="marie@..." />
           </div>
@@ -117,27 +121,27 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
 
         {/* Période */}
         <div>
-          <label className="block text-xs font-medium text-[#5C4F3A] mb-1">Période de séjour</label>
+          <label className="block text-xs font-medium text-[#5C4F3A] mb-1">{t('stay_period')}</label>
           <input type="month" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
             className={inputClass} />
         </div>
 
         {/* Commentaire */}
         <div>
-          <label className="block text-xs font-medium text-[#5C4F3A] mb-1">Votre commentaire *</label>
+          <label className="block text-xs font-medium text-[#5C4F3A] mb-1">{t('comment_label')}</label>
           <textarea required rows={3} value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })}
             className={`${inputClass} resize-none`}
-            placeholder="Décrivez votre séjour : l'accueil, le logement, les environs..." />
+            placeholder={t('comment_placeholder')} />
         </div>
 
         {error && <p className="text-red-500 text-xs">{error}</p>}
 
         <button type="submit" disabled={loading}
           className="w-full bg-[#C8763A] hover:bg-[#A85E28] disabled:opacity-50 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
-          {loading ? 'Envoi...' : 'Envoyer mon avis'}
+          {loading ? t('submitting') : t('submit')}
         </button>
 
-        <p className="text-xs text-[#9B8A74] text-center">Votre avis sera visible immédiatement sur cette page.</p>
+        <p className="text-xs text-[#9B8A74] text-center">{t('visible_note')}</p>
       </form>
     </div>
   );

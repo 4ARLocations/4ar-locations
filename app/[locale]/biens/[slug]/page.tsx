@@ -48,6 +48,7 @@ function InfoRow({ icon, label, value }: { icon: string; label: string; value: s
 
 function PropertyDetail({ locale, property }: { locale: string; property: (typeof properties)[0] }) {
   const t = useTranslations();
+  const td = useTranslations('property_detail');
 
   // Photo de fond selon la région
   const regionBg = property.region === 'alpes'
@@ -184,25 +185,25 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
             <div className="py-8 border-b border-[#E8DCC8]">
               <h2 className="text-xl font-bold text-[#2C2416] mb-5 flex items-center gap-2">
                 <span className="w-1 h-6 rounded-full bg-[#6B7C45] inline-block"></span>
-                Informations pratiques
+                {td('practical_info')}
               </h2>
               <div className="bg-white border border-[#E8DCC8] rounded-2xl px-5 py-1 shadow-sm">
                 {property.minNights && (
-                  <InfoRow icon="📅" label="Durée minimale de séjour" value={`${property.minNights} nuits`} />
+                  <InfoRow icon="📅" label={td('min_stay')} value={`${property.minNights} ${td('nights')}`} />
                 )}
                 {property.cleaningFee && (
-                  <InfoRow icon="🧹" label="Frais de ménage" value={`${property.cleaningFee} €`} />
+                  <InfoRow icon="🧹" label={td('cleaning_fee')} value={`${property.cleaningFee} €`} />
                 )}
                 {property.id === 'avignon' && (
-                  <InfoRow icon="☀️" label="Disponibilité" value="Juillet & Août uniquement" />
+                  <InfoRow icon="☀️" label={td('avignon_availability')} value={td('avignon_availability_value')} />
                 )}
                 {property.id === 'risoul' && (
-                  <InfoRow icon="⛷" label="Vacances scolaires d'hiver" value="Location à la semaine (sam → sam)" />
+                  <InfoRow icon="⛷" label={td('risoul_school_holidays')} value={td('risoul_school_holidays_value')} />
                 )}
                 {property.id === 'risoul' && (
-                  <InfoRow icon="🛏" label="Draps" value="Non fournis — ménage par les locataires" />
+                  <InfoRow icon="🛏" label={td('risoul_linen')} value={td('risoul_linen_value')} />
                 )}
-                <InfoRow icon="✉️" label="Réservation" value="Directe ou via Airbnb / Abritel" />
+                <InfoRow icon="✉️" label={td('booking_info')} value={td('booking_info_value')} />
               </div>
             </div>
 
@@ -229,13 +230,13 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                 <div className="pb-5 mb-5 border-b border-[#E8DCC8]">
                   {property.priceOnRequest ? (
                     <div>
-                      <p className="text-xs text-[#9B8A74] uppercase tracking-wide mb-1">Tarif selon la période</p>
+                      <p className="text-xs text-[#9B8A74] uppercase tracking-wide mb-1">{td('price_on_request_label')}</p>
                       <p className="text-2xl font-bold text-[#C8763A]">
                         {property.priceFrom}€ – {property.priceTo}€
-                        <span className="text-sm font-normal text-[#9B8A74]"> /nuit</span>
+                        <span className="text-sm font-normal text-[#9B8A74]"> {td('per_night')}</span>
                       </p>
                       <p className="text-xs text-[#C8763A] font-medium mt-1.5 flex items-center gap-1">
-                        <span>ℹ️</span> Nous contacter pour un devis précis
+                        <span>ℹ️</span> {td('price_quote')}
                       </p>
                     </div>
                   ) : property.priceFrom > 0 ? (
@@ -243,25 +244,25 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                       <p className="text-xs text-[#9B8A74] uppercase tracking-wide mb-1">{t('home.from_price')}</p>
                       <p className="text-2xl font-bold text-[#C8763A]">
                         {property.priceFrom}€
-                        <span className="text-sm font-normal text-[#9B8A74]"> /nuit</span>
+                        <span className="text-sm font-normal text-[#9B8A74]"> {td('per_night')}</span>
                       </p>
                       <div className="flex flex-wrap gap-2 mt-3">
                         {property.cleaningFee && (
                           <span className="text-xs bg-[#FAF7F2] border border-[#E8DCC8] rounded-lg px-2.5 py-1 text-[#5C4F3A]">
-                            🧹 Ménage {property.cleaningFee}€
+                            🧹 {td('cleaning_fee')} {property.cleaningFee}€
                           </span>
                         )}
                         {property.minNights && (
                           <span className="text-xs bg-[#FAF7F2] border border-[#E8DCC8] rounded-lg px-2.5 py-1 text-[#5C4F3A]">
-                            📅 Min. {property.minNights} nuits
+                            📅 Min. {property.minNights} {td('nights')}
                           </span>
                         )}
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <p className="text-xs text-[#9B8A74] uppercase tracking-wide mb-1">Tarif</p>
-                      <p className="text-xl font-semibold text-[#9B8A74] italic">Sur demande</p>
+                      <p className="text-xs text-[#9B8A74] uppercase tracking-wide mb-1">{td('price_label')}</p>
+                      <p className="text-xl font-semibold text-[#9B8A74] italic">{td('price_on_request')}</p>
                     </div>
                   )}
                 </div>
@@ -285,7 +286,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
                       </svg>
-                      Voir sur Airbnb
+                      {td('view_airbnb')}
                     </a>
                   )}
 
@@ -295,7 +296,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
                       </svg>
-                      Voir sur Abritel
+                      {td('view_abritel')}
                     </a>
                   )}
                 </div>
@@ -303,12 +304,12 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                 {/* Avantages résa directe */}
                 <div className="mt-5 pt-5 border-t border-[#E8DCC8]">
                   <p className="text-xs text-[#9B8A74] font-medium mb-3 text-center uppercase tracking-wide">
-                    Réserver en direct c'est…
+                    {td('book_direct_label')}
                   </p>
                   {[
-                    { icon: '💰', text: 'Zéro frais de service' },
-                    { icon: '💬', text: 'Contact direct avec les propriétaires' },
-                    { icon: '📋', text: 'Flexibilité sur les conditions' },
+                    { icon: '💰', text: td('book_direct_1') },
+                    { icon: '💬', text: td('book_direct_2') },
+                    { icon: '📋', text: td('book_direct_3') },
                   ].map((a) => (
                     <div key={a.text} className="flex items-center gap-2.5 mb-2 last:mb-0">
                       <span className="text-sm">{a.icon}</span>
@@ -324,7 +325,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                   ✉️
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-[#9B8A74] font-medium">Contact direct</p>
+                  <p className="text-xs text-[#9B8A74] font-medium">{td('direct_contact')}</p>
                   <a href="mailto:loc4ar@gmail.com"
                     className="text-[#C8763A] font-bold text-sm hover:underline truncate block">
                     loc4ar@gmail.com
