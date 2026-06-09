@@ -152,5 +152,15 @@
     "link1_label": "Lauris by French Moments",
     "link2_label": "J'aime le Vaucluse",
     "link3_label": "Destination Luberon"
+  },
+  "about": {
+    "title": "Who are we?",
+    "text": "We are the Arougon family, owners of 5 carefully maintained properties in Provence and the Alps. Passionate about travel and hospitality, we open our family homes to offer you authentic stays, far from standardised holiday packages. By booking directly, you deal with us personally — for a warm welcome and conditions tailored to your needs.",
+    "value_1_title": "Family & Trust",
+    "value_1_text": "Properties we know and maintain personally",
+    "value_2_title": "Exceptional locations",
+    "value_2_text": "5 addresses between the Luberon, Avignon and the Southern Alps",
+    "value_3_title": "Direct booking",
+    "value_3_text": "No commission, with real flexibility on conditions"
   }
 }
