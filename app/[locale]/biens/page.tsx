@@ -2,13 +2,24 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
+import { getPropertyImages } from '@/lib/property-images';
 
 export default async function BiensPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return <BiensContent locale={locale} />;
+
+  // Charger la photo principale depuis Redis (ou défaut) pour chaque bien
+  const imageOverrides: Record<string, string> = {};
+  await Promise.all(
+    properties.map(async (p) => {
+      const imgs = await getPropertyImages(p.id, p.images);
+      if (imgs[0] && imgs[0] !== p.image) imageOverrides[p.id] = imgs[0];
+    })
+  );
+
+  return <BiensContent locale={locale} imageOverrides={imageOverrides} />;
 }
 
-function BiensContent({ locale }: { locale: string }) {
+function BiensContent({ locale, imageOverrides }: { locale: string; imageOverrides: Record<string, string> }) {
   const t = useTranslations('properties');
   const tLauris = useTranslations('lauris');
 
@@ -50,7 +61,7 @@ function BiensContent({ locale }: { locale: string }) {
                 <p className="text-xs text-[#5C7080] font-medium tracking-wide">Hautes-Alpes · Risoul 1850</p>
               </div>
             </div>
-            <PropertyCard property={risoul} locale={locale} />
+            <PropertyCard property={risoul} locale={locale} imageOverride={imageOverrides[risoul.id]} />
           </div>
         </div>
 
@@ -78,7 +89,7 @@ function BiensContent({ locale }: { locale: string }) {
                 <p className="text-xs text-[#80604A] font-medium tracking-wide">Vaucluse · Intramuros</p>
               </div>
             </div>
-            <PropertyCard property={avignon} locale={locale} />
+            <PropertyCard property={avignon} locale={locale} imageOverride={imageOverrides[avignon.id]} />
           </div>
         </div>
 
@@ -108,7 +119,7 @@ function BiensContent({ locale }: { locale: string }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {luberon.map((p) => (
-              <PropertyCard key={p.id} property={p} locale={locale} />
+              <PropertyCard key={p.id} property={p} locale={locale} imageOverride={imageOverrides[p.id]} />
             ))}
           </div>
 

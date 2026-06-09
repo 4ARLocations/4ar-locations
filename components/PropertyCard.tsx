@@ -17,10 +17,11 @@ const regionEmoji: Record<string, string> = {
   luberon: '🌿',
 };
 
-export default function PropertyCard({ property, locale }: { property: Property; locale: string }) {
+export default function PropertyCard({ property, locale, imageOverride }: { property: Property; locale: string; imageOverride?: string }) {
   const t = useTranslations();
   const router = useRouter();
-  const hasPhoto = property.image && !property.image.includes('lauris3');
+  const displayImage = imageOverride ?? property.image;
+  const hasPhoto = displayImage && !displayImage.includes('lauris3');
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border border-[#E8DCC8] cursor-pointer"
@@ -30,7 +31,7 @@ export default function PropertyCard({ property, locale }: { property: Property;
       <div className={`relative h-56 overflow-hidden ${!hasPhoto ? `bg-gradient-to-br ${regionGradient[property.region]} flex items-center justify-center` : ''}`}>
         {hasPhoto ? (
           <Image
-            src={property.image}
+            src={displayImage}
             alt={t(property.nameKey)}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"

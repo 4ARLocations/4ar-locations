@@ -3,12 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { properties } from '@/lib/properties';
+import { getPropertyImages } from '@/lib/property-images';
 import PropertyGallery from '@/components/PropertyGallery';
 import LaurisCombine from '@/components/LaurisCombine';
 import ReviewList from '@/components/ReviewList';
 import ReviewForm from '@/components/ReviewForm';
 import AvailabilityCalendar from '@/components/AvailabilityCalendar';
-import FloorPlanSection from '@/components/FloorPlanSection';
 
 export default async function PropertyPage({
   params,
@@ -18,7 +18,8 @@ export default async function PropertyPage({
   const { locale, slug } = await params;
   const property = properties.find((p) => p.slug === slug);
   if (!property) notFound();
-  return <PropertyDetail locale={locale} property={property} />;
+  const images = await getPropertyImages(property.id, property.images);
+  return <PropertyDetail locale={locale} property={property} images={images} />;
 }
 
 // ─── Petits composants helpers ───────────────────────────────────
@@ -47,7 +48,7 @@ function InfoRow({ icon, label, value }: { icon: string; label: string; value: s
 
 // ─── Page principale ─────────────────────────────────────────────
 
-function PropertyDetail({ locale, property }: { locale: string; property: (typeof properties)[0] }) {
+function PropertyDetail({ locale, property, images }: { locale: string; property: (typeof properties)[0]; images: string[] }) {
   const t = useTranslations();
   const td = useTranslations('property_detail');
 
@@ -65,7 +66,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
     ? 'text-[#C8763A]'
     : 'text-[#6B7C45]';
 
-  const hasImages = property.images.length > 0;
+  const hasImages = images.length > 0;
 
   return (
     <>
@@ -147,7 +148,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
 
         {/* GALERIE */}
         {hasImages ? (
-          <PropertyGallery images={property.images} name={t(property.nameKey)} />
+          <PropertyGallery images={images} name={t(property.nameKey)} />
         ) : (
           <div className="h-64 rounded-2xl bg-[#F0EAE0] flex items-center justify-content-center text-center p-8">
             <div className="mx-auto">
@@ -207,9 +208,6 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
                 <InfoRow icon="✉️" label={td('booking_info')} value={td('booking_info_value')} />
               </div>
             </div>
-
-            {/* PLAN INTERACTIF */}
-            <FloorPlanSection propertyId={property.id} />
 
             {/* CALENDRIER DISPONIBILITÉS */}
             <AvailabilityCalendar propertyId={property.id} />
