@@ -4,8 +4,15 @@ import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
 import { getPropertyImages } from '@/lib/property-images';
 
-export default async function BiensPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function BiensPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ region?: string }>;
+}) {
   const { locale } = await params;
+  const { region } = await searchParams;
 
   // Charger la photo principale depuis Redis (ou défaut) pour chaque bien
   const imageOverrides: Record<string, string> = {};
@@ -16,10 +23,10 @@ export default async function BiensPage({ params }: { params: Promise<{ locale: 
     })
   );
 
-  return <BiensContent locale={locale} imageOverrides={imageOverrides} />;
+  return <BiensContent locale={locale} imageOverrides={imageOverrides} regionFilter={region} />;
 }
 
-function BiensContent({ locale, imageOverrides }: { locale: string; imageOverrides: Record<string, string> }) {
+function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string; imageOverrides: Record<string, string>; regionFilter?: string }) {
   const t = useTranslations('properties');
   const tLauris = useTranslations('lauris');
 
@@ -97,6 +104,7 @@ function BiensContent({ locale, imageOverrides }: { locale: string; imageOverrid
 
       {/* ─── SECTION LUBERON — fond château de Lauris ─── */}
       <section
+        id="luberon"
         className="relative py-12"
         style={{
           backgroundImage: "url('/images/bg-lauris-mid.jpg')",
