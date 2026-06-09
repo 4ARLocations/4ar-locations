@@ -209,7 +209,7 @@ function PropertyDetail({ locale, property }: { locale: string; property: (typeo
             </div>
 
             {/* PLAN INTERACTIF */}
-            <FloorPlanSection propertyId={property.id} propertyName={t(property.nameKey)} />
+            <FloorPlanSection propertyId={property.id} />
 
             {/* CALENDRIER DISPONIBILITÉS */}
             <AvailabilityCalendar propertyId={property.id} />

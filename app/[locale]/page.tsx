@@ -80,7 +80,7 @@ function HomeContent({ locale }: { locale: string }) {
                 {t('about.title')}
               </p>
               <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-5 leading-snug">
-                La famille Arougon<br />
+                La famille Rougon<br />
                 <span className="text-[#C8763A]">{t('home.welcome_subtitle')}</span>
               </h2>
               <p className="text-[#5C4F3A] text-base leading-relaxed mb-8">
