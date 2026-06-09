@@ -17,13 +17,13 @@ export default function Navbar({ locale }: { locale: string }) {
     <nav className="bg-white border-b border-[#E8DCC8] sticky top-0 z-50 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <Link href={localePath('')} className="flex items-center gap-2.5">
+        <Link href={localePath('')} className="flex items-center gap-2">
           <Image
             src="/images/logo-compass.png"
-            alt="4AR Locations"
-            width={40}
-            height={40}
-            className="object-contain"
+            alt=""
+            width={36}
+            height={36}
+            className="object-contain rounded-full"
             priority
           />
           <div className="flex items-baseline gap-1">
