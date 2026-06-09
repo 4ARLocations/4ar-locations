@@ -11,8 +11,8 @@ export default function Footer() {
             <Image
               src="/images/logo-compass.png"
               alt="4AR Locations"
-              width={44}
-              height={44}
+              width={60}
+              height={60}
               className="object-contain"
             />
             <div>

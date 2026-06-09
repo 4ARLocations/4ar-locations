@@ -21,8 +21,8 @@ export default function Navbar({ locale }: { locale: string }) {
           <Image
             src="/images/logo-compass.png"
             alt=""
-            width={36}
-            height={36}
+            width={52}
+            height={52}
             className="object-contain rounded-full"
             priority
           />
