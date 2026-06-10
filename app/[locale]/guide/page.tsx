@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -9,8 +10,7 @@ interface GuideLink {
   label: string;
   desc: string;
   url: string;
-  seasons: Season[];
-  weather?: 'sun' | 'cloud' | 'snow' | 'any';
+  seasons: Season[]; // Saisons où ce lien est pertinent. ['winter','spring','summer','autumn'] = toute l'année
   tags?: string[];
 }
 
@@ -25,10 +25,13 @@ interface Destination {
   name: string;
   sub: string;
   emoji: string;
-  color: string;
-  bg: string;
+  image: string;
+  caption: string;
   sections: GuideSection[];
 }
+
+// Raccourci : toute l'année
+const ALL_SEASONS: Season[] = ['winter', 'spring', 'summer', 'autumn'];
 
 // ─── Données ─────────────────────────────────────────────────────
 const destinations: Destination[] = [
@@ -37,8 +40,8 @@ const destinations: Destination[] = [
     name: 'Risoul 1850',
     sub: 'Hautes-Alpes · Station de montagne',
     emoji: '⛷',
-    color: '#1A2C3A',
-    bg: '/images/bg-risoul-mountain.jpg',
+    image: '/images/bg-risoul-mountain.jpg',
+    caption: 'Risoul 1850 — Hautes-Alpes',
     sections: [
       {
         title: 'Ski & sports d\'hiver',
@@ -49,7 +52,6 @@ const destinations: Destination[] = [
             desc: 'Pistes, remontées, enneigement en temps réel, tarifs forfaits',
             url: 'https://www.risoul.com',
             seasons: ['winter'],
-            weather: 'snow',
             tags: ['Ski', 'Officiel'],
           },
           {
@@ -57,7 +59,6 @@ const destinations: Destination[] = [
             desc: 'Le domaine skiable commun : 185 pistes, 80 remontées mécaniques',
             url: 'https://www.espacelumiere.com',
             seasons: ['winter'],
-            weather: 'snow',
             tags: ['Domaine', 'Ski'],
           },
           {
@@ -65,7 +66,6 @@ const destinations: Destination[] = [
             desc: 'Cours de ski et snowboard pour tous niveaux, enfants et adultes',
             url: 'https://www.esf-risoul.com',
             seasons: ['winter'],
-            weather: 'snow',
             tags: ['Cours', 'Enfants'],
           },
           {
@@ -73,7 +73,6 @@ const destinations: Destination[] = [
             desc: 'Prévisions météo détaillées pour la station, enneigement et vent',
             url: 'https://www.meteo-des-stations.fr/station/risoul-1850/',
             seasons: ['winter'],
-            weather: 'any',
             tags: ['Météo'],
           },
         ],
@@ -87,7 +86,6 @@ const destinations: Destination[] = [
             desc: 'Pistes VTT, itinéraires de randonnée balisés, bike park ouvert l\'été',
             url: 'https://www.risoul.com/ete/',
             seasons: ['summer', 'spring'],
-            weather: 'sun',
             tags: ['VTT', 'Rando'],
           },
           {
@@ -95,7 +93,6 @@ const destinations: Destination[] = [
             desc: 'Site d\'escalade et via ferrata spectaculaire près d\'Embrun',
             url: 'https://www.hautes-alpes.net/randonnee/via-ferrata-demoiselles-coiffees/',
             seasons: ['summer'],
-            weather: 'sun',
             tags: ['Via ferrata', 'Escalade'],
           },
           {
@@ -103,15 +100,13 @@ const destinations: Destination[] = [
             desc: 'Le plus grand lac artificiel d\'Europe : plages, voile, kayak, baignade',
             url: 'https://www.serre-poncon-tourisme.com',
             seasons: ['summer'],
-            weather: 'sun',
             tags: ['Lac', 'Baignade'],
           },
           {
             label: 'Hautes-Alpes Tourisme',
             desc: 'Agenda des événements, activités et découvertes dans les Hautes-Alpes',
             url: 'https://www.hautes-alpes.net',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Activités', 'Tourisme'],
           },
         ],
@@ -124,16 +119,14 @@ const destinations: Destination[] = [
             label: 'Embrun — ville médiévale',
             desc: 'Cathédrale, vieille ville et balade dans la cité médiévale des Hautes-Alpes',
             url: 'https://www.embrun.fr/tourisme/',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Culture', 'Histoire'],
           },
           {
             label: 'Gap — préfecture des Hautes-Alpes',
             desc: 'Musée, marché, commerces et restaurants à 40 min de Risoul',
             url: 'https://www.gap-tourisme.fr',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Ville', 'Marché'],
           },
         ],
@@ -145,8 +138,8 @@ const destinations: Destination[] = [
     name: 'Avignon',
     sub: 'Vaucluse · Intramuros',
     emoji: '🏛️',
-    color: '#2C1A08',
-    bg: '/images/bg-palais.jpg',
+    image: '/images/bg-palais.jpg',
+    caption: 'Le Palais des Papes — Avignon',
     sections: [
       {
         title: 'Incontournables d\'Avignon',
@@ -156,24 +149,21 @@ const destinations: Destination[] = [
             label: 'Palais des Papes',
             desc: 'Le plus grand palais gothique du monde — visites guidées et expositions',
             url: 'https://www.palais-des-papes.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Culture', 'Histoire'],
           },
           {
             label: 'Pont Saint-Bénézet (Pont d\'Avignon)',
             desc: 'Le célèbre pont médiéval sur le Rhône — musée et visite',
             url: 'https://www.avignon-pont.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Monument', 'Histoire'],
           },
           {
             label: 'Office de Tourisme d\'Avignon',
             desc: 'Visites guidées, agenda culturel, bons plans et circuits de la ville',
             url: 'https://www.avignon-tourisme.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Tourisme', 'Officiel'],
           },
           {
@@ -181,7 +171,6 @@ const destinations: Destination[] = [
             desc: 'Le plus grand festival de théâtre au monde — chaque année en juillet',
             url: 'https://www.festival-avignon.com',
             seasons: ['summer'],
-            weather: 'sun',
             tags: ['Festival', 'Théâtre', 'Juillet'],
           },
         ],
@@ -195,15 +184,13 @@ const destinations: Destination[] = [
             desc: 'Village des Alpilles, carrières de lumières — à 30 min d\'Avignon',
             url: 'https://www.les-baux-de-provence.com',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Village', 'Alpilles'],
           },
           {
             label: 'Pont du Gard',
             desc: 'Aqueduc romain classé UNESCO — baignade et kayak en été',
             url: 'https://www.pontdugard.fr',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['UNESCO', 'Romain'],
           },
           {
@@ -211,15 +198,13 @@ const destinations: Destination[] = [
             desc: 'Les plus beaux villages de Provence à moins d\'une heure',
             url: 'https://www.gordes-village.com',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Village', 'Provence'],
           },
           {
             label: 'Isle-sur-la-Sorgue — marché antiques',
             desc: 'Capitale mondiale de l\'antiquité — marché provençal les dimanches',
             url: 'https://www.oti-delasorgue.fr',
-            seasons: ['all'],
-            weather: 'sun',
+            seasons: ALL_SEASONS,
             tags: ['Marché', 'Antiques'],
           },
         ],
@@ -232,16 +217,14 @@ const destinations: Destination[] = [
             label: 'Halles d\'Avignon',
             desc: 'Le marché couvert d\'Avignon — produits locaux, épiceries fines, restauration',
             url: 'https://www.halles-avignon.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Marché', 'Gastronomie'],
           },
           {
             label: 'Vignobles Côtes du Rhône',
             desc: 'Route des vins entre Châteauneuf-du-Pape et les Costières de Nîmes',
             url: 'https://www.vins-rhone.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Vin', 'Dégustation'],
           },
         ],
@@ -253,8 +236,8 @@ const destinations: Destination[] = [
     name: 'Lauris · Luberon',
     sub: 'Vaucluse · Village perché',
     emoji: '🌿',
-    color: '#2C2416',
-    bg: '/images/bg-lauris-mid.jpg',
+    image: '/images/bg-lauris-panorama.jpg',
+    caption: 'Vue panoramique depuis Lauris — Luberon',
     sections: [
       {
         title: 'Villages & balades',
@@ -264,8 +247,7 @@ const destinations: Destination[] = [
             label: 'Lourmarin',
             desc: 'Premier village classé "Plus Beaux Villages de France" du Luberon, à 5 km',
             url: 'https://www.lourmarin.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Village', 'Incontournable'],
           },
           {
@@ -273,7 +255,6 @@ const destinations: Destination[] = [
             desc: 'Village perché emblématique du Luberon — vue panoramique exceptionnelle',
             url: 'https://www.gordes-village.com',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Village', 'Vue'],
           },
           {
@@ -281,15 +262,13 @@ const destinations: Destination[] = [
             desc: 'Le sentier des ocres et son village aux façades colorées',
             url: 'https://www.roussillon-provence.com',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Ocres', 'Nature'],
           },
           {
             label: 'Destination Luberon',
             desc: 'L\'office de tourisme du Luberon — agenda, randonnées, villages à visiter',
             url: 'https://www.destinationluberon.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Tourisme', 'Officiel'],
           },
         ],
@@ -303,7 +282,6 @@ const destinations: Destination[] = [
             desc: 'Sentiers balisés, faune, flore et patrimoine du Luberon',
             url: 'https://www.parcduluberon.fr',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Rando', 'Nature', 'Parc'],
           },
           {
@@ -311,7 +289,6 @@ const destinations: Destination[] = [
             desc: 'Tous les itinéraires de randonnée pédestre en Vaucluse',
             url: 'https://www.randoxygene.org',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Rando', 'Balisé'],
           },
           {
@@ -319,7 +296,6 @@ const destinations: Destination[] = [
             desc: 'Itinéraires cyclables, location de vélos, circuits VTT dans le Luberon',
             url: 'https://www.veloloisirprovence.com',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Vélo', 'VTT'],
           },
           {
@@ -327,7 +303,6 @@ const destinations: Destination[] = [
             desc: 'Balades équestres et randonnées à cheval dans le Luberon',
             url: 'https://www.chevalenluberon.com',
             seasons: ['spring', 'summer', 'autumn'],
-            weather: 'sun',
             tags: ['Équitation', 'Nature'],
           },
         ],
@@ -340,16 +315,14 @@ const destinations: Destination[] = [
             label: 'Marché de Lourmarin — vendredi matin',
             desc: 'Le plus animé du Luberon : fruits, légumes, épices, artisanat local',
             url: 'https://www.lourmarin.com/marche-provencal/',
-            seasons: ['all'],
-            weather: 'sun',
+            seasons: ALL_SEASONS,
             tags: ['Marché', 'Vendredi'],
           },
           {
             label: 'Marché de Pertuis — vendredi matin',
             desc: 'Grand marché provençal à 10 min de Lauris',
             url: 'https://www.ville-pertuis.fr',
-            seasons: ['all'],
-            weather: 'sun',
+            seasons: ALL_SEASONS,
             tags: ['Marché', 'Vendredi'],
           },
           {
@@ -357,15 +330,13 @@ const destinations: Destination[] = [
             desc: 'Routes de la lavande, distilleries et champs fleuris (juin–août)',
             url: 'https://www.routes-lavande.com',
             seasons: ['summer'],
-            weather: 'sun',
             tags: ['Lavande', 'Juin–Août'],
           },
           {
             label: 'Vins du Luberon — Cave des Vignerons',
             desc: 'Route des vins AOC Luberon, dégustations et domaines à visiter',
             url: 'https://www.vins-luberon.com',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Vin', 'Dégustation'],
           },
         ],
@@ -379,23 +350,20 @@ const destinations: Destination[] = [
             desc: 'Festival de musique et d\'art dans un cadre exceptionnel (juillet)',
             url: 'https://www.festivaldelacoste.com',
             seasons: ['summer'],
-            weather: 'sun',
             tags: ['Festival', 'Juillet'],
           },
           {
             label: 'Musée de l\'Aventure Industrielle — Apt',
             desc: 'Musée des ocres et des fruits confits à Apt (ouvert toute l\'année)',
             url: 'https://www.apt.fr/tourisme',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Musée', 'Culture'],
           },
           {
             label: 'Agenda Luberon',
             desc: 'Tous les événements, expositions et animations du Luberon',
             url: 'https://www.destinationluberon.com/agenda',
-            seasons: ['all'],
-            weather: 'any',
+            seasons: ALL_SEASONS,
             tags: ['Agenda', 'Événements'],
           },
         ],
@@ -406,29 +374,27 @@ const destinations: Destination[] = [
 
 // ─── Saisons config ───────────────────────────────────────────────
 const SEASONS: { id: Season; label: string; emoji: string; color: string }[] = [
-  { id: 'all', label: 'Toute l\'année', emoji: '📅', color: '#6B7C45' },
-  { id: 'winter', label: 'Hiver', emoji: '❄️', color: '#5B8DB8' },
-  { id: 'spring', label: 'Printemps', emoji: '🌸', color: '#B87D9A' },
-  { id: 'summer', label: 'Été', emoji: '☀️', color: '#C8763A' },
-  { id: 'autumn', label: 'Automne', emoji: '🍂', color: '#A0622A' },
+  { id: 'all',    label: 'Toute l\'année', emoji: '📅', color: '#6B7C45' },
+  { id: 'winter', label: 'Hiver',          emoji: '❄️', color: '#5B8DB8' },
+  { id: 'spring', label: 'Printemps',      emoji: '🌸', color: '#B87D9A' },
+  { id: 'summer', label: 'Été',            emoji: '☀️', color: '#C8763A' },
+  { id: 'autumn', label: 'Automne',        emoji: '🍂', color: '#A0622A' },
 ];
 
+const SEASON_COLOR: Record<Season, string> = {
+  all: '#6B7C45', winter: '#5B8DB8', spring: '#B87D9A', summer: '#C8763A', autumn: '#A0622A',
+};
+const SEASON_EMOJI: Record<Season, string> = {
+  all: '📅', winter: '❄️', spring: '🌸', summer: '☀️', autumn: '🍂',
+};
+
 // ─── Composant carte de lien ──────────────────────────────────────
-function LinkCard({ link }: { link: GuideLink }) {
-  const seasonColors: Record<Season, string> = {
-    all: '#6B7C45',
-    winter: '#5B8DB8',
-    spring: '#B87D9A',
-    summer: '#C8763A',
-    autumn: '#A0622A',
-  };
-  const seasonEmojis: Record<Season, string> = {
-    all: '📅',
-    winter: '❄️',
-    spring: '🌸',
-    summer: '☀️',
-    autumn: '🍂',
-  };
+function LinkCard({ link, activeSeason }: { link: GuideLink; activeSeason: Season }) {
+  // En vue filtrée : afficher uniquement le badge de la saison active (ou "Toute l'année" si toutes les saisons)
+  const isAllYear = link.seasons.length === 4 && ALL_SEASONS.every((s) => link.seasons.includes(s));
+  const badgeSeasons: Season[] = activeSeason === 'all'
+    ? (isAllYear ? ['all'] : link.seasons)
+    : (isAllYear ? ['all'] : [activeSeason]);
 
   return (
     <a
@@ -447,13 +413,13 @@ function LinkCard({ link }: { link: GuideLink }) {
       </div>
       <p className="text-xs text-[#9B8A74] leading-relaxed">{link.desc}</p>
       <div className="flex flex-wrap gap-1.5 mt-1">
-        {link.seasons.map((s) => (
+        {badgeSeasons.map((s) => (
           <span
             key={s}
             className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
-            style={{ backgroundColor: `${seasonColors[s]}18`, color: seasonColors[s] }}
+            style={{ backgroundColor: `${SEASON_COLOR[s]}18`, color: SEASON_COLOR[s] }}
           >
-            {seasonEmojis[s]} {SEASONS.find((x) => x.id === s)?.label}
+            {SEASON_EMOJI[s]} {SEASONS.find((x) => x.id === s)?.label}
           </span>
         ))}
         {link.tags?.map((tag) => (
@@ -467,19 +433,21 @@ function LinkCard({ link }: { link: GuideLink }) {
 }
 
 // ─── Page principale ──────────────────────────────────────────────
-export default function GuidePage({ params }: { params: { locale: string } }) {
+export default function GuidePage() {
   const [activeDestination, setActiveDestination] = useState<string>('risoul');
   const [activeSeason, setActiveSeason] = useState<Season>('all');
 
   const dest = destinations.find((d) => d.id === activeDestination)!;
 
-  // Filtrer les liens selon la saison active
+  // Filtrage strict : afficher uniquement les liens dont la saison active est listée
   const filteredSections = dest.sections.map((section) => ({
     ...section,
     links: activeSeason === 'all'
       ? section.links
-      : section.links.filter((l) => l.seasons.includes(activeSeason) || l.seasons.includes('all')),
+      : section.links.filter((l) => l.seasons.includes(activeSeason)),
   })).filter((s) => s.links.length > 0);
+
+  const totalLinks = filteredSections.reduce((n, s) => n + s.links.length, 0);
 
   return (
     <>
@@ -501,7 +469,7 @@ export default function GuidePage({ params }: { params: { locale: string } }) {
           {destinations.map((d) => (
             <button
               key={d.id}
-              onClick={() => setActiveDestination(d.id)}
+              onClick={() => { setActiveDestination(d.id); setActiveSeason('all'); }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all border ${
                 activeDestination === d.id
                   ? 'bg-[#2C2416] text-white border-[#2C2416] shadow-md'
@@ -514,6 +482,26 @@ export default function GuidePage({ params }: { params: { locale: string } }) {
           ))}
         </div>
 
+        {/* ─── PHOTO DESTINATION ─── */}
+        <div className="relative rounded-2xl overflow-hidden mb-8 h-52 md:h-72 shadow-sm">
+          <Image
+            src={dest.image}
+            alt={dest.caption}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 1152px"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#2C2416]/70 via-transparent to-transparent" />
+          <div className="absolute bottom-0 left-0 p-5 text-white">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-2xl">{dest.emoji}</span>
+              <h2 className="text-xl font-bold">{dest.name}</h2>
+            </div>
+            <p className="text-sm text-white/70">{dest.sub}</p>
+          </div>
+        </div>
+
         {/* ─── FILTRE SAISON ─── */}
         <div className="flex flex-wrap gap-2 mb-8 p-1 bg-white border border-[#E8DCC8] rounded-2xl w-fit">
           {SEASONS.map((s) => (
@@ -521,9 +509,7 @@ export default function GuidePage({ params }: { params: { locale: string } }) {
               key={s.id}
               onClick={() => setActiveSeason(s.id)}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                activeSeason === s.id
-                  ? 'text-white shadow-sm'
-                  : 'text-[#5C4F3A] hover:bg-[#FAF7F2]'
+                activeSeason === s.id ? 'text-white shadow-sm' : 'text-[#5C4F3A] hover:bg-[#FAF7F2]'
               }`}
               style={activeSeason === s.id ? { backgroundColor: s.color } : {}}
             >
@@ -533,15 +519,12 @@ export default function GuidePage({ params }: { params: { locale: string } }) {
           ))}
         </div>
 
-        {/* ─── EN-TÊTE DESTINATION ─── */}
-        <div className="flex items-center gap-3 mb-8 pb-6 border-b border-[#E8DCC8]">
-          <span className="text-3xl">{dest.emoji}</span>
-          <div>
-            <h2 className="text-xl font-bold text-[#2C2416]">{dest.name}</h2>
-            <p className="text-sm text-[#9B8A74]">{dest.sub}</p>
-          </div>
-          <div className="flex-1 h-px bg-[#E8DCC8] ml-2" />
-        </div>
+        {/* ─── RÉSUMÉ ─── */}
+        {activeSeason !== 'all' && (
+          <p className="text-xs text-[#9B8A74] mb-6">
+            {totalLinks} activité{totalLinks > 1 ? 's' : ''} pour {SEASON_EMOJI[activeSeason]} {SEASONS.find((s) => s.id === activeSeason)?.label.toLowerCase()} à {dest.name}
+          </p>
+        )}
 
         {/* ─── SECTIONS ─── */}
         {filteredSections.length === 0 ? (
@@ -563,7 +546,7 @@ export default function GuidePage({ params }: { params: { locale: string } }) {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {section.links.map((link) => (
-                    <LinkCard key={link.url} link={link} />
+                    <LinkCard key={link.url} link={link} activeSeason={activeSeason} />
                   ))}
                 </div>
               </div>
