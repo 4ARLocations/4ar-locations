@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
-import PropertiesMapClient from '@/components/PropertiesMapClient';
 import { properties } from '@/lib/properties';
 import { getPropertyImages } from '@/lib/property-images';
 
@@ -246,15 +245,22 @@ function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string
         </div>
       </section>
 
-      {/* ─── CARTE DES LOGEMENTS ─── */}
-      <section className="py-14 bg-[#FAF7F2] border-t border-[#E8DCC8]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="mb-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8763A] mb-2">Nos destinations</p>
-            <h2 className="text-2xl font-bold text-[#2C2416]">Où nous trouver</h2>
-            <p className="text-[#5C4F3A] text-sm mt-1">Cliquez sur un marqueur pour accéder directement au logement.</p>
+      {/* ─── LIEN CARTE ─── */}
+      <section className="py-8 bg-[#FAF7F2] border-t border-[#E8DCC8]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🗺️</span>
+            <div>
+              <p className="font-semibold text-[#2C2416] text-sm">Visualiser nos destinations sur la carte</p>
+              <p className="text-xs text-[#9B8A74]">Risoul · Avignon · Lauris/Luberon</p>
+            </div>
           </div>
-          <PropertiesMapClient />
+          <Link
+            href={`/${locale}/carte`}
+            className="flex-shrink-0 bg-[#2C2416] hover:bg-[#4A3828] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
+          >
+            Voir la carte →
+          </Link>
         </div>
       </section>
 

@@ -43,6 +43,9 @@ export default function Navbar({ locale }: { locale: string }) {
           <Link href={localePath('/guide')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
             {t('guide')}
           </Link>
+          <Link href={localePath('/carte')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
+            {t('map')}
+          </Link>
           <Link href={localePath('/contact')} className="bg-[#C8763A] text-white px-4 py-2 rounded-lg hover:bg-[#A85E28] transition-colors font-medium">
             {t('contact')}
           </Link>
@@ -80,6 +83,7 @@ export default function Navbar({ locale }: { locale: string }) {
           <Link href={localePath('')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('home')}</Link>
           <Link href={localePath('/biens')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('properties')}</Link>
           <Link href={localePath('/guide')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('guide')}</Link>
+          <Link href={localePath('/carte')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('map')}</Link>
           <Link href={localePath('/contact')} onClick={() => setMenuOpen(false)} className="py-2 text-[#C8763A] font-semibold">{t('contact')}</Link>
           <div className="flex gap-2 pt-2">
             {locales.map((l) => (
