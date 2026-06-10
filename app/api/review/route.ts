@@ -4,7 +4,7 @@ import { addReview, type Review } from '@/lib/redis';
 
 export async function POST(req: NextRequest) {
   try {
-    const { propertyId, propertyName, author, date, rating, comment, email } = await req.json();
+    const { propertyId, propertyName, author, date, rating, comment, email, photos } = await req.json();
 
     if (!propertyId || !propertyName || !author || !rating || !comment) {
       return NextResponse.json({ error: 'Champs manquants.' }, { status: 400 });
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
       date: date || '',
       rating,
       comment,
+      photos: Array.isArray(photos) ? photos.slice(0, 3) : [],
       createdAt: new Date().toISOString(),
     };
     await addReview(review);

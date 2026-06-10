@@ -49,6 +49,7 @@ export interface Review {
   date: string;        // "2024-08"
   rating: number;
   comment: string;
+  photos?: string[];   // URLs Vercel Blob (max 3)
   createdAt: string;   // ISO
 }
 

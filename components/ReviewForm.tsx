@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 interface ReviewFormProps {
   propertyId: string;
@@ -16,14 +17,57 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [form, setForm] = useState({
-    author: '',
-    email: '',
-    date: '',
-    comment: '',
-  });
+  const [form, setForm] = useState({ author: '', email: '', date: '', comment: '' });
+
+  // Photos
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const ratingLabels = ['', t('rating_1'), t('rating_2'), t('rating_3'), t('rating_4'), t('rating_5')];
+
+  const handlePhotoAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    const remaining = 3 - photoFiles.length;
+    const toAdd = files.slice(0, remaining);
+    setPhotoFiles((prev) => [...prev, ...toAdd]);
+    toAdd.forEach((f) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPhotoPreviews((prev) => [...prev, ev.target?.result as string]);
+      };
+      reader.readAsDataURL(f);
+    });
+    // Reset input pour pouvoir re-sélectionner le même fichier
+    e.target.value = '';
+  };
+
+  const handlePhotoRemove = (idx: number) => {
+    setPhotoFiles((prev) => prev.filter((_, i) => i !== idx));
+    setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const uploadPhotos = async (): Promise<string[]> => {
+    if (photoFiles.length === 0) return [];
+    setPhotoUploading(true);
+    try {
+      const urls = await Promise.all(
+        photoFiles.map(async (file) => {
+          const fd = new FormData();
+          fd.append('file', file);
+          const res = await fetch('/api/review/upload-photo', { method: 'POST', body: fd });
+          if (!res.ok) throw new Error('Upload échoué');
+          const data = await res.json();
+          return data.url as string;
+        })
+      );
+      return urls;
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,10 +76,11 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
     setError('');
     setLoading(true);
     try {
+      const photos = await uploadPhotos();
       const res = await fetch('/api/review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ propertyId, propertyName, ...form, rating }),
+        body: JSON.stringify({ propertyId, propertyName, ...form, rating, photos }),
       });
       if (res.ok) {
         setSubmitted(true);
@@ -86,9 +131,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
           <label className="block text-xs font-medium text-[#5C4F3A] mb-2">{t('rating')}</label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
+              <button key={star} type="button"
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHovered(star)}
                 onMouseLeave={() => setHovered(0)}
@@ -98,9 +141,7 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
               </button>
             ))}
             {rating > 0 && (
-              <span className="ml-2 text-xs text-[#9B8A74] self-center">
-                {ratingLabels[rating]}
-              </span>
+              <span className="ml-2 text-xs text-[#9B8A74] self-center">{ratingLabels[rating]}</span>
             )}
           </div>
         </div>
@@ -130,15 +171,60 @@ export default function ReviewForm({ propertyId, propertyName }: ReviewFormProps
         <div>
           <label className="block text-xs font-medium text-[#5C4F3A] mb-1">{t('comment_label')}</label>
           <textarea required rows={3} value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })}
-            className={`${inputClass} resize-none`}
-            placeholder={t('comment_placeholder')} />
+            className={`${inputClass} resize-none`} placeholder={t('comment_placeholder')} />
+        </div>
+
+        {/* Photos */}
+        <div>
+          <label className="block text-xs font-medium text-[#5C4F3A] mb-2">
+            📷 Photos de votre séjour
+            <span className="text-[#9B8A74] font-normal ml-1">(optionnel — max 3 photos)</span>
+          </label>
+
+          {photoPreviews.length > 0 && (
+            <div className="flex gap-2 mb-2 flex-wrap">
+              {photoPreviews.map((src, idx) => (
+                <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#E8DCC8] group">
+                  <Image src={src} alt={`Photo ${idx + 1}`} fill className="object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => handlePhotoRemove(idx)}
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {photoFiles.length < 3 && (
+            <>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-2 border border-dashed border-[#E8DCC8] rounded-xl px-4 py-2.5 text-xs text-[#9B8A74] hover:border-[#C8763A]/40 hover:text-[#C8763A] transition-colors"
+              >
+                <span>📎</span>
+                <span>Ajouter {photoFiles.length === 0 ? 'des photos' : 'une photo'} ({photoFiles.length}/3)</span>
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/heic"
+                multiple
+                className="hidden"
+                onChange={handlePhotoAdd}
+              />
+            </>
+          )}
         </div>
 
         {error && <p className="text-red-500 text-xs">{error}</p>}
 
-        <button type="submit" disabled={loading}
+        <button type="submit" disabled={loading || photoUploading}
           className="w-full bg-[#C8763A] hover:bg-[#A85E28] disabled:opacity-50 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
-          {loading ? t('submitting') : t('submit')}
+          {photoUploading ? 'Upload des photos...' : loading ? t('submitting') : t('submit')}
         </button>
 
         <p className="text-xs text-[#9B8A74] text-center">{t('visible_note')}</p>

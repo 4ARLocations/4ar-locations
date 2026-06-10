@@ -1,5 +1,6 @@
 import { getReviews } from '@/lib/redis';
 import { getTranslations, getLocale } from 'next-intl/server';
+import Image from 'next/image';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -18,7 +19,6 @@ function formatDate(dateStr: string, locale: string) {
   if (dateStr.includes('-')) {
     const [year, month] = dateStr.split('-');
     const date = new Date(parseInt(year), parseInt(month) - 1, 1);
-    // Utilise Intl.DateTimeFormat pour les noms de mois localisés
     const localeMap: Record<string, string> = { fr: 'fr-FR', en: 'en-GB', de: 'de-DE' };
     const monthName = date.toLocaleString(localeMap[locale] ?? 'fr-FR', { month: 'long' });
     return `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}`;
@@ -60,7 +60,6 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
           <div key={review.id} className="bg-white border border-[#E8DCC8] rounded-xl p-5 shadow-sm">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                {/* Avatar initiale */}
                 <div className="w-9 h-9 rounded-full bg-[#C8763A]/15 flex items-center justify-center text-[#C8763A] font-bold text-sm shrink-0">
                   {review.author.charAt(0).toUpperCase()}
                 </div>
@@ -73,7 +72,33 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
               </div>
               <StarRating rating={review.rating} />
             </div>
+
             <p className="text-[#5C4F3A] text-sm leading-relaxed italic">"{review.comment}"</p>
+
+            {/* Photos du séjour */}
+            {review.photos && review.photos.length > 0 && (
+              <div className="flex gap-2 mt-3 flex-wrap">
+                {review.photos.map((url, idx) => (
+                  <a
+                    key={idx}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#E8DCC8] hover:opacity-90 transition-opacity flex-shrink-0"
+                    title="Voir la photo en grand"
+                  >
+                    <Image
+                      src={url}
+                      alt={`Photo du séjour ${idx + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                    <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

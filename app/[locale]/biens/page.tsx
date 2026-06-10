@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
+import PropertiesMapClient from '@/components/PropertiesMapClient';
 import { properties } from '@/lib/properties';
 import { getPropertyImages } from '@/lib/property-images';
 
@@ -242,6 +243,18 @@ function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ─── CARTE DES LOGEMENTS ─── */}
+      <section className="py-14 bg-[#FAF7F2] border-t border-[#E8DCC8]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="mb-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8763A] mb-2">Nos destinations</p>
+            <h2 className="text-2xl font-bold text-[#2C2416]">Où nous trouver</h2>
+            <p className="text-[#5C4F3A] text-sm mt-1">Cliquez sur un marqueur pour accéder directement au logement.</p>
+          </div>
+          <PropertiesMapClient />
         </div>
       </section>
 
