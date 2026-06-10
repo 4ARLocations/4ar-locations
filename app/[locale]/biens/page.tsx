@@ -120,7 +120,7 @@ function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string
             <span className="text-2xl">🌿</span>
             <div>
               <h2 className="text-xl font-bold text-[#2C2416]">Luberon — Lauris</h2>
-              <p className="text-xs text-[#6B7C45] font-medium tracking-wide">Vaucluse · Village perché · 3 maisons combinables</p>
+              <p className="text-xs text-[#6B7C45] font-medium tracking-wide">Vaucluse · Village perché · 3 maisons privatisables ensemble</p>
             </div>
             <div className="flex-1 h-px bg-[#E8DCC8] ml-2" />
           </div>

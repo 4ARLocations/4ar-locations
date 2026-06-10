@@ -5,8 +5,8 @@
     "contact": "Contact & Réservation"
   },
   "hero": {
-    "tagline": "Locations de vacances en Provence & Alpes",
-    "subtitle": "Des séjours authentiques, de la montagne à la garrigue",
+    "tagline": "Des escapades en famille, entre amis ou en amoureux",
+    "subtitle": "Maisons & appartements de charme en Provence et dans les Alpes",
     "cta": "Voir nos logements",
     "cta_book": "Réserver directement"
   },
@@ -39,7 +39,7 @@
     "price_and": "et",
     "cleaning_fee_short": "+ {n}€ ménage",
     "min_nights_short": "min. {n} nuits",
-    "on_request": "Sur demande",
+    "on_request": "Location saisonnière",
     "contact_for_rates": "Nous contacter pour les tarifs",
     "more_photos": "+{n} photos"
   },
@@ -61,7 +61,7 @@
     "advantage_1": "Pas de frais de service Airbnb",
     "advantage_2": "Contact direct avec les propriétaires",
     "advantage_3": "Flexibilité sur les dates et conditions",
-    "advantage_4": "Tarifs négociables pour les longs séjours",
+    "advantage_4": "Tarifs préférentiels pour les longs séjours",
     "date_error_order": "La date de départ doit être après la date d'arrivée.",
     "date_error_min_nights": "La durée minimale de séjour est de {nights} nuits pour ce logement.",
     "date_error_avignon": "L'appartement d'Avignon est uniquement disponible en juillet et août.",
@@ -77,7 +77,7 @@
     "loading": "Chargement..."
   },
   "footer": {
-    "tagline": "Locations de vacances familiales en Provence & Alpes",
+    "tagline": "Logements de charme en Provence & Alpes",
     "rights": "Tous droits réservés",
     "destinations_heading": "Destinations",
     "contact_heading": "Contact"
@@ -109,14 +109,14 @@
     "name": "Maison de Mémé",
     "location": "Lauris, Luberon",
     "type": "Maison",
-    "description": "Située au cœur du village, à proximité des commerces et du château, la maison propose de belles prestations sur 3 niveaux.\n\n• Rez-de-chaussée : grand séjour avec cuisine équipée, WC.\n• 1er étage : salon avec TV, WC, grand dressing, salle d'eau, 1 chambre (2 lits simples), 1 chambre (lit double + dressing).\n• 2e étage : 2 chambres avec lit double, salle d'eau avec WC, espace extérieur sous les toits.\n\nCuisine équipée : grille-pain, bouilloire, Nespresso, cafetière filtre, micro-ondes, four traditionnel, réfrigérateur/congélateur, lave-linge, plaques à induction, lave-vaisselle. WiFi gratuit — voiture recommandée.\n\n🔹 Idéalement à la semaine (samedi/samedi), sinon 2 nuits minimum. Possibilité de louer la maison mitoyenne (2 chambres, 2 salles d'eau, séjour, espace extérieur sous les toits) pour accueillir jusqu'à 4 personnes supplémentaires.",
+    "description": "Maison de caractère au cœur du village de Lauris, à deux pas des commerces et du château. Entièrement meublée et équipée, elle s'organise sur 3 niveaux.\n\n• Rez-de-chaussée : grand séjour avec cuisine équipée, WC.\n• 1er étage : salon avec TV, WC, grand dressing, salle d'eau, 1 chambre (2 lits simples), 1 chambre (lit double + dressing).\n• 2e étage : 2 chambres avec lit double, salle d'eau avec WC, espace extérieur sous les toits.\n\nCuisine équipée : grille-pain, bouilloire, Nespresso, cafetière filtre, micro-ondes, four traditionnel, réfrigérateur/congélateur, lave-linge, plaques à induction, lave-vaisselle. WiFi gratuit — voiture recommandée.\n\n🔹 Idéalement à la semaine (samedi/samedi), sinon 2 nuits minimum. Possibilité de louer la maison mitoyenne (2 chambres, 2 salles d'eau, séjour, espace extérieur sous les toits) pour accueillir jusqu'à 4 personnes supplémentaires.",
     "badge": "Luberon"
   },
   "property_lauris2": {
     "name": "L'Atelier",
     "location": "Lauris, Luberon",
     "type": "Maison",
-    "description": "Maison refaite à neuf au cœur du village de Lauris, à 5 km de Lourmarin, avec de belles prestations.\n\n• Rez-de-chaussée : séjour avec cuisine équipée, WC.\n• 1er étage : espace de rangement (lave-linge, WC), suite parentale (salle d'eau, lit double, dressing).\n• 2e étage : suite parentale (lit double) + espace extérieur.\n\nCuisine équipée : grille-pain, bouilloire, Nespresso, cafetière filtre, micro-ondes, four traditionnel, réfrigérateur/congélateur, lave-linge, plaques à induction, lave-vaisselle. WiFi gratuit — voiture recommandée, accès voiture à 20 m.\n\n⚠️ Escaliers menant aux étages abrupts. Idéalement à la semaine (samedi/samedi), sinon 2 nuits minimum.",
+    "description": "Maison entièrement rénovée à neuf au cœur du village de Lauris, à 5 km de Lourmarin. Finitions soignées, équipements complets et confort moderne dans un cadre provençal authentique.\n\n• Rez-de-chaussée : séjour avec cuisine équipée, WC.\n• 1er étage : espace de rangement (lave-linge, WC), suite parentale (salle d'eau, lit double, dressing).\n• 2e étage : suite parentale (lit double) + espace extérieur.\n\nCuisine équipée : grille-pain, bouilloire, Nespresso, cafetière filtre, micro-ondes, four traditionnel, réfrigérateur/congélateur, lave-linge, plaques à induction, lave-vaisselle. WiFi gratuit — voiture recommandée, accès voiture à 20 m.\n\n⚠️ Escaliers menant aux étages abrupts. Idéalement à la semaine (samedi/samedi), sinon 2 nuits minimum.",
     "badge": "Luberon"
   },
   "property_lauris3": {
@@ -183,7 +183,7 @@
     "price_on_request_label": "Tarif selon la période",
     "per_night": "/nuit",
     "price_quote": "Nous contacter pour un devis précis",
-    "price_on_request": "Sur demande",
+    "price_on_request": "Location saisonnière",
     "price_label": "Tarif",
     "book_direct_label": "Réserver en direct c'est…",
     "book_direct_1": "Zéro frais de service",
