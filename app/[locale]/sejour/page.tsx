@@ -2,33 +2,7 @@ import Link from 'next/link';
 import { properties } from '@/lib/properties';
 import { useTranslations } from 'next-intl';
 
-const PRACTICAL_INFO: Record<string, { address: string; access: string; parking: string }> = {
-  risoul: {
-    address: 'Résidence Altaïr, Risoul 1850, 05600 Risoul',
-    access: "Boîte à clés à l'entrée de la résidence — code communiqué par email.",
-    parking: 'Parking couvert inclus dans la résidence.',
-  },
-  avignon: {
-    address: 'Rue Joyeuse, 84000 Avignon (intramuros)',
-    access: 'Boîte à clés sur la porte — code communiqué par email.',
-    parking: "Parkings payants à proximité (Palais des Papes, Porte de l'Oulle).",
-  },
-  'lauris-meme': {
-    address: 'Rue Sainte-Marguerite, 84360 Lauris',
-    access: 'Clés remises en main propre ou boîte à clés selon disponibilité.',
-    parking: 'Stationnement dans la rue, gratuit.',
-  },
-  'lauris-atelier': {
-    address: 'Rue Sainte-Marguerite, 84360 Lauris',
-    access: 'Clés remises en main propre ou boîte à clés selon disponibilité.',
-    parking: 'Stationnement dans la rue, gratuit.',
-  },
-  'lauris-alain': {
-    address: 'Rue Sainte-Marguerite, 84360 Lauris',
-    access: 'Clés remises en main propre ou boîte à clés selon disponibilité.',
-    parking: 'Stationnement dans la rue, gratuit.',
-  },
-};
+
 
 export default async function SejourPage({
   params,
@@ -42,7 +16,6 @@ export default async function SejourPage({
   const t = useTranslations();
 
   const property = bien ? properties.find((p) => p.id === bien) : null;
-  const info = bien ? PRACTICAL_INFO[bien] : null;
 
   const nextSteps = [
     { icon: '📧', title: 'Email de confirmation', desc: 'Vous allez recevoir un email récapitulatif dans quelques minutes.' },
@@ -87,38 +60,6 @@ export default async function SejourPage({
           ))}
         </div>
       </div>
-
-      {/* Infos pratiques si logement identifié */}
-      {property && info && (
-        <div className="bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl p-6 mb-6">
-          <h2 className="font-bold text-[#2C2416] text-lg mb-4 flex items-center gap-2">
-            <span>📍</span> Informations pratiques — {t(property.nameKey)}
-          </h2>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-start gap-3">
-              <span className="text-[#C8763A] flex-shrink-0 mt-0.5">📍</span>
-              <div>
-                <p className="font-medium text-[#2C2416]">Adresse</p>
-                <p className="text-[#5C4F3A]">{info.address}</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-[#C8763A] flex-shrink-0 mt-0.5">🔑</span>
-              <div>
-                <p className="font-medium text-[#2C2416]">Accès</p>
-                <p className="text-[#5C4F3A]">{info.access}</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-[#C8763A] flex-shrink-0 mt-0.5">🚗</span>
-              <div>
-                <p className="font-medium text-[#2C2416]">Parking</p>
-                <p className="text-[#5C4F3A]">{info.parking}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Liens utiles */}
       <div className="flex flex-col sm:flex-row gap-3">
