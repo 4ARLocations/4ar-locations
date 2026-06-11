@@ -8,6 +8,7 @@ const destinations = [
     emoji: '⛷',
     name: 'Risoul 1850',
     region: 'Hautes-Alpes',
+    address: 'Résidence Altaïr · Risoul 1850 · 05600 Risoul',
     image: '/images/bg-risoul-mountain.jpg',
     desc: 'Station de ski dans les Alpes du Sud, à 1 850 m d\'altitude. Idéale pour les séjours en famille ou entre amis, hiver comme été.',
     highlights: ['Domaine Espace Lumière (Risoul + Vars)', '185 pistes de ski', 'Lac de Serre-Ponçon à 30 min', 'Embrun — ville médiévale'],
@@ -20,6 +21,7 @@ const destinations = [
     emoji: '🏛️',
     name: 'Avignon',
     region: 'Vaucluse',
+    address: 'Rue Joyeuse · 84000 Avignon (intramuros)',
     image: '/images/bg-palais.jpg',
     desc: 'Au cœur des remparts, à deux pas du Palais des Papes. Un studio rénové dans l\'une des plus belles villes d\'art de Provence.',
     highlights: ['Palais des Papes à 5 min à pied', 'Festival d\'Avignon (juillet)', 'Pont du Gard à 30 min', 'Pont Saint-Bénézet'],
@@ -32,6 +34,7 @@ const destinations = [
     emoji: '🌿',
     name: 'Lauris · Luberon',
     region: 'Vaucluse',
+    address: 'Rue Sainte-Marguerite · 84360 Lauris',
     image: '/images/bg-lauris-panorama.jpg',
     desc: 'Village perché du Luberon à 5 km de Lourmarin. Trois maisons de caractère combinables pour des séjours en famille ou en grand groupe.',
     highlights: ['Lourmarin à 5 km', 'Marchés provençaux', 'Randonnées Parc du Luberon', 'Gordes, Roussillon, les Baux'],
@@ -98,6 +101,13 @@ export default function CartePage() {
 
               {/* Contenu */}
               <div className="p-5">
+                <p className="text-[#9B8A74] text-xs flex items-center gap-1 mb-3">
+                  <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {d.address}
+                </p>
                 <p className="text-[#5C4F3A] text-sm leading-relaxed mb-4">{d.desc}</p>
 
                 {/* Points forts */}
