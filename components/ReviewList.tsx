@@ -1,4 +1,4 @@
-import { getReviews } from '@/lib/redis';
+import { getReviews, getOwnerReply } from '@/lib/redis';
 import { getTranslations, getLocale } from 'next-intl/server';
 import Image from 'next/image';
 
@@ -32,6 +32,11 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
     getTranslations('review'),
     getLocale(),
   ]);
+
+  // Charger les réponses propriétaire en parallèle
+  const replyResults = await Promise.all(propertyReviews.map((r) => getOwnerReply(r.id)));
+  const replies: Record<string, string> = {};
+  propertyReviews.forEach((r, i) => { if (replyResults[i]) replies[r.id] = replyResults[i]!.text; });
 
   if (propertyReviews.length === 0) return null;
 
@@ -97,6 +102,21 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
                     <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
                   </a>
                 ))}
+              </div>
+            )}
+
+            {/* Réponse du propriétaire */}
+            {replies[review.id] && (
+              <div className="mt-4 border-t border-[#F0EAE0] pt-3">
+                <div className="flex items-start gap-2.5 bg-[#FAF7F2] rounded-xl px-4 py-3">
+                  <div className="w-7 h-7 rounded-full bg-[#C8763A] flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">
+                    4
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-[#C8763A] mb-1">Réponse du propriétaire</p>
+                    <p className="text-sm text-[#5C4F3A] leading-relaxed">{replies[review.id]}</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>

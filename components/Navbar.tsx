@@ -19,7 +19,7 @@ export default function Navbar({ locale }: { locale: string }) {
         {/* Logo */}
         <Link href={localePath('')} className="flex items-center gap-2">
           <Image
-            src="/images/logo-compass.png"
+            src="/images/logo-4ar.png"
             alt=""
             width={52}
             height={52}
@@ -45,6 +45,11 @@ export default function Navbar({ locale }: { locale: string }) {
           </Link>
           <Link href={localePath('/carte')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
             {t('map')}
+          </Link>
+          <Link href={localePath('/favoris')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors" title="Mes favoris">
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
           </Link>
           <Link href={localePath('/contact')} className="bg-[#C8763A] text-white px-4 py-2 rounded-lg hover:bg-[#A85E28] transition-colors font-medium">
             {t('contact')}

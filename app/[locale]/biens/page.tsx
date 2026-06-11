@@ -3,6 +3,7 @@ import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
 import { getPropertyImages } from '@/lib/property-images';
+import { getReviews } from '@/lib/redis';
 
 export default async function BiensPage({
   params,
@@ -14,19 +15,29 @@ export default async function BiensPage({
   const { locale } = await params;
   const { region } = await searchParams;
 
-  // Charger la photo principale depuis Redis (ou défaut) pour chaque bien
-  const imageOverrides: Record<string, string> = {};
-  await Promise.all(
-    properties.map(async (p) => {
+  // Charger les photos et les avis en parallèle
+  const [imageData, reviewData] = await Promise.all([
+    Promise.all(properties.map(async (p) => {
       const imgs = await getPropertyImages(p.id, p.images);
-      if (imgs[0] && imgs[0] !== p.image) imageOverrides[p.id] = imgs[0];
-    })
-  );
+      return { id: p.id, img: imgs[0] };
+    })),
+    Promise.all(properties.map(async (p) => {
+      const reviews = await getReviews(p.id);
+      const avg = reviews.length > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
+      return { id: p.id, avg, count: reviews.length };
+    })),
+  ]);
 
-  return <BiensContent locale={locale} imageOverrides={imageOverrides} regionFilter={region} />;
+  const imageOverrides: Record<string, string> = {};
+  imageData.forEach(({ id, img }) => { if (img) imageOverrides[id] = img; });
+
+  // "Coup de cœur" : note moyenne ≥ 4.5 avec au moins 3 avis
+  const topRated = new Set(reviewData.filter((r) => r.avg >= 4.5 && r.count >= 3).map((r) => r.id));
+
+  return <BiensContent locale={locale} imageOverrides={imageOverrides} regionFilter={region} topRated={topRated} />;
 }
 
-function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string; imageOverrides: Record<string, string>; regionFilter?: string }) {
+function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { locale: string; imageOverrides: Record<string, string>; regionFilter?: string; topRated?: Set<string> }) {
   const t = useTranslations('properties');
   const tLauris = useTranslations('lauris');
 
@@ -68,7 +79,7 @@ function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string
                 <p className="text-xs text-[#5C7080] font-medium tracking-wide">Hautes-Alpes · Risoul 1850</p>
               </div>
             </div>
-            <PropertyCard property={risoul} locale={locale} imageOverride={imageOverrides[risoul.id]} />
+            <PropertyCard property={risoul} locale={locale} imageOverride={imageOverrides[risoul.id]} topRated={topRated?.has(risoul.id)} />
           </div>
         </div>
 
@@ -96,7 +107,7 @@ function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string
                 <p className="text-xs text-[#80604A] font-medium tracking-wide">Vaucluse · Intramuros</p>
               </div>
             </div>
-            <PropertyCard property={avignon} locale={locale} imageOverride={imageOverrides[avignon.id]} />
+            <PropertyCard property={avignon} locale={locale} imageOverride={imageOverrides[avignon.id]} topRated={topRated?.has(avignon.id)} />
           </div>
         </div>
 
@@ -127,7 +138,7 @@ function BiensContent({ locale, imageOverrides, regionFilter }: { locale: string
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {luberon.map((p) => (
-              <PropertyCard key={p.id} property={p} locale={locale} imageOverride={imageOverrides[p.id]} />
+              <PropertyCard key={p.id} property={p} locale={locale} imageOverride={imageOverrides[p.id]} topRated={topRated?.has(p.id)} />
             ))}
           </div>
 

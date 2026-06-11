@@ -102,6 +102,59 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    // ── Rappel J-1 avec infos pratiques ──
+    if (arrival === 1) {
+      const key = `notif:checkin-reminder:${booking.id}`;
+      const alreadySent = await isNotified(key);
+      if (!alreadySent) {
+        await resend.emails.send({
+          from: 'onboarding@resend.dev',
+          to: booking.guestEmail,
+          subject: `🔑 Votre arrivée à ${booking.propertyName} est demain !`,
+          html: `
+            <div style="font-family:Georgia,serif;max-width:600px;margin:auto;background:#FAF7F2;border-radius:12px;overflow:hidden">
+              <div style="background:#2C2416;padding:24px 32px">
+                <span style="color:#C8763A;font-weight:bold;font-size:22px">4AR</span>
+                <span style="color:#8A9E5A;font-weight:bold;font-size:22px"> Locations</span>
+              </div>
+              <div style="padding:32px">
+                <h2 style="color:#2C2416;margin-top:0">Bonjour ${booking.guestName} 👋</h2>
+                <p style="color:#5C4F3A;line-height:1.6">
+                  Vous arrivez <strong>demain</strong> à <strong>${booking.propertyName}</strong> !<br/>
+                  Voici un rappel de vos informations de séjour.
+                </p>
+
+                <div style="background:white;border-radius:10px;padding:20px;border:1px solid #E8DCC8;margin:20px 0">
+                  <p style="margin:0 0 8px"><strong>📍 Logement :</strong> ${booking.propertyName}</p>
+                  <p style="margin:0 0 8px"><strong>📅 Arrivée :</strong> ${frDate(booking.checkin)}</p>
+                  <p style="margin:0 0 8px"><strong>📅 Départ :</strong> ${frDate(booking.checkout)}</p>
+                  <p style="margin:0 0 8px"><strong>👥 Voyageurs :</strong> ${booking.guests}</p>
+                </div>
+
+                <p style="color:#5C4F3A;line-height:1.6">
+                  Pour toute question de dernière minute (accès, code, parking…),
+                  contactez-nous directement à
+                  <a href="mailto:loc4ar@gmail.com" style="color:#C8763A">loc4ar@gmail.com</a>
+                  ou sur WhatsApp.
+                </p>
+
+                <p style="color:#5C4F3A;line-height:1.6">
+                  À demain et bienvenue ! 🌿
+                </p>
+
+                <p style="color:#9B8A74;font-size:13px;margin-top:24px">
+                  L'équipe 4AR Locations<br/>
+                  <a href="mailto:loc4ar@gmail.com" style="color:#C8763A">loc4ar@gmail.com</a>
+                </p>
+              </div>
+            </div>
+          `,
+        });
+        await markNotified(key);
+        sent.push(`checkin-reminder:${booking.id}`);
+      }
+    }
+
     // ── Demande d'avis J+2 après le départ ──
     if (departure === -2) {
       const key = `notif:review:${booking.id}`;

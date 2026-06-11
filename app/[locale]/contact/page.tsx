@@ -1,13 +1,17 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { properties } from '@/lib/properties';
 
 function ContactForm() {
   const t = useTranslations('contact');
   const tProp = useTranslations();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  // pathname is like /fr/contact — extract locale
+  const locale = pathname.split('/')[1] ?? 'fr';
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -103,7 +107,10 @@ function ContactForm() {
       if (!res.ok) {
         setServerError(data.error || t('error_generic'));
       } else {
-        setSubmitted(true);
+        // Rediriger vers la page séjour
+        const nom = encodeURIComponent(form.name?.split(' ')[0] ?? '');
+        const bien = encodeURIComponent(form.property ?? '');
+        router.push(`/${locale}/sejour?bien=${bien}&nom=${nom}`);
       }
     } catch {
       setServerError(t('error_connection'));

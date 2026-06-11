@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import type { Property } from '@/lib/properties';
+import FavoriteButton from '@/components/FavoriteButton';
 
 const regionGradient: Record<string, string> = {
   alpes: 'from-blue-900 to-slate-700',
@@ -17,7 +18,7 @@ const regionEmoji: Record<string, string> = {
   luberon: '🌿',
 };
 
-export default function PropertyCard({ property, locale, imageOverride }: { property: Property; locale: string; imageOverride?: string }) {
+export default function PropertyCard({ property, locale, imageOverride, topRated }: { property: Property; locale: string; imageOverride?: string; topRated?: boolean }) {
   const t = useTranslations();
   const router = useRouter();
   const displayImage = imageOverride ?? property.image;
@@ -42,12 +43,18 @@ export default function PropertyCard({ property, locale, imageOverride }: { prop
         )}
         {/* Gradient overlay for readability */}
         {hasPhoto && <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />}
-        <div className="absolute top-3 left-3 z-10">
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
           <span className="bg-[#C8763A] text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
             {t(property.badgeKey)}
           </span>
+          {topRated && (
+            <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow flex items-center gap-1">
+              ❤️ Coup de cœur
+            </span>
+          )}
         </div>
-        <div className="absolute top-3 right-3 z-10">
+        <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-1.5">
+          <FavoriteButton propertyId={property.id} size="md" className="bg-white/90 hover:bg-white rounded-full p-1.5 shadow text-[#2C2416]/60 hover:text-[#C8763A]" />
           <span className="bg-white/90 text-[#2C2416] text-xs font-semibold px-2 py-1 rounded-full shadow">
             {t(property.typeKey)}
           </span>

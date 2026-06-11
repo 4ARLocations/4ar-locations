@@ -57,7 +57,7 @@ export default function AdminCalendar({ initialBlocks }: Props) {
   const [source, setSource] = useState<BlockSource>('blocked');
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'calendar' | 'stats'>('calendar');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'calendar' | 'stats'>('dashboard');
 
   const propertyBlocks = blocks.filter((b) => b.propertyId === selectedProperty);
 
@@ -277,6 +277,16 @@ export default function AdminCalendar({ initialBlocks }: Props) {
             Photos
           </a>
           <a
+            href="/admin/reviews"
+            className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+            Avis
+          </a>
+          <a
             href="/admin/ical"
             className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
           >
@@ -285,6 +295,36 @@ export default function AdminCalendar({ initialBlocks }: Props) {
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             iCal
+          </a>
+          <a
+            href="/admin/checklist"
+            className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            Checklist
+          </a>
+          <a
+            href="/admin/messages"
+            className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Messages
+          </a>
+          <a
+            href="/admin/tarifs"
+            className="text-white/40 hover:text-white text-sm transition-colors flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            Tarifs
           </a>
           <a
             href="/admin/floor-plans"
@@ -325,6 +365,14 @@ export default function AdminCalendar({ initialBlocks }: Props) {
         {/* Onglets vue principale */}
         <div className="flex gap-1 mb-6 bg-white/5 rounded-xl p-1 w-fit">
           <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
+              activeTab === 'dashboard' ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white/70'
+            }`}
+          >
+            🏠 Aujourd'hui
+          </button>
+          <button
             onClick={() => setActiveTab('calendar')}
             className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
               activeTab === 'calendar' ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white/70'
@@ -341,6 +389,9 @@ export default function AdminCalendar({ initialBlocks }: Props) {
             📊 Statistiques
           </button>
         </div>
+
+        {/* ── VUE AUJOURD'HUI ── */}
+        {activeTab === 'dashboard' && <DashboardView blocks={blocks} />}
 
         {/* ── VUE STATS ── */}
         {activeTab === 'stats' && <StatsView blocks={blocks} onDeleteBlock={removeBlock} />}
@@ -548,6 +599,168 @@ function countNights(start: string, end: string): number {
   return Math.max(0, Math.round((e.getTime() - s.getTime()) / 86400000));
 }
 
+// ─── Tableau de bord "Aujourd'hui" ───────────────────────────────
+function DashboardView({ blocks }: { blocks: AvailabilityBlock[] }) {
+  const today = new Date().toISOString().slice(0, 10);
+  const todayLabel = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const RESERVATION_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct'];
+  const SRC_COLOR: Record<string, string> = { airbnb: '#FF5A5F', abritel: '#00A699', direct: '#C8763A', family: '#6B7C45', blocked: '#6B6B6B' };
+  const SRC_LABEL: Record<string, string> = { airbnb: 'Airbnb', abritel: 'Abritel', direct: 'Direct', family: 'Famille', blocked: 'Bloqué' };
+
+  // Statut de chaque logement aujourd'hui
+  const propertyStatus = PROPERTIES.map((p) => {
+    const todayBlocks = blocks.filter((b) => b.propertyId === p.id && b.start <= today && b.end >= today);
+    const checkinToday = blocks.find((b) => b.propertyId === p.id && b.start === today && RESERVATION_SOURCES.includes(b.source as BlockSource));
+    const checkoutToday = blocks.find((b) => b.propertyId === p.id && b.end === today && RESERVATION_SOURCES.includes(b.source as BlockSource));
+    const occupied = todayBlocks.find((b) => RESERVATION_SOURCES.includes(b.source as BlockSource));
+    return { ...p, occupied, checkinToday, checkoutToday, isBlocked: !occupied && todayBlocks.length > 0 };
+  });
+
+  const occupiedCount = propertyStatus.filter((p) => p.occupied).length;
+  const checkinCount  = propertyStatus.filter((p) => p.checkinToday).length;
+  const checkoutCount = propertyStatus.filter((p) => p.checkoutToday).length;
+  const freeCount     = propertyStatus.filter((p) => !p.occupied && !p.isBlocked).length;
+
+  // Prochains séjours (à venir, triés par date)
+  const upcoming = blocks
+    .filter((b) => b.start > today && RESERVATION_SOURCES.includes(b.source as BlockSource))
+    .sort((a, b) => a.start.localeCompare(b.start))
+    .slice(0, 12);
+
+  const formatDateFr = (iso: string) =>
+    new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+
+  const daysUntil = (iso: string) => {
+    const diff = Math.round((new Date(iso + 'T12:00:00').getTime() - new Date(today + 'T12:00:00').getTime()) / 86400000);
+    if (diff === 0) return "Aujourd'hui";
+    if (diff === 1) return 'Demain';
+    return `Dans ${diff}j`;
+  };
+
+  return (
+    <div className="space-y-8 pb-10">
+
+      {/* En-tête date */}
+      <div>
+        <h2 className="text-white text-2xl font-bold capitalize">{todayLabel}</h2>
+        <p className="text-white/40 text-sm mt-1">
+          {occupiedCount > 0
+            ? `${occupiedCount} logement${occupiedCount > 1 ? 's' : ''} occupé${occupiedCount > 1 ? 's' : ''} ce soir`
+            : 'Aucun logement occupé ce soir'}
+        </p>
+      </div>
+
+      {/* Résumé du jour — 4 chiffres */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: 'Occupés ce soir', value: occupiedCount, icon: '🛏', color: 'bg-[#FF5A5F]/20 border-[#FF5A5F]/30' },
+          { label: "Arrivées aujourd'hui", value: checkinCount, icon: '🔑', color: 'bg-green-500/20 border-green-500/30' },
+          { label: "Départs aujourd'hui", value: checkoutCount, icon: '🧳', color: 'bg-blue-400/20 border-blue-400/30' },
+          { label: 'Libres ce soir', value: freeCount, icon: '✅', color: 'bg-white/5 border-white/10' },
+        ].map((s) => (
+          <div key={s.label} className={`rounded-2xl border px-5 py-4 ${s.color}`}>
+            <div className="text-2xl mb-1">{s.icon}</div>
+            <div className="text-white text-3xl font-bold">{s.value}</div>
+            <div className="text-white/50 text-xs mt-1">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Statut par logement */}
+      <div>
+        <h3 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">État des logements</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {propertyStatus.map((p) => {
+            const status = p.checkinToday ? 'checkin' : p.checkoutToday ? 'checkout' : p.occupied ? 'occupied' : p.isBlocked ? 'blocked' : 'free';
+            const statusConfig = {
+              checkin:  { label: 'Arrivée aujourd\'hui', dot: '#4ade80', bg: 'border-green-500/30 bg-green-500/10' },
+              checkout: { label: 'Départ aujourd\'hui',  dot: '#60a5fa', bg: 'border-blue-400/30 bg-blue-400/10' },
+              occupied: { label: 'Occupé',               dot: '#FF5A5F', bg: 'border-[#FF5A5F]/30 bg-[#FF5A5F]/10' },
+              blocked:  { label: 'Bloqué',               dot: '#9ca3af', bg: 'border-white/10 bg-white/5' },
+              free:     { label: 'Disponible',           dot: '#6B7C45', bg: 'border-white/5 bg-white/3' },
+            }[status];
+
+            const block = p.checkinToday ?? p.checkoutToday ?? p.occupied;
+
+            return (
+              <div key={p.id} className={`rounded-xl border px-4 py-3 flex items-center gap-3 ${statusConfig.bg}`}>
+                <span className="text-xl flex-shrink-0">{p.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-sm font-semibold truncate">{p.name}</p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: statusConfig.dot }} />
+                    <span className="text-white/50 text-xs">{statusConfig.label}</span>
+                    {block && (
+                      <span className="text-white/30 text-xs">· {SRC_LABEL[block.source]}</span>
+                    )}
+                  </div>
+                  {block && status !== 'free' && status !== 'blocked' && (
+                    <p className="text-white/30 text-[11px] mt-0.5">
+                      {formatDateFr(block.start)} → {formatDateFr(block.end)} · {countNights(block.start, block.end)}n
+                    </p>
+                  )}
+                </div>
+                {block && (
+                  <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: SRC_COLOR[block.source] }} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Prochains séjours */}
+      {upcoming.length > 0 && (
+        <div>
+          <h3 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">
+            {upcoming.length} séjour{upcoming.length > 1 ? 's' : ''} à venir
+          </h3>
+          <div className="space-y-2">
+            {upcoming.map((b) => {
+              const prop = PROPERTIES.find((p) => p.id === b.propertyId);
+              const nights = countNights(b.start, b.end);
+              const soon = daysUntil(b.start);
+              const isSoon = ['Demain', "Aujourd'hui"].includes(soon) || soon.startsWith('Dans 2') || soon.startsWith('Dans 3');
+              return (
+                <div key={b.id} className="flex items-center gap-4 px-4 py-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/8 transition-colors">
+                  {/* Délai */}
+                  <div className={`text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${isSoon ? 'bg-[#C8763A]/30 text-[#E8914A]' : 'bg-white/10 text-white/50'}`}>
+                    {soon}
+                  </div>
+                  {/* Pastille plateforme */}
+                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: SRC_COLOR[b.source] }} />
+                  {/* Infos */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-white text-sm font-medium truncate">{b.label || SRC_LABEL[b.source]}</span>
+                      <span className="text-white/30 text-xs hidden sm:inline">·</span>
+                      <span className="text-white/40 text-xs hidden sm:inline">{prop?.emoji} {prop?.name}</span>
+                    </div>
+                    <p className="text-white/40 text-xs mt-0.5 sm:hidden">{prop?.emoji} {prop?.name}</p>
+                  </div>
+                  {/* Dates */}
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-white/60 text-xs font-medium">{formatDateFr(b.start)} → {formatDateFr(b.end)}</div>
+                    <div className="text-white/30 text-[11px]">{nights} nuit{nights > 1 ? 's' : ''}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {upcoming.length === 0 && occupiedCount === 0 && (
+        <div className="text-center py-12 text-white/30">
+          <p className="text-4xl mb-3">🌿</p>
+          <p>Aucune réservation à venir pour le moment.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function StatsView({ blocks, onDeleteBlock }: { blocks: AvailabilityBlock[], onDeleteBlock: (block: AvailabilityBlock) => void }) {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
@@ -640,11 +853,22 @@ function StatsView({ blocks, onDeleteBlock }: { blocks: AvailabilityBlock[], onD
   return (
     <div className="space-y-8 pb-10">
 
-      {/* Sélecteur année */}
-      <div className="flex items-center gap-3">
-        <button onClick={() => setYear(y => y - 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">←</button>
-        <span className="text-white font-bold text-2xl">{year}</span>
-        <button onClick={() => setYear(y => y + 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">→</button>
+      {/* Sélecteur année + Export */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setYear(y => y - 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">←</button>
+          <span className="text-white font-bold text-2xl">{year}</span>
+          <button onClick={() => setYear(y => y + 1)} className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">→</button>
+        </div>
+        <a
+          href={`/api/admin/export?year=${year}`}
+          className="flex items-center gap-1.5 text-xs font-semibold text-white/60 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Export CSV
+        </a>
       </div>
 
       {/* ── BLOC 0 : Prochains séjours ── */}
@@ -841,6 +1065,48 @@ function StatsView({ blocks, onDeleteBlock }: { blocks: AvailabilityBlock[], onD
         </div>
         {totalBookings === 0 && <p className="text-white/20 text-sm text-center py-6">Aucune réservation pour {year}</p>}
       </div>
+
+      {/* ── BLOC 4b : Taux d'occupation mensuel ── */}
+      {totalBookings > 0 && (
+        <div>
+          <h2 className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Occupation mensuelle {year}</h2>
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 overflow-x-auto">
+            <div className="min-w-[500px]">
+              {/* Barres empilées par mois */}
+              <div className="flex items-end gap-1 h-28">
+                {Array.from({ length: 12 }, (_, monthIdx) => {
+                  const monthStr = `${year}-${String(monthIdx + 1).padStart(2, '0')}`;
+                  const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+                  const monthBlocks = yearBlocks.filter(b => b.start.startsWith(monthStr) || b.end.startsWith(monthStr) || (b.start < monthStr + '-01' && b.end > monthStr + '-31'));
+                  const bookedNights = Math.min(daysInMonth, monthBlocks.reduce((acc, b) => {
+                    const s = Math.max(new Date(b.start).getTime(), new Date(`${year}-${String(monthIdx + 1).padStart(2, '0')}-01`).getTime());
+                    const e = Math.min(new Date(b.end + 'T00:00:00').getTime(), new Date(year, monthIdx + 1, 0).getTime());
+                    return acc + Math.max(0, Math.round((e - s) / 86400000));
+                  }, 0));
+                  const pct = Math.min(100, Math.round((bookedNights / daysInMonth) * 100));
+                  const MONTHS_SHORT = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+                  return (
+                    <div key={monthIdx} className="flex-1 flex flex-col items-center gap-1">
+                      <span className="text-white/40 text-[9px]">{pct > 0 ? `${pct}%` : ''}</span>
+                      <div className="w-full bg-white/10 rounded-t-sm overflow-hidden" style={{ height: '80px' }}>
+                        <div
+                          className="w-full rounded-t-sm transition-all"
+                          style={{
+                            height: `${pct}%`,
+                            backgroundColor: pct >= 80 ? '#C8763A' : pct >= 50 ? '#6B7C45' : '#3B82F6',
+                            marginTop: `${100 - pct}%`,
+                          }}
+                        />
+                      </div>
+                      <span className="text-white/30 text-[9px]">{MONTHS_SHORT[monthIdx]}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── BLOC 5 : Liste complète des réservations ── */}
       <div>

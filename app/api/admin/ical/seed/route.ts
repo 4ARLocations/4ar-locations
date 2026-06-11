@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken, COOKIE_NAME } from '@/lib/auth';
-import { setICalUrls } from '@/lib/ical-sync';
+import { setICalUrls, getICalUrls } from '@/lib/ical-sync';
 
 // URLs Airbnb fournies par le propriétaire
 const AIRBNB_URLS: Record<string, string> = {
@@ -11,6 +11,10 @@ const AIRBNB_URLS: Record<string, string> = {
   'avignon':        'https://www.airbnb.fr/calendar/ical/1439243184509708331.ics?t=b7d9533b1af843b6a5fb8c2237822b4b',
 };
 
+// URL Abritel combinée (contient les 2 logements Lauris)
+const ABRITEL_COMBINED = 'https://www.abritel.fr/icalendar/97e07a92db0148398681113f6cc7df34.ics?nonTentative';
+const ABRITEL_PROPERTY_IDS = ['lauris-meme', 'lauris-atelier'];
+
 export async function POST(req: NextRequest) {
   const token = req.cookies.get(COOKIE_NAME)?.value;
   if (!token || !verifyToken(token)) {
@@ -18,7 +22,11 @@ export async function POST(req: NextRequest) {
   }
 
   for (const [propertyId, airbnb] of Object.entries(AIRBNB_URLS)) {
-    await setICalUrls(propertyId, { airbnb });
+    const existing = await getICalUrls(propertyId);
+    await setICalUrls(propertyId, {
+      airbnb,
+      abritel: ABRITEL_PROPERTY_IDS.includes(propertyId) ? ABRITEL_COMBINED : existing.abritel,
+    });
   }
 
   return NextResponse.json({ success: true, seeded: Object.keys(AIRBNB_URLS) });

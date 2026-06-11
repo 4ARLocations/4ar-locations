@@ -101,3 +101,23 @@ export async function isNotified(key: string): Promise<boolean> {
 export async function markNotified(key: string): Promise<void> {
   await redis.set(key, '1');
 }
+
+// ─────────────────────────────────────────────
+// Réponses propriétaire aux avis
+// ─────────────────────────────────────────────
+
+export interface OwnerReply {
+  text: string;
+  date: string; // ISO
+}
+
+export async function getOwnerReply(reviewId: string): Promise<OwnerReply | null> {
+  const raw = await redis.get(`review-reply:${reviewId}`);
+  if (!raw) return null;
+  return typeof raw === 'string' ? JSON.parse(raw) : raw as OwnerReply;
+}
+
+export async function setOwnerReply(reviewId: string, text: string): Promise<void> {
+  const reply: OwnerReply = { text, date: new Date().toISOString() };
+  await redis.set(`review-reply:${reviewId}`, JSON.stringify(reply));
+}

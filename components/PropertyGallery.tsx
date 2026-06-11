@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
@@ -7,6 +7,17 @@ export default function PropertyGallery({ images, name }: { images: string[]; na
   const t = useTranslations('properties');
   const [current, setCurrent] = useState(0);
   const [lightbox, setLightbox] = useState(false);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') setCurrent((c) => Math.max(0, c - 1));
+      if (e.key === 'ArrowRight') setCurrent((c) => Math.min(images.length - 1, c + 1));
+      if (e.key === 'Escape') setLightbox(false);
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightbox, images.length]);
 
   return (
     <>
