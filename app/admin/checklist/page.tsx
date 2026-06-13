@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import type { PropertyChecklist, ChecklistItem } from '@/app/api/admin/checklist/route';
+import type { PropertyChecklist } from '@/app/api/admin/checklist/route';
 
 const PROPERTIES = [
   { id: 'risoul', name: 'Risoul 1850', emoji: '⛷' },
@@ -62,24 +62,26 @@ export default function ChecklistPage() {
   const doneCount = checklist?.items.filter((i) => i.done).length ?? 0;
   const totalCount = checklist?.items.length ?? 0;
   const allDone = doneCount === totalCount && totalCount > 0;
+  const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#2C2416]">Checklist ménage</h1>
-        <p className="text-sm text-[#9B8A74] mt-1">Cochez les tâches effectuées avant chaque nouvelle arrivée.</p>
+    <div className="px-6 py-6 max-w-2xl">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-white">Checklist ménage</h1>
+        <p className="text-sm text-white/40 mt-1">Cochez les tâches effectuées avant chaque arrivée.</p>
       </div>
 
       {/* Sélecteur logement */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-1.5 mb-6">
         {PROPERTIES.map((p) => (
           <button
             key={p.id}
             onClick={() => setActiveId(p.id)}
-            className={`flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full transition-colors ${
+            className={`flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg transition-all ${
               activeId === p.id
                 ? 'bg-[#C8763A] text-white'
-                : 'bg-[#FAF7F2] border border-[#E8DCC8] text-[#5C4F3A] hover:border-[#C8763A]'
+                : 'bg-white/[0.06] text-white/40 hover:text-white/70 hover:bg-white/10 border border-white/[0.07]'
             }`}
           >
             <span>{p.emoji}</span>
@@ -91,39 +93,46 @@ export default function ChecklistPage() {
       {checklist && (
         <>
           {/* Progression */}
-          <div className="bg-white border border-[#E8DCC8] rounded-2xl p-5 mb-4 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
+          <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5 mb-4">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <span className="text-2xl font-bold text-[#2C2416]">{doneCount}</span>
-                <span className="text-[#9B8A74]">/{totalCount} tâches</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white">{doneCount}</span>
+                  <span className="text-white/40 text-lg">/ {totalCount}</span>
+                  <span className="text-white/30 text-sm ml-1">tâches</span>
+                </div>
                 {checklist.lastReset && (
-                  <p className="text-xs text-[#9B8A74] mt-0.5">Réinitialisé {timeAgo(checklist.lastReset)}</p>
+                  <p className="text-xs text-white/25 mt-1">Réinitialisé {timeAgo(checklist.lastReset)}</p>
                 )}
               </div>
               <div className="flex items-center gap-2">
                 {allDone && (
-                  <span className="text-xs bg-green-100 text-green-700 font-bold px-3 py-1.5 rounded-full">✅ Prêt !</span>
+                  <span className="text-xs bg-green-500/15 text-green-400 font-bold px-3 py-1.5 rounded-full border border-green-500/20">
+                    ✅ Prêt !
+                  </span>
                 )}
                 <button
                   onClick={reset}
                   disabled={saving}
-                  className="text-xs border border-[#E8DCC8] hover:border-[#C8763A] text-[#5C4F3A] font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                  className="text-xs border border-white/10 hover:border-white/25 text-white/40 hover:text-white/70 font-medium px-3 py-1.5 rounded-lg transition-all disabled:opacity-40"
                 >
-                  🔄 Réinitialiser
+                  ↺ Réinitialiser
                 </button>
               </div>
             </div>
 
-            <div className="h-2 bg-[#F0EAE0] rounded-full overflow-hidden">
+            {/* Barre de progression */}
+            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${allDone ? 'bg-green-500' : 'bg-[#C8763A]'}`}
-                style={{ width: `${totalCount > 0 ? (doneCount / totalCount) * 100 : 0}%` }}
+                style={{ width: `${pct}%` }}
               />
             </div>
+            <p className="text-right text-xs text-white/25 mt-1">{pct}%</p>
           </div>
 
           {/* Liste des tâches */}
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {checklist.items.map((item) => (
               <button
                 key={item.id}
@@ -131,12 +140,12 @@ export default function ChecklistPage() {
                 disabled={saving}
                 className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border text-left transition-all ${
                   item.done
-                    ? 'bg-green-50 border-green-200 opacity-70'
-                    : 'bg-white border-[#E8DCC8] hover:border-[#C8763A]/40'
+                    ? 'bg-green-500/[0.07] border-green-500/20'
+                    : 'bg-white/[0.04] border-white/[0.08] hover:bg-white/[0.07] hover:border-white/15'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
-                  item.done ? 'bg-green-500 border-green-500' : 'border-[#D8CFC4]'
+                  item.done ? 'bg-green-500 border-green-500' : 'border-white/20'
                 }`}>
                   {item.done && (
                     <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +153,9 @@ export default function ChecklistPage() {
                     </svg>
                   )}
                 </div>
-                <span className={`text-sm font-medium ${item.done ? 'line-through text-[#9B8A74]' : 'text-[#2C2416]'}`}>
+                <span className={`text-sm font-medium transition-colors ${
+                  item.done ? 'line-through text-white/25' : 'text-white/75'
+                }`}>
                   {item.label}
                 </span>
               </button>

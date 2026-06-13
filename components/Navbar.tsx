@@ -2,65 +2,99 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
-const localeLabels: Record<string, string> = { fr: '🇫🇷 FR', en: '🇬🇧 EN', de: '🇩🇪 DE' };
 const locales = ['fr', 'en', 'de'];
 
 export default function Navbar({ locale }: { locale: string }) {
   const t = useTranslations('nav');
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const localePath = (path: string) => `/${locale}${path}`;
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const lp = (path: string) => `/${locale}${path}`;
+
+  const isActive = (path: string) =>
+    path === '' ? pathname === `/${locale}` || pathname === `/${locale}/` : pathname.startsWith(lp(path));
+
+  const navLink = (path: string, label: string) => (
+    <Link
+      href={lp(path)}
+      className={`text-sm font-medium transition-colors relative py-1 ${
+        isActive(path) ? 'text-[#C8763A]' : 'text-[#5C4F3A] hover:text-[#2C2416]'
+      }`}
+    >
+      {label}
+      {isActive(path) && (
+        <span className="absolute -bottom-[19px] left-0 right-0 h-0.5 bg-[#C8763A] rounded-full" />
+      )}
+    </Link>
+  );
 
   return (
-    <nav className="bg-white border-b border-[#E8DCC8] sticky top-0 z-50 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <nav className={`bg-white sticky top-0 z-50 transition-all duration-200 ${
+      scrolled ? 'shadow-[0_1px_12px_rgba(44,36,22,0.08)] border-b border-[#E8DCC8]/80' : 'border-b border-[#E8DCC8]'
+    }`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center h-16 gap-8">
+
         {/* Logo */}
-        <Link href={localePath('')} className="flex items-center gap-2">
+        <Link href={lp('')} className="flex items-center gap-2.5 flex-shrink-0 mr-2">
           <Image
             src="/images/logo-4ar.png"
-            alt=""
-            width={52}
-            height={52}
-            className="object-contain rounded-full"
+            alt="4AR Locations"
+            width={38}
+            height={38}
+            className="object-contain"
             priority
           />
-          <div className="flex items-baseline gap-1">
-            <span className="text-[#C8763A] text-xl tracking-tight font-serif">4AR</span>
-            <span className="text-[#6B7C45] text-xl font-serif">Locations</span>
+          <div className="flex items-baseline gap-0.5 leading-none">
+            <span className="text-[#C8763A] text-[17px] font-bold tracking-tight">4AR</span>
+            <span className="text-[#6B7C45] text-[17px] font-semibold tracking-tight"> Locations</span>
           </div>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <Link href={localePath('')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
-            {t('home')}
-          </Link>
-          <Link href={localePath('/biens')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
-            {t('properties')}
-          </Link>
-          <Link href={localePath('/guide')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
-            {t('guide')}
-          </Link>
-          <Link href={localePath('/carte')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors font-medium">
-            {t('map')}
-          </Link>
-          <Link href={localePath('/favoris')} className="text-[#5C4F3A] hover:text-[#C8763A] transition-colors" title="Mes favoris">
-            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2}>
+        <div className="hidden md:flex items-center gap-7 flex-1">
+          {navLink('', t('home'))}
+          {navLink('/biens', t('properties'))}
+          {navLink('/guide', t('guide'))}
+          {navLink('/carte', t('map'))}
+        </div>
+
+        {/* Desktop right */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            href={lp('/favoris')}
+            className="p-1.5 text-[#9B8A74] hover:text-[#C8763A] transition-colors rounded-lg hover:bg-[#FAF7F2]"
+            title="Mes favoris"
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </Link>
-          <Link href={localePath('/contact')} className="bg-[#C8763A] text-white px-4 py-2 rounded-lg hover:bg-[#A85E28] transition-colors font-medium">
+
+          <Link
+            href={lp('/contact')}
+            className="bg-[#C8763A] hover:bg-[#A85E28] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+          >
             {t('contact')}
           </Link>
-          {/* Language switcher */}
-          <div className="flex items-center gap-1 border border-[#E8DCC8] rounded-lg overflow-hidden">
+
+          <div className="flex items-center border border-[#E8DCC8] rounded-lg overflow-hidden">
             {locales.map((l) => (
               <Link
                 key={l}
                 href={`/${l}`}
-                className={`px-2 py-1 text-sm font-medium transition-colors ${l === locale ? 'bg-[#C8763A] text-white' : 'text-[#5C4F3A] hover:bg-[#FAF7F2]'}`}
+                className={`px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                  l === locale ? 'bg-[#2C2416] text-white' : 'text-[#9B8A74] hover:bg-[#FAF7F2] hover:text-[#5C4F3A]'
+                }`}
               >
                 {l.toUpperCase()}
               </Link>
@@ -70,7 +104,7 @@ export default function Navbar({ locale }: { locale: string }) {
 
         {/* Mobile burger */}
         <button
-          className="md:hidden p-2 text-[#5C4F3A]"
+          className="md:hidden ml-auto p-1.5 text-[#5C4F3A] rounded-lg hover:bg-[#FAF7F2] transition-colors"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menu"
         >
@@ -84,20 +118,42 @@ export default function Navbar({ locale }: { locale: string }) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-[#E8DCC8] px-4 pb-4 flex flex-col gap-3">
-          <Link href={localePath('')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('home')}</Link>
-          <Link href={localePath('/biens')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('properties')}</Link>
-          <Link href={localePath('/guide')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('guide')}</Link>
-          <Link href={localePath('/carte')} onClick={() => setMenuOpen(false)} className="py-2 text-[#5C4F3A] font-medium">{t('map')}</Link>
-          <Link href={localePath('/contact')} onClick={() => setMenuOpen(false)} className="py-2 text-[#C8763A] font-semibold">{t('contact')}</Link>
-          <div className="flex gap-2 pt-2">
+        <div className="md:hidden bg-white border-t border-[#E8DCC8] px-4 py-3 flex flex-col gap-0.5">
+          {[
+            { path: '', label: t('home') },
+            { path: '/biens', label: t('properties') },
+            { path: '/guide', label: t('guide') },
+            { path: '/carte', label: t('map') },
+            { path: '/favoris', label: 'Favoris' },
+          ].map(({ path, label }) => (
+            <Link
+              key={path}
+              href={lp(path)}
+              onClick={() => setMenuOpen(false)}
+              className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive(path) ? 'text-[#C8763A] bg-[#FAF4EE]' : 'text-[#5C4F3A] hover:bg-[#FAF7F2]'
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+          <Link
+            href={lp('/contact')}
+            onClick={() => setMenuOpen(false)}
+            className="mt-2 text-center bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold py-2.5 rounded-lg text-sm transition-colors"
+          >
+            {t('contact')}
+          </Link>
+          <div className="flex gap-1.5 pt-3 mt-1 border-t border-[#E8DCC8]">
             {locales.map((l) => (
               <Link
                 key={l}
                 href={`/${l}`}
-                className={`px-3 py-1 rounded text-sm font-medium ${l === locale ? 'bg-[#C8763A] text-white' : 'border border-[#E8DCC8] text-[#5C4F3A]'}`}
+                className={`flex-1 text-center py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                  l === locale ? 'bg-[#2C2416] text-white' : 'border border-[#E8DCC8] text-[#9B8A74]'
+                }`}
               >
-                {localeLabels[l]}
+                {l.toUpperCase()}
               </Link>
             ))}
           </div>

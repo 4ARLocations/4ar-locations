@@ -80,56 +80,55 @@ export default function ICalPage() {
   };
 
   const allHaveUrls = data.every((p) => p.urls.airbnb || p.urls.abritel);
+  const urlInput = "w-full bg-white/[0.06] border border-white/10 rounded-lg px-3 py-2 text-xs font-mono text-white/70 focus:outline-none focus:border-[#C8763A]/50 transition-colors placeholder-white/20";
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-8">
+    <div className="px-6 py-6 max-w-4xl">
+      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold text-[#2C2416]">Synchronisation iCal</h1>
-          <p className="text-sm text-[#9B8A74] mt-1">Liez vos calendriers Airbnb et Abritel pour synchroniser automatiquement les réservations.</p>
+          <h1 className="text-xl font-bold text-white">Synchronisation iCal</h1>
+          <p className="text-sm text-white/40 mt-1">Liez vos calendriers Airbnb et Abritel pour importer automatiquement les réservations.</p>
         </div>
         <button
           onClick={() => handleSync()}
           disabled={syncing !== null}
           className="flex items-center gap-2 bg-[#C8763A] hover:bg-[#A85E28] disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors"
         >
-          {syncing === 'all' ? (
-            <><span className="animate-spin">↻</span> Synchro en cours…</>
-          ) : (
-            <><span>↻</span> Tout synchroniser</>
-          )}
+          <svg className={`w-4 h-4 ${syncing === 'all' ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          {syncing === 'all' ? 'Synchro…' : 'Tout synchroniser'}
         </button>
       </div>
 
-      {/* Bouton seed initial */}
+      {/* Bouton seed */}
       {!allHaveUrls && !seedDone && (
-        <div className="mb-6 bg-[#FFF8F0] border border-[#C8763A]/30 rounded-2xl p-5 flex items-center justify-between gap-4">
+        <div className="mb-5 bg-[#C8763A]/10 border border-[#C8763A]/20 rounded-2xl p-5 flex items-center justify-between gap-4">
           <div>
-            <p className="font-semibold text-[#2C2416] text-sm">Charger les URLs Airbnb initiales</p>
-            <p className="text-xs text-[#9B8A74] mt-0.5">Cliquez pour pré-remplir les 5 URLs Airbnb fournies.</p>
+            <p className="font-semibold text-white text-sm">Charger les URLs Airbnb initiales</p>
+            <p className="text-xs text-white/40 mt-0.5">Pré-remplir les 5 URLs Airbnb fournies.</p>
           </div>
           <button
             onClick={handleSeed}
             disabled={seeding}
-            className="flex-shrink-0 bg-[#2C2416] hover:bg-[#4A3828] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors disabled:opacity-50"
+            className="flex-shrink-0 bg-white/10 hover:bg-white/15 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors disabled:opacity-50 border border-white/10"
           >
             {seeding ? 'Chargement…' : 'Pré-remplir les URLs'}
           </button>
         </div>
       )}
 
-      {/* Résultats de la dernière sync */}
+      {/* Résultats sync */}
       {results.length > 0 && (
-        <div className="mb-6 bg-[#F0FAF4] border border-[#6B7C45]/30 rounded-2xl p-5">
-          <p className="font-semibold text-[#2C2416] text-sm mb-3">✅ Résultats de la synchronisation</p>
-          <div className="space-y-1.5">
+        <div className="mb-5 bg-green-500/10 border border-green-500/20 rounded-2xl p-4">
+          <p className="font-semibold text-green-400 text-sm mb-2">Résultats de la synchronisation</p>
+          <div className="space-y-1">
             {results.map((r) => (
-              <div key={r.propertyId} className="flex items-center gap-3 text-xs text-[#5C4F3A]">
-                <span className="font-medium w-28">{data.find((p) => p.propertyId === r.propertyId)?.name ?? r.propertyId}</span>
-                <span className="text-[#6B7C45]">+{r.added} blocs importés</span>
-                {r.errors.length > 0 && (
-                  <span className="text-red-500">{r.errors.join(', ')}</span>
-                )}
+              <div key={r.propertyId} className="flex items-center gap-3 text-xs text-white/50">
+                <span className="font-medium w-32">{data.find((p) => p.propertyId === r.propertyId)?.name ?? r.propertyId}</span>
+                <span className="text-green-400">+{r.added} blocs importés</span>
+                {r.errors.length > 0 && <span className="text-red-400">{r.errors.join(', ')}</span>}
               </div>
             ))}
           </div>
@@ -141,61 +140,62 @@ export default function ICalPage() {
         {data.map((p) => {
           const ed = editing[p.propertyId] ?? { airbnb: '', abritel: '' };
           const hasChanges = ed.airbnb !== (p.urls.airbnb ?? '') || ed.abritel !== (p.urls.abritel ?? '');
+          const hasUrls = p.urls.airbnb || p.urls.abritel;
           return (
-            <div key={p.propertyId} className="bg-white border border-[#E8DCC8] rounded-2xl p-5 shadow-sm">
+            <div key={p.propertyId} className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="font-bold text-[#2C2416]">{p.name}</p>
-                  <p className="text-xs text-[#9B8A74] mt-0.5">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-white text-sm">{p.name}</p>
+                    {hasUrls && <span className="text-[10px] bg-green-500/15 text-green-400 font-semibold px-2 py-0.5 rounded-full border border-green-500/20">Configuré</span>}
+                  </div>
+                  <p className="text-xs text-white/30 mt-0.5">
                     {p.lastSync ? `Dernière synchro : ${timeAgo(p.lastSync)}` : 'Jamais synchronisé'}
                   </p>
                 </div>
                 <button
                   onClick={() => handleSync(p.propertyId)}
                   disabled={syncing !== null}
-                  className="flex items-center gap-1.5 border border-[#E8DCC8] hover:border-[#C8763A]/40 text-[#5C4F3A] text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                  className="flex items-center gap-1.5 bg-white/[0.06] hover:bg-white/10 border border-white/10 text-white/50 hover:text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-all disabled:opacity-40"
                 >
-                  {syncing === p.propertyId ? <span className="animate-spin">↻</span> : '↻'}
+                  <svg className={`w-3.5 h-3.5 ${syncing === p.propertyId ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
                   Synchroniser
                 </button>
               </div>
 
               <div className="space-y-3">
-                {/* Airbnb */}
                 <div>
-                  <label className="flex items-center gap-1.5 text-xs font-medium text-[#5C4F3A] mb-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5A5F] inline-block" />
-                    URL iCal Airbnb
+                  <label className="flex items-center gap-1.5 text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#FF5A5F]" /> URL iCal Airbnb
                   </label>
                   <input
                     type="url"
                     value={ed.airbnb}
                     onChange={(e) => setEditing((prev) => ({ ...prev, [p.propertyId]: { ...ed, airbnb: e.target.value } }))}
                     placeholder="https://www.airbnb.fr/calendar/ical/..."
-                    className="w-full border border-[#E8DCC8] rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C8763A] bg-[#FAF7F2] transition-colors"
+                    className={urlInput}
                   />
                 </div>
-
-                {/* Abritel */}
                 <div>
-                  <label className="flex items-center gap-1.5 text-xs font-medium text-[#5C4F3A] mb-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#00A699] inline-block" />
-                    URL iCal Abritel
+                  <label className="flex items-center gap-1.5 text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#00A699]" /> URL iCal Abritel
                   </label>
                   <input
                     type="url"
                     value={ed.abritel}
                     onChange={(e) => setEditing((prev) => ({ ...prev, [p.propertyId]: { ...ed, abritel: e.target.value } }))}
                     placeholder="https://www.vrbo.com/icalendar/..."
-                    className="w-full border border-[#E8DCC8] rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#00A699] bg-[#FAF7F2] transition-colors"
+                    className={urlInput}
                   />
                 </div>
-
                 {hasChanges && (
                   <button
                     onClick={() => handleSave(p.propertyId)}
                     disabled={saving === p.propertyId}
-                    className="text-xs bg-[#2C2416] hover:bg-[#4A3828] text-white font-semibold px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                    className="text-xs bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
                   >
                     {saving === p.propertyId ? 'Sauvegarde…' : 'Enregistrer les URLs'}
                   </button>
@@ -206,12 +206,11 @@ export default function ICalPage() {
         })}
       </div>
 
-      {/* Note automatisation */}
-      <div className="mt-8 bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl p-5">
-        <p className="text-xs font-semibold text-[#2C2416] mb-1">⚙️ Synchronisation automatique</p>
-        <p className="text-xs text-[#9B8A74] leading-relaxed">
-          Le calendrier est synchronisé automatiquement <strong>toutes les heures</strong> via Vercel Cron.
-          Les réservations Airbnb et Abritel apparaissent directement dans le calendrier admin avec leur couleur respective.
+      {/* Note sync auto */}
+      <div className="mt-6 bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4">
+        <p className="text-xs font-semibold text-white/30 mb-1">Synchronisation automatique</p>
+        <p className="text-xs text-white/25 leading-relaxed">
+          Le calendrier est synchronisé automatiquement <strong className="text-white/40">chaque jour à 7h</strong> via Vercel Cron.
           Vous pouvez aussi déclencher une synchronisation manuelle à tout moment.
         </p>
       </div>

@@ -15,7 +15,7 @@ function HomeContent({ locale }: { locale: string }) {
   return (
     <>
       {/* ─── HERO ─── */}
-      <section className="relative text-white overflow-hidden min-h-[600px] flex items-center">
+      <section className="relative text-white overflow-hidden min-h-[92vh] flex items-center">
         <Image
           src="/images/hero-logo.png"
           alt="4AR Locations — Provence & Alpes"
@@ -23,38 +23,38 @@ function HomeContent({ locale }: { locale: string }) {
           className="object-cover object-center"
           priority
         />
-        {/* Dégradé gauche pour lisibilité du texte */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1A1008]/85 via-[#1A1008]/50 to-[#1A1008]/10" />
-        {/* Léger assombrissement global */}
-        <div className="absolute inset-0 bg-[#2C1A08]/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#130C04]/92 via-[#1A1008]/55 to-transparent" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-28 md:py-40 w-full">
-          <div className="max-w-2xl">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-6">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-24 w-full">
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-1.5 mb-7">
               <span className="w-1.5 h-1.5 rounded-full bg-[#C8763A] animate-pulse" />
-              <span className="text-xs text-white/80 font-medium tracking-widest uppercase">Provence · Alpes · Avignon</span>
+              <span className="text-xs text-white/75 font-medium tracking-[0.15em] uppercase">Provence · Alpes · Avignon</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
+            <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-5 leading-[1.1] tracking-tight">
               {t('hero.tagline')}
             </h1>
-            <p className="text-lg md:text-xl text-white/75 mb-10 leading-relaxed max-w-lg">
+            <p className="text-lg text-white/65 mb-10 leading-relaxed">
               {t('hero.subtitle')}
             </p>
+
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href={`/${locale}/biens`}
-                className="bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold px-7 py-3.5 rounded-xl transition-all text-center shadow-lg shadow-[#C8763A]/25 hover:shadow-[#C8763A]/40">
+              <Link
+                href={`/${locale}/biens`}
+                className="bg-[#C8763A] hover:bg-[#A85E28] text-white font-bold px-7 py-3.5 rounded-xl transition-all text-center shadow-lg shadow-[#C8763A]/30 hover:shadow-[#C8763A]/45 hover:-translate-y-px"
+              >
                 {t('hero.cta')}
               </Link>
-              <Link href={`/${locale}/contact`}
-                className="border border-white/40 hover:border-white/70 text-white font-semibold px-7 py-3.5 rounded-xl transition-all text-center backdrop-blur-sm hover:bg-white/5">
+              <Link
+                href={`/${locale}/contact`}
+                className="border border-white/30 hover:border-white/60 hover:bg-white/8 text-white font-semibold px-7 py-3.5 rounded-xl transition-all text-center backdrop-blur-sm"
+              >
                 {t('hero.cta_book')}
               </Link>
             </div>
 
-            {/* Stats rapides */}
-            <div className="flex flex-wrap gap-6 mt-12 pt-8 border-t border-white/15">
+            <div className="flex flex-wrap gap-8 mt-14 pt-8 border-t border-white/10">
               {[
                 { num: '5', label: t('home.stat_properties') },
                 { num: '3', label: t('home.stat_destinations') },
@@ -62,7 +62,7 @@ function HomeContent({ locale }: { locale: string }) {
               ].map((s) => (
                 <div key={s.label}>
                   <div className="text-2xl font-bold text-white">{s.num}</div>
-                  <div className="text-xs text-white/55 uppercase tracking-wider mt-0.5">{s.label}</div>
+                  <div className="text-xs text-white/45 uppercase tracking-widest mt-0.5">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -73,87 +73,86 @@ function HomeContent({ locale }: { locale: string }) {
       {/* ─── QUI SOMMES-NOUS ─── */}
       <section className="bg-[#FAF7F2] py-20 border-b border-[#EDE6DC]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            {/* Texte */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8763A] mb-3">
-                {t('about.title')}
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-5 leading-snug">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('about.title')}</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416] leading-tight">
                 La famille Rougon<br />
                 <span className="text-[#C8763A]">{t('home.welcome_subtitle')}</span>
               </h2>
-              <p className="text-[#5C4F3A] text-base leading-relaxed mb-8">
-                {t('about.text')}
-              </p>
+            </div>
+            <p className="text-[#5C4F3A] text-sm leading-relaxed max-w-xs text-[#9B8A74]">
+              {t('about.text')}
+            </p>
+          </div>
 
-              {/* 3 valeurs */}
-              <div className="space-y-4">
-                {([
-                  { icon: '🏡', title: t('about.value_1_title'), text: t('about.value_1_text') },
-                  { icon: '📍', title: t('about.value_2_title'), text: t('about.value_2_text') },
-                  { icon: '✉️', title: t('about.value_3_title'), text: t('about.value_3_text') },
-                ]).map((v) => (
-                  <div key={v.title} className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#C8763A]/10 flex items-center justify-center text-base flex-shrink-0 mt-0.5">
-                      {v.icon}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-[#2C2416] text-sm">{v.title}</div>
-                      <div className="text-[#9B8A74] text-sm mt-0.5">{v.text}</div>
-                    </div>
+          {/* Grille destinations */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+            {[
+              { label: 'Risoul 1850', sub: t('home.dest_risoul_sub'), image: '/images/bg-risoul-mountain.jpg', href: `/${locale}/biens/risoul`, tag: 'Hautes-Alpes', span: false },
+              { label: 'Avignon', sub: t('home.dest_avignon_sub'), image: '/images/bg-palais.jpg', href: `/${locale}/biens/avignon`, tag: 'Vaucluse', span: false },
+              { label: 'Lauris · Luberon', sub: t('home.dest_lauris_sub'), image: '/images/bg-lauris-mid.jpg', href: `/${locale}/biens#luberon`, tag: 'Vaucluse', span: true },
+            ].map((d) => (
+              <Link key={d.label} href={d.href} className={`group block ${d.span ? 'col-span-2 md:col-span-1' : ''}`}>
+                <div className="relative overflow-hidden rounded-2xl h-52 md:h-64">
+                  <Image src={d.image} alt={d.label} fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/55 mb-0.5">{d.tag}</p>
+                    <p className="font-bold text-base leading-tight">{d.label}</p>
+                    <p className="text-xs text-white/60 mt-0.5">{d.sub}</p>
                   </div>
-                ))}
+                  <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Valeurs */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10 border-t border-[#EDE6DC]">
+            {([
+              { icon: '🏡', title: t('about.value_1_title'), text: t('about.value_1_text') },
+              { icon: '📍', title: t('about.value_2_title'), text: t('about.value_2_text') },
+              { icon: '✉️', title: t('about.value_3_title'), text: t('about.value_3_text') },
+            ]).map((v) => (
+              <div key={v.title} className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#C8763A]/10 flex items-center justify-center text-lg flex-shrink-0 mt-0.5">
+                  {v.icon}
+                </div>
+                <div>
+                  <p className="font-semibold text-[#2C2416] text-sm">{v.title}</p>
+                  <p className="text-[#9B8A74] text-sm mt-0.5 leading-relaxed">{v.text}</p>
+                </div>
               </div>
-            </div>
-
-            {/* Photo + carte destinations */}
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: 'Risoul 1850', sub: t('home.dest_risoul_sub'), image: '/images/bg-risoul-mountain.jpg', href: `/${locale}/biens/risoul`, span: false },
-                { label: 'Avignon', sub: t('home.dest_avignon_sub'), image: '/images/bg-palais.jpg', href: `/${locale}/biens/avignon`, span: false },
-                { label: 'Lauris · Luberon', sub: t('home.dest_lauris_sub'), image: '/images/bg-lauris-mid.jpg', href: `/${locale}/biens#luberon`, span: true },
-              ].map((d) => (
-                <Link key={d.label} href={d.href} className={`group block ${d.span ? 'col-span-2' : ''}`}>
-                  <div className={`relative overflow-hidden rounded-2xl shadow-sm ${d.span ? 'h-40' : 'h-48'}`}>
-                    <Image src={d.image} alt={d.label} fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <div className="font-bold text-base leading-tight">{d.label}</div>
-                      <div className="text-xs text-white/65 mt-0.5">{d.sub}</div>
-                    </div>
-                    <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ─── NOS LOGEMENTS — fond Risoul ─── */}
-      <section
-        className="relative py-20"
-        style={{
-          backgroundImage: "url('/images/bg-risoul-mountain.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          backgroundAttachment: 'fixed',
-        }}
-      >
-        <div className="absolute inset-0 bg-[#FAF7F2]/80 pointer-events-none" />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('home.properties_title')}</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416]">{t('properties.subtitle')}</h2>
+      {/* ─── NOS LOGEMENTS ─── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('home.properties_title')}</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416]">{t('properties.subtitle')}</h2>
+            </div>
+            <Link
+              href={`/${locale}/biens`}
+              className="text-sm font-semibold text-[#C8763A] hover:text-[#A85E28] flex items-center gap-1 transition-colors whitespace-nowrap"
+            >
+              Voir tous les biens
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {properties.map((p) => (
               <PropertyCard key={p.id} property={p} locale={locale} />
             ))}
@@ -162,25 +161,31 @@ function HomeContent({ locale }: { locale: string }) {
       </section>
 
       {/* ─── CTA réservation directe ─── */}
-      <section className="relative text-white py-20 overflow-hidden">
-        <Image src="/images/bg-lauris-panorama.jpg" alt="Vue panoramique de Lauris" fill
-          className="object-cover object-center" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2C4A1A]/90 via-[#3A5A28]/80 to-[#1A3010]/85" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8AC870] mb-3">{t('home.direct_booking')}</p>
+      <section className="relative text-white py-24 overflow-hidden">
+        <Image src="/images/bg-lauris-panorama.jpg" alt="Vue panoramique Luberon" fill className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1A3010]/93 via-[#2C4A1A]/85 to-[#0E1E08]/90" />
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#8AC870] mb-3">{t('home.direct_booking')}</p>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('contact.advantage_title')}</h2>
-          <p className="text-white/65 mb-10 max-w-xl mx-auto">{t('home.intro_text')}</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 text-left">
+          <p className="text-white/55 mb-10 max-w-md mx-auto text-sm leading-relaxed">{t('home.intro_text')}</p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
             {(['advantage_1', 'advantage_2', 'advantage_3', 'advantage_4'] as const).map((k) => (
-              <div key={k} className="flex items-start gap-2.5 bg-white/8 rounded-xl p-4 backdrop-blur-sm border border-white/10">
-                <span className="text-[#8AC870] text-lg mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm text-white/85 leading-snug">{t(`contact.${k}`)}</span>
+              <div key={k} className="flex items-start gap-2 bg-white/[0.07] rounded-xl p-3.5 backdrop-blur-sm border border-white/[0.09] text-left">
+                <span className="text-[#8AC870] font-bold text-sm mt-0.5 flex-shrink-0">✓</span>
+                <span className="text-xs text-white/75 leading-snug">{t(`contact.${k}`)}</span>
               </div>
             ))}
           </div>
-          <Link href={`/${locale}/contact`}
-            className="inline-block bg-[#C8763A] hover:bg-[#A85E28] text-white font-bold px-10 py-4 rounded-xl transition-all text-base shadow-lg shadow-black/20 hover:shadow-black/30">
+
+          <Link
+            href={`/${locale}/contact`}
+            className="inline-flex items-center gap-2 bg-[#C8763A] hover:bg-[#A85E28] text-white font-bold px-10 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-black/25"
+          >
             {t('hero.cta_book')}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </Link>
         </div>
       </section>

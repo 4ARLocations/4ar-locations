@@ -6,20 +6,18 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-// Noms lisibles (on ne peut pas utiliser next-intl côté admin sans locale)
 const PROPERTY_NAMES: Record<string, string> = {
   'risoul': 'Appartement Risoul 1850',
   'avignon': 'Appartement Avignon Intramuros',
   'lauris-meme': 'Maison de Mémé',
-  'lauris-atelier': 'L\'Atelier',
-  'lauris-alain': 'Maison d\'Alain',
+  'lauris-atelier': "L'Atelier",
+  'lauris-alain': "Maison d'Alain",
 };
 
 export default async function AdminPhotosPage() {
   const ok = await isAdminAuthenticated();
   if (!ok) redirect('/admin/login');
 
-  // Pour chaque bien, compter les photos (Redis > défaut)
   const propertiesWithCounts = await Promise.all(
     properties.map(async (p) => {
       let images = p.images;
@@ -36,59 +34,46 @@ export default async function AdminPhotosPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] p-4 sm:p-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="px-6 py-6 max-w-3xl">
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-white">Gestion des photos</h1>
+        <p className="text-sm text-white/40 mt-1">Modifiez, réordonnez et uploadez les photos de chaque bien.</p>
+      </div>
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-          <div>
-            <a href="/admin" className="text-sm text-[#9B8A74] hover:text-[#5C4F3A] transition-colors">
-              ← Tableau de bord
-            </a>
-            <h1 className="text-2xl font-bold text-[#2C2416] mt-1">Gestion des photos</h1>
-            <p className="text-sm text-[#9B8A74]">Modifiez, réordonnez et uploadez les photos de chaque bien</p>
-          </div>
-        </div>
+      <div className="space-y-2">
+        {propertiesWithCounts.map((p) => (
+          <Link
+            key={p.id}
+            href={`/admin/photos/${p.id}`}
+            className="flex items-center gap-4 bg-white/[0.04] border border-white/[0.08] rounded-2xl p-4 hover:bg-white/[0.07] hover:border-white/15 transition-all group"
+          >
+            {/* Miniature */}
+            <div
+              className="w-14 h-14 rounded-xl bg-cover bg-center flex-shrink-0 border border-white/10"
+              style={{ backgroundImage: `url(${p.currentImages[0]})` }}
+            />
 
-        {/* Liste des biens */}
-        <div className="space-y-3">
-          {propertiesWithCounts.map(p => (
-            <Link
-              key={p.id}
-              href={`/admin/photos/${p.id}`}
-              className="flex items-center gap-4 bg-white rounded-2xl border border-[#EDE6DC] p-4 hover:border-[#C8763A]/40 hover:shadow-md transition-all group"
-            >
-              {/* Miniature */}
-              <div
-                className="w-16 h-16 rounded-xl bg-cover bg-center flex-shrink-0 border border-[#EDE6DC]"
-                style={{ backgroundImage: `url(${p.currentImages[0]})` }}
-              />
-
-              {/* Infos */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="font-semibold text-[#2C2416] group-hover:text-[#C8763A] transition-colors">
-                    {PROPERTY_NAMES[p.id] ?? p.id}
-                  </h2>
-                  {p.isOverride && (
-                    <span className="text-[10px] font-bold bg-[#C8763A]/10 text-[#C8763A] px-2 py-0.5 rounded-full">
-                      Personnalisé
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-[#9B8A74]">
-                  {p.currentImages.length} photo{p.currentImages.length > 1 ? 's' : ''}
-                </p>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="font-semibold text-white/85 group-hover:text-white transition-colors text-sm">
+                  {PROPERTY_NAMES[p.id] ?? p.id}
+                </h2>
+                {p.isOverride && (
+                  <span className="text-[10px] font-bold bg-[#C8763A]/15 text-[#E8914A] px-2 py-0.5 rounded-full border border-[#C8763A]/20">
+                    Personnalisé
+                  </span>
+                )}
               </div>
+              <p className="text-xs text-white/30 mt-0.5">
+                {p.currentImages.length} photo{p.currentImages.length > 1 ? 's' : ''}
+              </p>
+            </div>
 
-              {/* Flèche */}
-              <div className="text-[#9B8A74] group-hover:text-[#C8763A] transition-colors text-xl flex-shrink-0">
-                →
-              </div>
-            </Link>
-          ))}
-        </div>
-
+            <svg className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        ))}
       </div>
     </div>
   );
