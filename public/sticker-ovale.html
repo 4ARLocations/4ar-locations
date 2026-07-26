@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticker Ovale — 4AR Locations</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #EDE3CE;
+  font-family: 'Georgia', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+h1 { font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: #2C2416; font-weight: normal; }
+.btn {
+  background: #C8763A; color: white; border: none;
+  padding: 10px 28px; border-radius: 8px; font-size: 14px;
+  font-family: inherit; cursor: pointer; letter-spacing: 0.05em;
+}
+.btn:hover { background: #A85E28; }
+
+.sticker {
+  background: #FFF8F0;
+  border: 2px solid #D4AF37;
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  width: 320px;
+}
+
+.header {
+  font-size: 7.5px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9B8A74;
+  padding-bottom: 12px;
+  font-family: Georgia, serif;
+}
+
+.sep {
+  width: 100%;
+  border: none;
+  border-top: 1px solid rgba(212,175,55,0.45);
+  margin-bottom: 14px;
+}
+
+.logo-oval {
+  width: 280px;
+  margin-bottom: 14px;
+}
+.logo-oval img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sep2 {
+  width: 100%;
+  border: none;
+  border-top: 1px solid rgba(212,175,55,0.45);
+  margin-bottom: 14px;
+}
+
+.qr-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.qr-section img.qr {
+  width: 110px;
+  height: 110px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: block;
+}
+.qr-text { display: flex; flex-direction: column; gap: 4px; }
+.brand-name { font-size: 12px; font-weight: bold; color: #2C2416; letter-spacing: 0.05em; }
+.brand-tagline { font-size: 9px; color: #9B8A74; font-style: italic; }
+.brand-url { font-size: 9px; color: #C8763A; font-family: Arial, sans-serif; letter-spacing: 0.03em; }
+
+.hint { font-size: 11px; color: #9B8A74; letter-spacing: 0.1em; text-transform: uppercase; }
+
+@media print {
+  body { background: white; padding: 1cm; min-height: auto; gap: 1rem; }
+  h1, .btn, .hint { display: none; }
+  .sticker { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<h1>4AR Locations · Sticker Ovale</h1>
+<button class="btn" onclick="window.print()">Imprimer</button>
+
+<div class="sticker">
+  <span class="header">4AR Locations</span>
+  <div class="sep"></div>
+  <div class="logo-oval">
+    <img src="/images/hero-logo.png" alt="4AR Locations — Risoul · Avignon · Lauris">
+  </div>
+  <div class="sep2"></div>
+  <div class="qr-section">
+    <img class="qr" src="/api/qr" alt="QR Code 4AR Locations">
+    <div class="qr-text">
+      <span class="brand-name">4AR Locations</span>
+      <span class="brand-tagline">Provence · Alpes · Avignon</span>
+      <span class="brand-url">www.4arlocations.com</span>
+    </div>
+  </div>
+</div>
+
+<p class="hint">Découpez le long du contour</p>
+
+</body>
+</html>

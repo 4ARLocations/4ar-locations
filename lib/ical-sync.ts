@@ -1,8 +1,8 @@
 import { redis } from './redis';
-import { addBlock, getBlocks, deleteBlock, type AvailabilityBlock } from './availability';
+import { addBlock, clearSyncedBlocks, type AvailabilityBlock } from './availability';
+import ical, { type VEvent } from 'node-ical';
 
 // ─── URLs iCal par logement ───────────────────────────────────────
-// Stockées dans Redis : clé `ical-urls:{propertyId}` → JSON { airbnb?, abritel? }
 export interface ICalUrls {
   airbnb?: string;
   abritel?: string;
@@ -18,62 +18,58 @@ export async function setICalUrls(propertyId: string, urls: ICalUrls): Promise<v
   await redis.set(`ical-urls:${propertyId}`, JSON.stringify(urls));
 }
 
-// ─── Parsing iCal ────────────────────────────────────────────────
-function toDateStr(date: Date): string {
-  return date.toISOString().slice(0, 10);
+// ─── Helpers date ─────────────────────────────────────────────────
+// node-ical parse les dates "all-day" comme minuit en heure locale du processus.
+// On utilise les méthodes locales pour rester cohérent.
+function dateToStr(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
 }
 
-async function fetchAndParseICal(url: string): Promise<{ start: string; end: string; summary: string }[]> {
+// ─── Parsing iCal (node-ical — gère TZID, DATE vs DATETIME, line folding) ──
+async function fetchAndParseICal(
+  url: string
+): Promise<{ start: string; end: string; summary: string }[]> {
   const res = await fetch(url, {
     headers: { 'User-Agent': '4AR-Locations-Sync/1.0' },
     next: { revalidate: 0 },
   });
-  if (!res.ok) throw new Error(`iCal fetch failed: ${res.status}`);
+  if (!res.ok) {
+    throw new Error(`iCal fetch failed: HTTP ${res.status} ${res.statusText}`);
+  }
   const text = await res.text();
-
-  // Parser iCal manuellement (évite dépendances lourdes)
-  const events: { start: string; end: string; summary: string }[] = [];
-  const lines = text.replace(/\r\n /g, '').replace(/\r\n\t/g, '').split(/\r?\n/);
-
-  let inEvent = false;
-  let current: Partial<{ start: string; end: string; summary: string }> = {};
-
-  for (const line of lines) {
-    if (line === 'BEGIN:VEVENT') {
-      inEvent = true;
-      current = {};
-    } else if (line === 'END:VEVENT') {
-      if (current.start && current.end) {
-        events.push({
-          start: current.start,
-          end: current.end,
-          summary: current.summary ?? 'Réservé',
-        });
-      }
-      inEvent = false;
-    } else if (inEvent) {
-      if (line.startsWith('DTSTART')) {
-        const val = line.split(':')[1]?.replace(/\D/g, '');
-        if (val && val.length >= 8) {
-          const y = val.slice(0, 4), m = val.slice(4, 6), d = val.slice(6, 8);
-          current.start = `${y}-${m}-${d}`;
-        }
-      } else if (line.startsWith('DTEND')) {
-        const val = line.split(':')[1]?.replace(/\D/g, '');
-        if (val && val.length >= 8) {
-          const y = val.slice(0, 4), m = val.slice(4, 6), d = val.slice(6, 8);
-          // iCal DTEND est exclusif — on recule d'un jour
-          const dt = new Date(`${y}-${m}-${d}`);
-          dt.setDate(dt.getDate() - 1);
-          current.end = toDateStr(dt);
-        }
-      } else if (line.startsWith('SUMMARY')) {
-        current.summary = line.split(':').slice(1).join(':').trim();
-      }
-    }
+  if (!text.includes('BEGIN:VCALENDAR')) {
+    throw new Error('Réponse invalide — URL iCal incorrecte ou expirée');
   }
 
-  return events;
+  const parsed = ical.sync.parseICS(text);
+  const results: { start: string; end: string; summary: string }[] = [];
+
+  for (const component of Object.values(parsed)) {
+    // Type guard: only process VEVENTs
+    if (!component || (component as { type?: string }).type !== 'VEVENT') continue;
+    const e = component as VEvent;
+
+    if (!e.start || !e.end) continue;
+
+    const start = dateToStr(new Date(e.start));
+
+    // DTEND est toujours exclusif en iCal :
+    // - all-day (DATE) : lendemain du dernier jour occupé
+    // - horodaté (DATETIME) : heure de départ, toujours le matin après la dernière nuit
+    // Dans les deux cas, soustraire 1 jour donne la dernière nuit bloquée.
+    const endDt = new Date(e.end);
+    endDt.setDate(endDt.getDate() - 1);
+    const end = dateToStr(endDt);
+
+    if (end < start) continue;
+
+    results.push({ start, end, summary: String(e.summary || 'Réservé') });
+  }
+
+  return results;
 }
 
 // ─── Synchronisation d'un logement ───────────────────────────────
@@ -88,27 +84,24 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
   const result: SyncResult = { propertyId, added: 0, removed: 0, errors: [] };
   const urls = await getICalUrls(propertyId);
 
-  // Supprimer les anciens blocs issus de la synchro automatique
-  const existingBlocks = await getBlocks(propertyId);
-  const toDelete = existingBlocks.filter((b) => b.source === 'airbnb' || b.source === 'abritel');
-  for (const b of toDelete) {
-    await deleteBlock(propertyId, b.id);
-    result.removed++;
-  }
+  // Supprimer en bloc les anciens blocs issus de la synchro (O(N) au lieu de O(N²))
+  result.removed = await clearSyncedBlocks(propertyId);
 
-  // Importer depuis Airbnb
+  // ── Airbnb ──────────────────────────────────────────────────────
   if (urls.airbnb) {
     try {
       const events = await fetchAndParseICal(urls.airbnb);
       for (const ev of events) {
-        if (!ev.start || !ev.end || ev.end < ev.start) continue;
+        const isHostBlocked = /not available|blocked|unavailable|indisponible/i.test(
+          ev.summary ?? ''
+        );
         const block: AvailabilityBlock = {
           id: `airbnb-${propertyId}-${ev.start}-${ev.end}`,
           propertyId,
           start: ev.start,
           end: ev.end,
-          label: ev.summary.includes('Airbnb') || ev.summary.includes('Not available') ? 'Airbnb' : ev.summary,
-          source: 'airbnb',
+          label: isHostBlocked ? 'Bloqué hôte' : ev.summary || 'Airbnb',
+          source: isHostBlocked ? 'airbnb-blocked' : 'airbnb',
         };
         await addBlock(block);
         result.added++;
@@ -118,18 +111,17 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
     }
   }
 
-  // Importer depuis Abritel
+  // ── Abritel ─────────────────────────────────────────────────────
   if (urls.abritel) {
     try {
       const events = await fetchAndParseICal(urls.abritel);
       for (const ev of events) {
-        if (!ev.start || !ev.end || ev.end < ev.start) continue;
         const block: AvailabilityBlock = {
           id: `abritel-${propertyId}-${ev.start}-${ev.end}`,
           propertyId,
           start: ev.start,
           end: ev.end,
-          label: 'Abritel',
+          label: ev.summary || 'Abritel',
           source: 'abritel',
         };
         await addBlock(block);
@@ -140,9 +132,14 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
     }
   }
 
-  // Mettre à jour la date de dernière synchro
-  await redis.set(`ical-last-sync:${propertyId}`, new Date().toISOString());
-
+  const now = new Date().toISOString();
+  await redis.set(`ical-last-sync:${propertyId}`, now);
+  await redis.set(`ical-last-sync-result:${propertyId}`, JSON.stringify({
+    added: result.added,
+    removed: result.removed,
+    errors: result.errors,
+    ts: now,
+  }));
   return result;
 }
 
@@ -154,4 +151,17 @@ export async function syncAllProperties(): Promise<SyncResult[]> {
 export async function getLastSync(propertyId: string): Promise<string | null> {
   const val = await redis.get(`ical-last-sync:${propertyId}`);
   return val ? String(val) : null;
+}
+
+export interface SyncResultStored {
+  added: number;
+  removed: number;
+  errors: string[];
+  ts: string;
+}
+
+export async function getLastSyncResult(propertyId: string): Promise<SyncResultStored | null> {
+  const raw = await redis.get(`ical-last-sync-result:${propertyId}`);
+  if (!raw) return null;
+  return typeof raw === 'string' ? JSON.parse(raw) : (raw as SyncResultStored);
 }

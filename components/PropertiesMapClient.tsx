@@ -16,6 +16,6 @@ const PropertiesMap = dynamic(() => import('./PropertiesMap'), {
   ),
 });
 
-export default function PropertiesMapClient() {
-  return <PropertiesMap />;
+export default function PropertiesMapClient({ focusId }: { focusId?: string | null }) {
+  return <PropertiesMap focusId={focusId} />;
 }

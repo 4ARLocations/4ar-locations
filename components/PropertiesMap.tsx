@@ -1,11 +1,11 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const MARKERS = [
   {
     id: 'risoul',
-    lat: 44.6268,
-    lng: 6.6250,
+    lat: 44.6221,
+    lng: 6.6312,
     label: 'Risoul 1850',
     sub: 'Résidence Altaïr · Risoul 05600',
     emoji: '⛷',
@@ -14,8 +14,8 @@ const MARKERS = [
   },
   {
     id: 'avignon',
-    lat: 43.9492,
-    lng: 4.8034,
+    lat: 43.9448,
+    lng: 4.8103,
     label: 'Avignon',
     sub: 'Rue Joyeuse · Avignon 84000',
     emoji: '🏛️',
@@ -24,8 +24,8 @@ const MARKERS = [
   },
   {
     id: 'lauris',
-    lat: 43.7380,
-    lng: 5.3102,
+    lat: 43.7462,
+    lng: 5.3117,
     label: 'Lauris · Luberon',
     sub: 'Rue Sainte-Marguerite · Lauris 84360',
     emoji: '🌿',
@@ -34,15 +34,15 @@ const MARKERS = [
   },
 ];
 
-export default function PropertiesMap() {
+export default function PropertiesMap({ focusId }: { focusId?: string | null }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mapRef = useRef<any>(null);
+
   useEffect(() => {
-    // Charger Leaflet uniquement côté client
     import('leaflet').then((L) => {
-      // Éviter double initialisation
       const container = document.getElementById('4ar-map') as HTMLElement & { _leaflet_id?: number };
       if (!container || container._leaflet_id) return;
 
-      // Fix icônes par défaut Leaflet
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (L.Icon.Default.prototype as any)._getIconUrl;
       L.Icon.Default.mergeOptions({
@@ -57,6 +57,8 @@ export default function PropertiesMap() {
         scrollWheelZoom: false,
         zoomControl: true,
       });
+
+      mapRef.current = map;
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -107,6 +109,15 @@ export default function PropertiesMap() {
       });
     });
   }, []);
+
+  // Zoom to destination when focusId changes
+  useEffect(() => {
+    if (!focusId || !mapRef.current) return;
+    const marker = MARKERS.find((m) => m.id === focusId);
+    if (marker) {
+      mapRef.current.flyTo([marker.lat, marker.lng], 14, { duration: 1.2 });
+    }
+  }, [focusId]);
 
   return (
     <div className="rounded-2xl overflow-hidden border border-[#E8DCC8] shadow-sm">

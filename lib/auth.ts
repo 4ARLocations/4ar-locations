@@ -9,7 +9,7 @@ import { createHmac, timingSafeEqual } from 'crypto';
 import { cookies } from 'next/headers';
 
 const COOKIE_NAME = '4ar-admin-token';
-const TOKEN_TTL = 30 * 24 * 60 * 60 * 1000; // 30 jours
+const TOKEN_TTL = 3 * 60 * 60 * 1000; // 3 heures d'inactivité
 
 function secret(): string {
   return process.env.ADMIN_SECRET ?? process.env.ADMIN_PASSWORD ?? 'dev-secret-change-me';

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { properties } from '@/lib/properties';
-import { getPropertyImages } from '@/lib/property-images';
+import { getPropertyImages, getPhotoCategories } from '@/lib/property-images';
 import PhotoManager from '@/components/admin/PhotoManager';
 
 export const dynamic = 'force-dynamic';
@@ -26,7 +26,10 @@ export default async function AdminPropertyPhotosPage({
   const property = properties.find(p => p.id === propertyId);
   if (!property) redirect('/admin/photos');
 
-  const images = await getPropertyImages(propertyId, property.images);
+  const [images, categories] = await Promise.all([
+    getPropertyImages(propertyId, property.images),
+    getPhotoCategories(propertyId),
+  ]);
   const hasUpload = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
   return (
@@ -34,6 +37,7 @@ export default async function AdminPropertyPhotosPage({
       propertyId={propertyId}
       propertyName={PROPERTY_NAMES[propertyId] ?? propertyId}
       initialImages={images}
+      initialCategories={categories}
       hasUpload={hasUpload}
     />
   );

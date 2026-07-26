@@ -11,11 +11,12 @@ const PROPERTIES = [
 ];
 
 const SOURCES: { value: BlockSource; label: string; color: string }[] = [
-  { value: 'airbnb',   label: 'Airbnb',              color: '#FF5A5F' },
-  { value: 'abritel',  label: 'Abritel',             color: '#00A699' },
-  { value: 'direct',   label: 'Réservation directe', color: '#C8763A' },
-  { value: 'family',   label: 'Famille / Personnel', color: '#6B7C45' },
-  { value: 'blocked',  label: 'Bloqué',              color: '#6B6B6B' },
+  { value: 'airbnb',         label: 'Réservation Airbnb',   color: '#FF5A5F' },
+  { value: 'airbnb-blocked', label: 'Bloqué hôte (Airbnb)', color: '#FFAAAA' },
+  { value: 'abritel',        label: 'Abritel',              color: '#00A699' },
+  { value: 'direct',         label: 'Réservation directe',  color: '#C8763A' },
+  { value: 'family',         label: 'Famille / Personnel',  color: '#6B7C45' },
+  { value: 'blocked',        label: 'Bloqué',               color: '#6B6B6B' },
 ];
 
 function isoDate(y: number, m: number, d: number): string {
@@ -493,8 +494,8 @@ function DashboardView({ blocks }: { blocks: AvailabilityBlock[] }) {
   const todayLabel = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 
   const RESERVATION_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct'];
-  const SRC_COLOR: Record<string, string> = { airbnb: '#FF5A5F', abritel: '#00A699', direct: '#C8763A', family: '#6B7C45', blocked: '#6B6B6B' };
-  const SRC_LABEL: Record<string, string> = { airbnb: 'Airbnb', abritel: 'Abritel', direct: 'Direct', family: 'Famille', blocked: 'Bloqué' };
+  const SRC_COLOR: Record<string, string> = { airbnb: '#FF5A5F', 'airbnb-blocked': '#FFAAAA', abritel: '#00A699', direct: '#C8763A', family: '#6B7C45', blocked: '#6B6B6B' };
+  const SRC_LABEL: Record<string, string> = { airbnb: 'Réservation Airbnb', 'airbnb-blocked': 'Bloqué hôte', abritel: 'Abritel', direct: 'Direct', family: 'Famille', blocked: 'Bloqué' };
 
   // Statut de chaque logement aujourd'hui
   const propertyStatus = PROPERTIES.map((p) => {
@@ -657,18 +658,20 @@ function StatsView({ blocks, onDeleteBlock }: { blocks: AvailabilityBlock[], onD
   const RESERVATION_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct'];
   const ALL_SOURCES: BlockSource[] = ['airbnb', 'abritel', 'direct', 'family', 'blocked'];
   const SRC_COLOR: Record<string, string> = {
-    airbnb:  '#FF5A5F',
-    abritel: '#00A699',
-    direct:  '#C8763A',
-    family:  '#6B7C45',
-    blocked: '#6B6B6B',
+    airbnb:           '#FF5A5F',
+    'airbnb-blocked': '#FFAAAA',
+    abritel:          '#00A699',
+    direct:           '#C8763A',
+    family:           '#6B7C45',
+    blocked:          '#6B6B6B',
   };
   const SRC_LABEL: Record<string, string> = {
-    airbnb:  'Airbnb',
-    abritel: 'Abritel',
-    direct:  'En direct',
-    family:  'Famille',
-    blocked: 'Bloqué',
+    airbnb:           'Réservation Airbnb',
+    'airbnb-blocked': 'Bloqué hôte',
+    abritel:          'Abritel',
+    direct:           'En direct',
+    family:           'Famille',
+    blocked:          'Bloqué',
   };
 
   // ── Réservations de l'année sélectionnée (hors bloqué/famille)

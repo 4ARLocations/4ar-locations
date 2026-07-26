@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticker Rond — 4AR Locations</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #EDE3CE;
+  font-family: 'Georgia', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+h1 { font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: #2C2416; font-weight: normal; }
+.btn {
+  background: #C8763A; color: white; border: none;
+  padding: 10px 28px; border-radius: 8px; font-size: 14px;
+  font-family: inherit; cursor: pointer; letter-spacing: 0.05em;
+}
+.btn:hover { background: #A85E28; }
+
+.sticker {
+  background: #FFF8F0;
+  border: 2px solid #D4AF37;
+  border-radius: 16px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+}
+
+.qr-medallion {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.qr-medallion img.qr {
+  width: 200px;
+  height: 200px;
+  display: block;
+  border-radius: 6px;
+}
+.logo-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #FFF8F0;
+  padding: 2px;
+  box-shadow: none;
+  overflow: hidden;
+}
+.logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.brand { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.brand-name { font-size: 12px; font-weight: bold; color: #2C2416; letter-spacing: 0.08em; }
+.brand-url { font-size: 9.5px; color: #C8763A; font-family: Arial, sans-serif; letter-spacing: 0.04em; }
+
+.hint { font-size: 11px; color: #9B8A74; letter-spacing: 0.1em; text-transform: uppercase; }
+
+@media print {
+  body { background: white; padding: 1cm; min-height: auto; gap: 1rem; }
+  h1, .btn, .hint { display: none; }
+  .sticker { box-shadow: none; }
+  .logo-wrap { box-shadow: 0 0 0 4px white; }
+}
+</style>
+</head>
+<body>
+
+<h1>4AR Locations · Sticker Rond</h1>
+<button class="btn" onclick="window.print()">Imprimer</button>
+
+<div class="sticker">
+  <div class="qr-medallion">
+    <img class="qr" src="/api/qr" alt="QR Code 4AR Locations">
+    <div class="logo-wrap">
+      <img src="/images/logo-4ar.png" alt="4AR Locations — Rose des vents">
+    </div>
+  </div>
+  <div class="brand">
+    <span class="brand-name">4AR Locations</span>
+    <span class="brand-url">www.4arlocations.com</span>
+  </div>
+</div>
+
+<p class="hint">Découpez le long du contour</p>
+
+</body>
+</html>

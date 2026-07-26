@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stickers — 4AR Locations</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #EDE3CE;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem 5rem;
+  gap: 2.5rem;
+  min-height: 100vh;
+}
+.header { text-align: center; }
+.header h1 {
+  font-size: 0.95rem;
+  color: #2C2416;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: normal;
+}
+.header p {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: #9B8A74;
+  letter-spacing: 0.1em;
+}
+.btn {
+  background: #C8763A;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+.btn:hover { background: #A85E28; }
+.stickers-row {
+  display: flex;
+  gap: 5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.sticker-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.sticker-label {
+  font-size: 10.5px;
+  color: #9B8A74;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.round-frame {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.18), 0 0 0 3px #D4AF37;
+}
+.round-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.oval-frame {
+  position: relative;
+  width: 450px;
+  height: 300px;
+  border-radius: 50% / 40%;
+  overflow: hidden;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.18), 0 0 0 3px #D4AF37;
+}
+.oval-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.qr-badge {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(240, 230, 200, 0.94);
+  border-radius: 7px;
+  padding: 5px 5px 3px 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.28);
+}
+.qr-badge canvas { display: block; }
+.qr-url {
+  font-size: 7px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #4A3828;
+  text-align: center;
+  margin-top: 3px;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.guide {
+  font-size: 12px;
+  color: #9B8A74;
+  text-align: center;
+  max-width: 500px;
+  line-height: 1.7;
+  border-top: 1px solid #D4C4A0;
+  padding-top: 1.5rem;
+}
+@media print {
+  body { background: white; padding: 1cm; gap: 2cm; }
+  .header, .btn, .guide { display: none; }
+  .round-frame { box-shadow: none; border: 2px solid #D4AF37; }
+  .oval-frame  { box-shadow: none; border: 2px solid #D4AF37; }
+  .stickers-row { gap: 3cm; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>4AR Locations · Stickers</h1>
+  <p>Imprimer sur papier autocollant brillant</p>
+</div>
+
+<button class="btn" onclick="window.print()">Imprimer</button>
+
+<div class="stickers-row">
+
+  <div class="sticker-wrap">
+    <div class="round-frame">
+      <img src="/images/logo-4ar.png" alt="4AR Locations — Rose des vents">
+      <div class="qr-badge">
+        <canvas id="qr1" width="68" height="68"></canvas>
+        <div class="qr-url">4arlocations.com</div>
+      </div>
+    </div>
+    <p class="sticker-label">Rond · ø 8 cm</p>
+  </div>
+
+  <div class="sticker-wrap">
+    <div class="oval-frame">
+      <img src="/images/hero-logo.png" alt="4AR Locations — Destinations Provence & Alpes">
+      <div class="qr-badge">
+        <canvas id="qr2" width="68" height="68"></canvas>
+        <div class="qr-url">4arlocations.com</div>
+      </div>
+    </div>
+    <p class="sticker-label">Ovale · 12 × 8 cm</p>
+  </div>
+
+</div>
+
+<p class="guide">
+  Imprimez sur du papier autocollant brillant A4 (disponible en papeterie ou sur Amazon).<br>
+  Découpez le long du contour rond ou ovale — une paire de ciseaux à bouts ronds suffit.
+</p>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+  const opts = { width: 68, margin: 1, color: { dark: '#2C2416', light: '#F0E6C4' } };
+  const url  = 'https://www.4arlocations.com';
+  ['qr1','qr2'].forEach(id =>
+    QRCode.toCanvas(document.getElementById(id), url, opts)
+  );
+</script>
+</body>
+</html>

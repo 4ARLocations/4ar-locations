@@ -1,9 +1,10 @@
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer() {
   const t = useTranslations('footer');
+  const locale = useLocale();
 
   return (
     <footer className="bg-[#1E1509] text-[#9B8A74] border-t border-[#2C2416]">
@@ -63,16 +64,16 @@ export default function Footer() {
         <div>
           <h4 className="text-[#E8DCC8] text-xs font-bold uppercase tracking-widest mb-4">Navigation</h4>
           <ul className="space-y-2.5">
-            {[
-              { href: '/fr/biens', label: 'Nos logements' },
-              { href: '/fr/guide', label: 'Guide de voyage' },
-              { href: '/fr/carte', label: 'Carte & destinations' },
-              { href: '/fr/favoris', label: 'Mes favoris' },
-              { href: '/fr/contact', label: 'Contact & réservation' },
-            ].map(({ href, label }) => (
-              <li key={href}>
-                <Link href={href} className="text-sm text-[#6B5E4A] hover:text-[#C8763A] transition-colors">
-                  {label}
+            {([
+              { path: 'biens', key: 'nav_properties' },
+              { path: 'guide', key: 'nav_guide' },
+              { path: 'carte', key: 'nav_map' },
+              { path: 'favoris', key: 'nav_favorites' },
+              { path: 'contact', key: 'nav_contact' },
+            ] as const).map(({ path, key }) => (
+              <li key={path}>
+                <Link href={`/${locale}/${path}`} className="text-sm text-[#6B5E4A] hover:text-[#C8763A] transition-colors">
+                  {t(key)}
                 </Link>
               </li>
             ))}
@@ -83,13 +84,13 @@ export default function Footer() {
         <div>
           <h4 className="text-[#E8DCC8] text-xs font-bold uppercase tracking-widest mb-4">{t('contact_heading')}</h4>
           <Link
-            href="/fr/contact"
+            href={`/${locale}/contact`}
             className="inline-flex items-center gap-2 text-sm bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold px-4 py-2.5 rounded-xl transition-colors mb-4"
           >
-            Demande de réservation
+            {t('book_cta')}
           </Link>
           <p className="text-xs text-[#6B5E4A] leading-relaxed">
-            Réservation directe sans frais de service. Réponse sous 24h.
+            {t('book_sub')}
           </p>
         </div>
       </div>
@@ -101,7 +102,7 @@ export default function Footer() {
           <a
             href="/admin"
             title="Administration"
-            className="opacity-20 hover:opacity-50 transition-opacity"
+            className="text-white/25 hover:text-white/65 transition-colors"
             aria-label="Administration"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

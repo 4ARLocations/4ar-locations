@@ -3,15 +3,19 @@
 import { useState, useRef, useCallback, useId, useEffect } from 'react';
 import Image from 'next/image';
 
+const CATEGORY_PRESETS = ['RDC', 'Étage 1', 'Étage 2', 'Salon', 'Cuisine', 'Chambre', 'Salle de bain', 'Extérieur', 'Terrasse'];
+
 interface Props {
   propertyId: string;
   propertyName: string;
   initialImages: string[];
-  hasUpload: boolean;   // BLOB_READ_WRITE_TOKEN configuré ?
+  initialCategories: Record<string, string>;
+  hasUpload: boolean;
 }
 
-export default function PhotoManager({ propertyId, propertyName, initialImages, hasUpload }: Props) {
+export default function PhotoManager({ propertyId, propertyName, initialImages, initialCategories, hasUpload }: Props) {
   const [images, setImages] = useState<string[]>(initialImages);
+  const [categories, setCategories] = useState<Record<string, string>>(initialCategories);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,6 +142,12 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
     if (e.dataTransfer.files?.length) uploadFiles(e.dataTransfer.files);
   };
 
+  // ── Catégorie ─────────────────────────────────────────────────────────────
+  const setCategory = useCallback((url: string, cat: string) => {
+    setCategories(prev => ({ ...prev, [url]: cat }));
+    setSaved(false);
+  }, []);
+
   // ── Sauvegarder ───────────────────────────────────────────────────────────
   const save = useCallback(async () => {
     setSaving(true);
@@ -146,7 +156,7 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
       const res = await fetch(`/api/photos/${propertyId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ images }),
+        body: JSON.stringify({ images, categories }),
       });
       if (!res.ok) throw new Error(await res.text());
       setSaved(true);
@@ -155,7 +165,7 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
     } finally {
       setSaving(false);
     }
-  }, [propertyId, images]);
+  }, [propertyId, images, categories]);
 
   // ── Réinitialiser aux photos par défaut ───────────────────────────────────
   const reset = useCallback(async () => {
@@ -166,6 +176,7 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
       const res = await fetch(`/api/photos/${propertyId}`);
       const data = await res.json();
       setImages(data.images);
+      setCategories(data.categories ?? {});
       setSaved(false);
     } catch { setError('Erreur'); }
     finally { setSaving(false); }
@@ -244,6 +255,11 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
             <strong>Upload désactivé</strong> — Pour activer l'upload de photos, ajoutez la variable d'environnement <code className="bg-amber-100 px-1 rounded">BLOB_READ_WRITE_TOKEN</code> dans les paramètres Vercel de votre projet.
           </div>
         )}
+
+        {/* Suggestions de catégories */}
+        <datalist id={`cats-${uploadId}`}>
+          {CATEGORY_PRESETS.map(c => <option key={c} value={c} />)}
+        </datalist>
 
         {/* Grille de photos */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -335,8 +351,15 @@ export default function PhotoManager({ propertyId, propertyName, initialImages, 
                 </div>
               </div>
 
-              {/* Nom du fichier */}
-              <div className="px-2 py-1.5 bg-white">
+              {/* Catégorie + nom fichier */}
+              <div className="px-2 py-1.5 bg-white space-y-1">
+                <input
+                  list={`cats-${uploadId}`}
+                  value={categories[src] ?? ''}
+                  onChange={e => setCategory(src, e.target.value)}
+                  placeholder="Catégorie..."
+                  className="w-full text-[11px] border border-[#E8DCC8] rounded-md px-2 py-1 text-[#2C2416] placeholder-[#C8B8A0] focus:outline-none focus:border-[#C8763A]"
+                />
                 <p className="text-[10px] text-[#9B8A74] truncate">{src.split('/').pop()}</p>
               </div>
             </div>

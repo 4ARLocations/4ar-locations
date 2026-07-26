@@ -71,7 +71,7 @@ export default function PropertyCard({
           </span>
           {topRated && (
             <span className="bg-amber-400 text-amber-900 text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
-              ❤️ Coup de cœur
+              ❤️ {t('properties.top_rated')}
             </span>
           )}
         </div>
@@ -110,21 +110,21 @@ export default function PropertyCard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {property.guests} pers.
+            {property.guests} {t('properties.guests_short')}
           </span>
           <span className="flex items-center gap-1">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
             </svg>
-            {property.bedrooms} ch.
+            {property.bedrooms} {t('properties.bedrooms_short')}
           </span>
           <span className="flex items-center gap-1">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-2 2-2V6c0-1.1-.9-2-2-2z" />
             </svg>
-            {property.bathrooms} sdb
+            {property.bathrooms} {t('properties.bathrooms_short')}
           </span>
           <span className="ml-auto text-[#9B8A74] bg-[#FAF7F2] px-2 py-0.5 rounded text-[10px] font-medium">
             {t(property.typeKey)}
@@ -142,20 +142,20 @@ export default function PropertyCard({
             {priceLabel ? (
               <>
                 <div className="text-[10px] text-[#9B8A74] uppercase tracking-wide leading-none mb-0.5">
-                  {property.priceOnRequest ? 'entre' : 'à partir de'}
+                  {t('home.from_price')}
                 </div>
                 <div className="flex items-baseline gap-0.5">
                   <span className="text-[#C8763A] font-bold text-xl leading-none">{priceLabel}</span>
-                  <span className="text-[#9B8A74] text-xs">/nuit</span>
+                  <span className="text-[#9B8A74] text-xs">{t('properties.per_night_short')}</span>
                 </div>
                 {property.cleaningFee && (
                   <div className="text-[10px] text-[#9B8A74] mt-0.5">
-                    + {property.cleaningFee}€ ménage
+                    {t('properties.cleaning_fee_short', { n: property.cleaningFee })}
                   </div>
                 )}
               </>
             ) : (
-              <span className="text-sm text-[#9B8A74] italic">Sur demande</span>
+              <span className="text-sm text-[#9B8A74] italic">{t('properties.on_request')}</span>
             )}
           </div>
 
@@ -176,7 +176,7 @@ export default function PropertyCard({
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-semibold bg-[#2C2416] hover:bg-[#C8763A] text-white px-3.5 py-1.5 rounded-lg transition-colors"
             >
-              Réserver
+              {t('properties.book_btn')}
             </Link>
           </div>
         </div>
