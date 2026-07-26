@@ -35,7 +35,9 @@
     "direct_booking": "Réservation directe",
     "dest_risoul_sub": "Hautes-Alpes · ⛷️",
     "dest_avignon_sub": "Vaucluse · 🏛️",
-    "dest_lauris_sub": "3 maisons · 🌿"
+    "dest_lauris_sub": "3 maisons · 🌿",
+    "family_name": "La famille Rougon",
+    "see_all_properties": "Voir tous les biens"
   },
   "properties": {
     "title": "Tous nos logements",

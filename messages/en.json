@@ -35,7 +35,9 @@
     "direct_booking": "Direct booking",
     "dest_risoul_sub": "Hautes-Alpes · ⛷️",
     "dest_avignon_sub": "Vaucluse · 🏛️",
-    "dest_lauris_sub": "3 houses · 🌿"
+    "dest_lauris_sub": "3 houses · 🌿",
+    "family_name": "The Rougon family",
+    "see_all_properties": "See all properties"
   },
   "properties": {
     "title": "All our properties",

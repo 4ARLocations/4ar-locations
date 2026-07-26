@@ -103,7 +103,7 @@ function HomeContent({ locale }: { locale: string }) {
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('about.title')}</p>
               <h2 className="text-3xl md:text-4xl font-bold text-[#2C2416] leading-tight">
-                La famille Rougon<br />
+                {t('home.family_name')}<br />
                 <span className="text-[#C8763A]">{t('home.welcome_subtitle')}</span>
               </h2>
             </div>
@@ -172,7 +172,7 @@ function HomeContent({ locale }: { locale: string }) {
               href={`/${locale}/biens`}
               className="text-sm font-semibold text-[#C8763A] hover:text-[#A85E28] flex items-center gap-1 transition-colors whitespace-nowrap"
             >
-              Voir tous les biens
+              {t('home.see_all_properties')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
