@@ -1,10 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,7 +18,8 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ password }),
       });
       if (res.ok) {
-        router.push('/admin/calendar');
+        // Full page navigation so the server layout re-reads the auth cookie
+        window.location.href = '/admin/calendar';
       } else {
         setError('Mot de passe incorrect.');
         setPassword('');

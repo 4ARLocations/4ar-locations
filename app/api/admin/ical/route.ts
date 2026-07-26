@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken, COOKIE_NAME } from '@/lib/auth';
-import { getICalUrls, setICalUrls, syncProperty, syncAllProperties, getLastSync } from '@/lib/ical-sync';
+import { getICalUrls, setICalUrls, syncProperty, syncAllProperties, getLastSync, getLastSyncResult } from '@/lib/ical-sync';
 import { properties } from '@/lib/properties';
 
 function auth(req: NextRequest) {
@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
       name: ({ risoul: 'Appartement Risoul 1850', avignon: 'Appartement Avignon', 'lauris-meme': 'Maison de Mémé', 'lauris-atelier': "L'Atelier", 'lauris-alain': "Maison d'Alain" } as Record<string,string>)[p.id] ?? p.id,
       urls: await getICalUrls(p.id),
       lastSync: await getLastSync(p.id),
+      lastResult: await getLastSyncResult(p.id),
     }))
   );
 

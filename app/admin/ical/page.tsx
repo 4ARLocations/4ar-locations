@@ -1,11 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+interface LastResult {
+  added: number;
+  removed: number;
+  errors: string[];
+  ts: string;
+}
+
 interface PropertyICal {
   propertyId: string;
   name: string;
   urls: { airbnb?: string; abritel?: string };
   lastSync: string | null;
+  lastResult: LastResult | null;
 }
 
 interface SyncResult {
@@ -151,7 +159,15 @@ export default function ICalPage() {
                   </div>
                   <p className="text-xs text-white/30 mt-0.5">
                     {p.lastSync ? `Dernière synchro : ${timeAgo(p.lastSync)}` : 'Jamais synchronisé'}
+                    {p.lastResult && p.lastResult.errors.length === 0 && (
+                      <span className="ml-2 text-green-500/60">· {p.lastResult.added} blocs</span>
+                    )}
                   </p>
+                  {p.lastResult?.errors && p.lastResult.errors.length > 0 && (
+                    <p className="text-xs text-red-400 mt-0.5">
+                      ⚠ {p.lastResult.errors.join(' · ')}
+                    </p>
+                  )}
                 </div>
                 <button
                   onClick={() => handleSync(p.propertyId)}
@@ -187,9 +203,12 @@ export default function ICalPage() {
                     type="url"
                     value={ed.abritel}
                     onChange={(e) => setEditing((prev) => ({ ...prev, [p.propertyId]: { ...ed, abritel: e.target.value } }))}
-                    placeholder="https://www.vrbo.com/icalendar/..."
+                    placeholder="https://www.abritel.fr/icalendar/...ics"
                     className={urlInput}
                   />
+                  <p className="text-[10px] text-amber-400/60 mt-1.5 leading-snug">
+                    ⚠ Utiliser l&apos;URL iCal propre à <strong className="text-amber-400/80">ce logement</strong> (Abritel → Calendrier → Exporter). Ne pas utiliser l&apos;URL combinée multi-logements, qui provoquerait des doublons.
+                  </p>
                 </div>
                 {hasChanges && (
                   <button

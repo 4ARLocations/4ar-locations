@@ -1,9 +1,21 @@
 import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
 import { getPropertyImages } from '@/lib/property-images';
 import { getReviews } from '@/lib/redis';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'meta' });
+  return { title: t('biens_title') };
+}
 
 export default async function BiensPage({
   params,
@@ -40,6 +52,7 @@ export default async function BiensPage({
 function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { locale: string; imageOverrides: Record<string, string>; regionFilter?: string; topRated?: Set<string> }) {
   const t = useTranslations('properties');
   const tLauris = useTranslations('lauris');
+  const tCombine = useTranslations('lauris_combine');
 
   const risoul = properties.find((p) => p.id === 'risoul')!;
   const avignon = properties.find((p) => p.id === 'avignon')!;
@@ -48,10 +61,29 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
   return (
     <>
       {/* ─── EN-TÊTE ─── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-4 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-3">{t('title')}</h1>
         <p className="text-[#5C4F3A] text-lg">{t('subtitle')}</p>
       </div>
+
+      {/* ─── LIEN CARTE ─── */}
+      <section className="py-4 bg-[#FAF7F2] border-y border-[#E8DCC8] mb-2">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🗺️</span>
+            <div>
+              <p className="font-semibold text-[#2C2416] text-sm">{t('map_promo_title')}</p>
+              <p className="text-xs text-[#9B8A74]">{t('map_promo_sub')}</p>
+            </div>
+          </div>
+          <Link
+            href={`/${locale}/carte`}
+            className="flex-shrink-0 bg-[#2C2416] hover:bg-[#4A3828] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
+          >
+            {t('see_map')} →
+          </Link>
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════
           ÉCRAN SCINDÉ — Alpes du Sud | Avignon
@@ -75,8 +107,8 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
             <div className="flex items-center gap-2 mb-6">
               <span className="text-2xl">⛷</span>
               <div>
-                <h2 className="text-xl font-bold text-[#1A2C3A]">Alpes du Sud</h2>
-                <p className="text-xs text-[#5C7080] font-medium tracking-wide">Hautes-Alpes · Risoul 1850</p>
+                <h2 className="text-xl font-bold text-[#1A2C3A]">{t('alps_title')}</h2>
+                <p className="text-xs text-[#5C7080] font-medium tracking-wide">{t('alps_sub')}</p>
               </div>
             </div>
             <PropertyCard property={risoul} locale={locale} imageOverride={imageOverrides[risoul.id]} topRated={topRated?.has(risoul.id)} />
@@ -104,7 +136,7 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
               <span className="text-2xl">🏛️</span>
               <div>
                 <h2 className="text-xl font-bold text-[#2C1A08]">Avignon</h2>
-                <p className="text-xs text-[#80604A] font-medium tracking-wide">Vaucluse · Intramuros</p>
+                <p className="text-xs text-[#80604A] font-medium tracking-wide">{t('avignon_area_sub')}</p>
               </div>
             </div>
             <PropertyCard property={avignon} locale={locale} imageOverride={imageOverrides[avignon.id]} topRated={topRated?.has(avignon.id)} />
@@ -130,8 +162,8 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">🌿</span>
             <div>
-              <h2 className="text-xl font-bold text-[#2C2416]">Luberon — Lauris</h2>
-              <p className="text-xs text-[#6B7C45] font-medium tracking-wide">Vaucluse · Village perché · 3 maisons privatisables ensemble</p>
+              <h2 className="text-xl font-bold text-[#2C2416]">{t('luberon_title')}</h2>
+              <p className="text-xs text-[#6B7C45] font-medium tracking-wide">{t('luberon_area_sub')}</p>
             </div>
             <div className="flex-1 h-px bg-[#E8DCC8] ml-2" />
           </div>
@@ -150,10 +182,10 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
                 <span className="text-3xl">🏘️</span>
                 <div>
                   <h3 className="text-white font-bold text-lg leading-tight">
-                    Vous êtes un grand groupe ?
+                    {tCombine('large_group_title')}
                   </h3>
                   <p className="text-white/60 text-sm mt-0.5">
-                    Combinez 2 ou 3 maisons pour accueillir jusqu'à <strong className="text-[#E8914A]">20 personnes</strong>
+                    {tCombine('large_group_sub', { n: 20 })}
                   </p>
                 </div>
               </div>
@@ -161,14 +193,14 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
                 href={`/${locale}/contact?combine=true`}
                 className="flex-shrink-0 bg-[#C8763A] hover:bg-[#A85E28] text-white font-bold px-6 py-2.5 rounded-xl transition-colors text-sm"
               >
-                Demander une réservation →
+                {tCombine('book_request')} →
               </Link>
             </div>
 
             {/* Corps — 3 combinaisons possibles */}
             <div className="bg-white/85 backdrop-blur-sm px-6 py-5">
               <p className="text-xs font-semibold uppercase tracking-widest text-[#9B8A74] mb-4">
-                Les combinaisons possibles
+                {tCombine('combinations')}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -181,9 +213,9 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
                   </div>
                   <div className="flex items-end gap-1">
                     <span className="text-2xl font-bold text-[#2C2416]">12</span>
-                    <span className="text-sm text-[#9B8A74] mb-0.5">personnes max</span>
+                    <span className="text-sm text-[#9B8A74] mb-0.5">{tCombine('persons_max')}</span>
                   </div>
-                  <div className="text-xs text-[#9B8A74] mt-1">8 + 4 voyageurs · 6 chambres</div>
+                  <div className="text-xs text-[#9B8A74] mt-1">{tCombine('travelers_rooms', { guests: '8 + 4', rooms: 6 })}</div>
                 </div>
 
                 {/* Combinaison 2 : Mémé + Alain */}
@@ -195,9 +227,9 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
                   </div>
                   <div className="flex items-end gap-1">
                     <span className="text-2xl font-bold text-[#2C2416]">16</span>
-                    <span className="text-sm text-[#9B8A74] mb-0.5">personnes max</span>
+                    <span className="text-sm text-[#9B8A74] mb-0.5">{tCombine('persons_max')}</span>
                   </div>
-                  <div className="text-xs text-[#9B8A74] mt-1">8 + 8 voyageurs · 8 chambres</div>
+                  <div className="text-xs text-[#9B8A74] mt-1">{tCombine('travelers_rooms', { guests: '8 + 8', rooms: 8 })}</div>
                 </div>
 
                 {/* Combinaison 3 : Les 3 */}
@@ -216,15 +248,15 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
                   </div>
                   <div className="flex items-end gap-1">
                     <span className="text-2xl font-bold text-[#C8763A]">20</span>
-                    <span className="text-sm text-[#9B8A74] mb-0.5">personnes max</span>
+                    <span className="text-sm text-[#9B8A74] mb-0.5">{tCombine('persons_max')}</span>
                   </div>
-                  <div className="text-xs text-[#9B8A74] mt-1">8 + 4 + 8 voyageurs · 10 chambres</div>
+                  <div className="text-xs text-[#9B8A74] mt-1">{tCombine('travelers_rooms', { guests: '8 + 4 + 8', rooms: 10 })}</div>
                 </div>
               </div>
 
               <p className="text-xs text-[#9B8A74] mt-4 flex items-start gap-1.5">
                 <span>ℹ️</span>
-                Les disponibilités sont à vérifier auprès de 4AR Locations — contactez-nous pour organiser votre séjour en grand groupe.
+                {tCombine('availability_note')}
               </p>
             </div>
           </div>
@@ -253,25 +285,6 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ─── LIEN CARTE ─── */}
-      <section className="py-8 bg-[#FAF7F2] border-t border-[#E8DCC8]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🗺️</span>
-            <div>
-              <p className="font-semibold text-[#2C2416] text-sm">Visualiser nos destinations sur la carte</p>
-              <p className="text-xs text-[#9B8A74]">Risoul · Avignon · Lauris/Luberon</p>
-            </div>
-          </div>
-          <Link
-            href={`/${locale}/carte`}
-            className="flex-shrink-0 bg-[#2C2416] hover:bg-[#4A3828] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
-          >
-            Voir la carte →
-          </Link>
         </div>
       </section>
 

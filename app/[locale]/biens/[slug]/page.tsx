@@ -1,9 +1,12 @@
 import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { properties } from '@/lib/properties';
-import { getPropertyImages } from '@/lib/property-images';
+import { getPropertyImages, getPhotoCategories } from '@/lib/property-images';
+import { getCustomDescription } from '@/lib/property-descriptions';
 import PropertyGallery from '@/components/PropertyGallery';
 import LaurisCombine from '@/components/LaurisCombine';
 import ReviewList from '@/components/ReviewList';
@@ -11,7 +14,46 @@ import ReviewForm from '@/components/ReviewForm';
 import AvailabilityCalendar from '@/components/AvailabilityCalendar';
 import FavoriteButton from '@/components/FavoriteButton';
 import BookingCalculator from '@/components/BookingCalculator';
-import PropertyFAQ from '@/components/PropertyFAQ';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const property = properties.find((p) => p.slug === slug);
+  if (!property) return {};
+  const t = await getTranslations({ locale });
+  const name = t(property.nameKey);
+  const location = t(property.locationKey);
+  const desc = t(property.descriptionKey);
+  const shortDesc = desc.length > 155 ? desc.slice(0, 152) + '…' : desc;
+  return {
+    title: `${name} — ${location}`,
+    description: shortDesc,
+    openGraph: {
+      title: `${name} · 4AR Locations`,
+      description: shortDesc,
+      images: [{ url: property.image, width: 1200, height: 630, alt: name }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${name} · 4AR Locations`,
+      description: shortDesc,
+      images: [property.image],
+    },
+  };
+}
+
+const BASE = 'https://www.4arlocations.com';
+
+const PROPERTY_ADDRESS: Record<string, { streetAddress: string; addressLocality: string; postalCode: string; addressRegion: string }> = {
+  'risoul':         { streetAddress: 'Résidence Altaïr', addressLocality: 'Risoul 1850', postalCode: '05600', addressRegion: 'Hautes-Alpes' },
+  'avignon':        { streetAddress: 'Rue Joyeuse',      addressLocality: 'Avignon',     postalCode: '84000', addressRegion: 'Vaucluse' },
+  'lauris-meme':    { streetAddress: 'Rue Sainte-Marguerite', addressLocality: 'Lauris', postalCode: '84360', addressRegion: 'Vaucluse' },
+  'lauris-atelier': { streetAddress: 'Rue Sainte-Marguerite', addressLocality: 'Lauris', postalCode: '84360', addressRegion: 'Vaucluse' },
+  'lauris-alain':   { streetAddress: 'Rue Sainte-Marguerite', addressLocality: 'Lauris', postalCode: '84360', addressRegion: 'Vaucluse' },
+};
 
 export default async function PropertyPage({
   params,
@@ -21,8 +63,49 @@ export default async function PropertyPage({
   const { locale, slug } = await params;
   const property = properties.find((p) => p.slug === slug);
   if (!property) notFound();
-  const images = await getPropertyImages(property.id, property.images);
-  return <PropertyDetail locale={locale} property={property} images={images} />;
+  const [images, customDescription, categories] = await Promise.all([
+    getPropertyImages(property.id, property.images),
+    getCustomDescription(property.id, locale),
+    getPhotoCategories(property.id),
+  ]);
+
+  const t = await getTranslations({ locale });
+  const name = t(property.nameKey);
+  const desc = t(property.descriptionKey);
+  const addr = PROPERTY_ADDRESS[property.id];
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name,
+    description: desc,
+    url: `${BASE}/${locale}/biens/${property.slug}`,
+    image: property.images.map((img) => `${BASE}${img}`),
+    ...(addr && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: addr.streetAddress,
+        addressLocality: addr.addressLocality,
+        postalCode: addr.postalCode,
+        addressRegion: addr.addressRegion,
+        addressCountry: 'FR',
+      },
+    }),
+    occupancy: { '@type': 'QuantitativeValue', maxValue: property.guests },
+    numberOfRooms: property.bedrooms,
+    ...(property.priceFrom > 0 && {
+      priceRange: property.priceTo ? `€${property.priceFrom} - €${property.priceTo}` : `À partir de €${property.priceFrom}`,
+    }),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <PropertyDetail locale={locale} property={property} images={images} customDescription={customDescription} categories={categories} />
+    </>
+  );
 }
 
 // ─── Petits composants helpers ───────────────────────────────────
@@ -116,7 +199,7 @@ function DescriptionBlock({ text }: { text: string }) {
 
 // ─── Page principale ─────────────────────────────────────────────
 
-function PropertyDetail({ locale, property, images }: { locale: string; property: (typeof properties)[0]; images: string[] }) {
+function PropertyDetail({ locale, property, images, customDescription, categories }: { locale: string; property: (typeof properties)[0]; images: string[]; customDescription: string | null; categories: Record<string, string> }) {
   const t = useTranslations();
   const td = useTranslations('property_detail');
 
@@ -223,7 +306,7 @@ function PropertyDetail({ locale, property, images }: { locale: string; property
 
         {/* GALERIE */}
         {hasImages ? (
-          <PropertyGallery images={images} name={t(property.nameKey)} />
+          <PropertyGallery images={images} name={t(property.nameKey)} categories={categories} />
         ) : (
           <div className="h-64 rounded-2xl bg-[#F0EAE0] flex items-center justify-content-center text-center p-8">
             <div className="mx-auto">
@@ -251,9 +334,9 @@ function PropertyDetail({ locale, property, images }: { locale: string; property
             <div className="py-8 border-b border-[#E8DCC8]">
               <h2 className="text-xl font-bold text-[#2C2416] mb-5 flex items-center gap-2">
                 <span className="w-1 h-6 rounded-full bg-[#C8763A] inline-block"></span>
-                À propos de ce logement
+                {td('about_property')}
               </h2>
-              <DescriptionBlock text={t(property.descriptionKey)} />
+              <DescriptionBlock text={customDescription ?? t(property.descriptionKey)} />
             </div>
 
             {/* INFOS PRATIQUES */}
@@ -284,9 +367,6 @@ function PropertyDetail({ locale, property, images }: { locale: string; property
 
             {/* CALENDRIER DISPONIBILITÉS */}
             <AvailabilityCalendar propertyId={property.id} />
-
-            {/* FAQ */}
-            <PropertyFAQ propertyId={property.id} />
 
             {/* AVIS VOYAGEURS */}
             <div className="py-8">
@@ -457,7 +537,7 @@ function SuggestedProperties({ currentId, locale }: { currentId: string; locale:
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 border-t border-[#E8DCC8]">
-      <h2 className="text-2xl font-bold text-[#2C2416] mb-6">Vous aimerez aussi</h2>
+      <h2 className="text-2xl font-bold text-[#2C2416] mb-6">{t('property_detail.you_might_also_like')}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {others.map((p) => (
           <Link

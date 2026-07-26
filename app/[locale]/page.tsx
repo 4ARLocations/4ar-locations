@@ -4,9 +4,35 @@ import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
 
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: '4AR Locations',
+  url: 'https://www.4arlocations.com',
+  logo: 'https://www.4arlocations.com/icon-512.png',
+  email: 'loc4ar@gmail.com',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'loc4ar@gmail.com',
+    contactType: 'customer service',
+    availableLanguage: ['French', 'English', 'German'],
+  },
+  sameAs: [
+    'https://www.airbnb.fr/users/show/12345',
+  ],
+};
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return <HomeContent locale={locale} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+      />
+      <HomeContent locale={locale} />
+    </>
+  );
 }
 
 function HomeContent({ locale }: { locale: string }) {
@@ -15,7 +41,7 @@ function HomeContent({ locale }: { locale: string }) {
   return (
     <>
       {/* ─── HERO ─── */}
-      <section className="relative text-white overflow-hidden min-h-[92vh] flex items-center">
+      <section className="relative text-white overflow-hidden flex items-center" style={{ minHeight: 'max(65vw, 480px)' }}>
         <Image
           src="/images/hero-logo.png"
           alt="4AR Locations — Provence & Alpes"
