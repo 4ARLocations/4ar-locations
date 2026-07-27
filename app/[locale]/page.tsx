@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
 import { properties } from '@/lib/properties';
+import { getPropertyImages } from '@/lib/property-images';
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
@@ -24,18 +25,27 @@ const orgJsonLd = {
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const imageData = await Promise.all(
+    properties.map(async (p) => {
+      const imgs = await getPropertyImages(p.id, p.images);
+      return { id: p.id, img: imgs[0] ?? p.image };
+    })
+  );
+  const imageOverrides: Record<string, string> = {};
+  imageData.forEach(({ id, img }) => { if (img) imageOverrides[id] = img; });
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
       />
-      <HomeContent locale={locale} />
+      <HomeContent locale={locale} imageOverrides={imageOverrides} />
     </>
   );
 }
 
-function HomeContent({ locale }: { locale: string }) {
+function HomeContent({ locale, imageOverrides }: { locale: string; imageOverrides: Record<string, string> }) {
   const t = useTranslations();
 
   return (
@@ -180,7 +190,7 @@ function HomeContent({ locale }: { locale: string }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {properties.map((p) => (
-              <PropertyCard key={p.id} property={p} locale={locale} />
+              <PropertyCard key={p.id} property={p} locale={locale} imageOverride={imageOverrides[p.id]} />
             ))}
           </div>
         </div>
