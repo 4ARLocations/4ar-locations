@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { redis } from '@/lib/redis';
 import { properties } from '@/lib/properties';
 import { verifyToken, COOKIE_NAME } from '@/lib/auth';
@@ -44,6 +45,9 @@ export async function PUT(
       redis.set(`property-photos:${propertyId}`, images),
       redis.set(`property-photo-categories:${propertyId}`, categories ?? {}),
     ]);
+    revalidatePath('/[locale]', 'page');
+    revalidatePath('/[locale]/biens', 'page');
+    revalidatePath(`/[locale]/biens/${property.slug}`, 'page');
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: 'Erreur Redis' }, { status: 500 });
