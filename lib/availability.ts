@@ -61,6 +61,42 @@ export async function clearSyncedBlocks(propertyId: string): Promise<number> {
   return removed;
 }
 
+/**
+ * Remplace atomiquement tous les blocs synchronisés par un nouveau lot, en préservant
+ * les blocs manuels (direct/blocked/family). Utilise un pipeline Redis pour réduire
+ * la fenêtre d'incohérence : fetch iCal d'abord, écriture Redis en une seule fois.
+ * Renvoie le nombre de blocs synchronisés supprimés.
+ */
+export async function bulkReplaceSyncedBlocks(
+  propertyId: string,
+  newSyncedBlocks: AvailabilityBlock[]
+): Promise<number> {
+  const all = await getBlocks(propertyId);
+  const manual = all.filter(
+    (b) => b.source !== 'airbnb' && b.source !== 'airbnb-blocked' && b.source !== 'abritel'
+  );
+  const removed = all.length - manual.length;
+  const combined = [...manual, ...newSyncedBlocks];
+
+  // Pipeline : envoi en un seul batch pour minimiser la fenêtre de données incohérentes.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const p = (redis as any).pipeline?.();
+  if (p) {
+    p.del(key(propertyId));
+    for (const b of [...combined].reverse()) {
+      p.lpush(key(propertyId), JSON.stringify(b));
+    }
+    await p.exec();
+  } else {
+    // Fallback séquentiel (dev sans Redis réel)
+    await redis.del(key(propertyId));
+    for (const b of [...combined].reverse()) {
+      await redis.lpush(key(propertyId), JSON.stringify(b));
+    }
+  }
+  return removed;
+}
+
 /** Vérifier si une date (YYYY-MM-DD) est dans un bloc bloqué */
 export function isDateBlocked(date: string, blocks: AvailabilityBlock[]): boolean {
   return blocks.some((b) => date >= b.start && date <= b.end);

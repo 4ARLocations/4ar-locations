@@ -1,5 +1,5 @@
 import { redis } from './redis';
-import { addBlock, clearSyncedBlocks, type AvailabilityBlock } from './availability';
+import { bulkReplaceSyncedBlocks, type AvailabilityBlock } from './availability';
 import ical, { type VEvent } from 'node-ical';
 
 // ─── URLs iCal par logement ───────────────────────────────────────
@@ -84,53 +84,53 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
   const result: SyncResult = { propertyId, added: 0, removed: 0, errors: [] };
   const urls = await getICalUrls(propertyId);
 
-  // Supprimer en bloc les anciens blocs issus de la synchro (O(N) au lieu de O(N²))
-  result.removed = await clearSyncedBlocks(propertyId);
+  // ── 1. Fetch iCal AVANT de toucher Redis ────────────────────────
+  // Si le fetch échoue, les blocs existants restent intacts.
+  const newBlocks: AvailabilityBlock[] = [];
 
-  // ── Airbnb ──────────────────────────────────────────────────────
   if (urls.airbnb) {
     try {
       const events = await fetchAndParseICal(urls.airbnb);
-      for (const ev of events) {
+      events.forEach((ev, i) => {
         const isHostBlocked = /not available|blocked|unavailable|indisponible/i.test(
           ev.summary ?? ''
         );
-        const block: AvailabilityBlock = {
-          id: `airbnb-${propertyId}-${ev.start}-${ev.end}`,
+        // Index `i` garantit l'unicité même si deux réservations ont les mêmes dates.
+        newBlocks.push({
+          id: `airbnb-${propertyId}-${ev.start}-${ev.end}-${i}`,
           propertyId,
           start: ev.start,
           end: ev.end,
           label: isHostBlocked ? 'Bloqué hôte' : ev.summary || 'Airbnb',
           source: isHostBlocked ? 'airbnb-blocked' : 'airbnb',
-        };
-        await addBlock(block);
-        result.added++;
-      }
+        });
+      });
     } catch (e) {
       result.errors.push(`Airbnb: ${(e as Error).message}`);
     }
   }
 
-  // ── Abritel ─────────────────────────────────────────────────────
   if (urls.abritel) {
     try {
       const events = await fetchAndParseICal(urls.abritel);
-      for (const ev of events) {
-        const block: AvailabilityBlock = {
-          id: `abritel-${propertyId}-${ev.start}-${ev.end}`,
+      events.forEach((ev, i) => {
+        newBlocks.push({
+          id: `abritel-${propertyId}-${ev.start}-${ev.end}-${i}`,
           propertyId,
           start: ev.start,
           end: ev.end,
           label: ev.summary || 'Abritel',
           source: 'abritel',
-        };
-        await addBlock(block);
-        result.added++;
-      }
+        });
+      });
     } catch (e) {
       result.errors.push(`Abritel: ${(e as Error).message}`);
     }
   }
+
+  // ── 2. Écriture atomique : preserve les blocs manuels, remplace les blocs synchro ──
+  result.removed = await bulkReplaceSyncedBlocks(propertyId, newBlocks);
+  result.added = newBlocks.length;
 
   const now = new Date().toISOString();
   await redis.set(`ical-last-sync:${propertyId}`, now);
