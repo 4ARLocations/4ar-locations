@@ -1,9 +1,10 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
-import { DM_Serif_Display, Space_Grotesk } from 'next/font/google';
+import { DM_Serif_Display, Space_Grotesk, Cinzel } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SmoothScroll from '@/components/SmoothScroll';
 import '../globals.css';
 
 const dmSerif = DM_Serif_Display({
@@ -18,6 +19,13 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-sans',
+  display: 'swap',
+});
+
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-cinzel',
   display: 'swap',
 });
 
@@ -87,9 +95,10 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`h-full ${dmSerif.variable} ${spaceGrotesk.variable}`}>
+    <html lang={locale} className={`h-full ${dmSerif.variable} ${spaceGrotesk.variable} ${cinzel.variable}`}>
       <body className="min-h-full flex flex-col bg-[#FAF7F2] text-[#2C2416] font-sans">
         <NextIntlClientProvider messages={messages}>
+          <SmoothScroll />
           <Navbar locale={locale} />
           <main className="flex-1">{children}</main>
           <Footer />

@@ -253,25 +253,49 @@ function ContactForm() {
   );
 }
 
+const GRAIN = "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")";
+
 export default function ContactClient() {
   const t = useTranslations('contact');
 
   return (
     <>
-      <div className="bg-[#FAF7F2] border-b border-[#E8DCC8]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-8">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('direct_booking_label')}</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-2">{t('title')}</h1>
-          <p className="text-[#9B8A74]">{t('subtitle')}</p>
+      {/* ─── HÉRO CONTACT ─── */}
+      <section className="relative text-white overflow-hidden" style={{ minHeight: 'max(14vw, 200px)' }}>
+        <div className="absolute inset-0" style={{ background: '#090A0C' }} />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="page-orb-1" />
+          <div className="page-orb-2" />
         </div>
-      </div>
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 118% 105% at 28% 52%, transparent 18%, rgba(5,2,0,.66) 100%)' }} />
+        <div className="absolute inset-0 opacity-[.07] pointer-events-none"
+          style={{ backgroundImage: GRAIN, backgroundSize: '160px 160px' }} />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full flex items-end"
+          style={{ minHeight: 'inherit', paddingTop: '5.5rem', paddingBottom: '2.8rem' }}>
+          <div>
+            <p className="hero-a text-[10px] font-bold uppercase tracking-[.30em] text-[#C8763A] mb-4">
+              {t('direct_booking_label')}
+            </p>
+            <h1 className="hero-b font-serif font-normal leading-[.92] tracking-tight mb-3"
+              style={{ fontSize: 'clamp(24px, 3.6vw, 54px)' }}>
+              {t('title')}
+            </h1>
+            <p className="hero-c text-[14px] text-white/42 max-w-[440px] leading-relaxed">
+              {t('subtitle')}
+            </p>
+          </div>
+        </div>
+      </section>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+          {/* ─── SIDEBAR ─── */}
           <div className="lg:col-span-1 space-y-3">
             <a
               href="mailto:loc4ar@gmail.com"
-              className="flex items-center gap-3 bg-white border border-[#E8DCC8] hover:border-[#C8763A]/40 rounded-xl p-4 transition-colors group"
+              className="flex items-center gap-3 bg-white border border-[#E8DCC8] hover:border-[#C8763A]/40 rounded-xl p-4 transition-all hover:shadow-md group"
             >
               <div className="w-9 h-9 rounded-lg bg-[#C8763A]/10 flex items-center justify-center flex-shrink-0">
                 <svg className="w-4 h-4 text-[#C8763A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,8 +323,11 @@ export default function ContactClient() {
               </div>
             </div>
 
-            <div className="bg-[#6B7C45]/8 border border-[#6B7C45]/20 rounded-xl p-4 flex items-start gap-3">
-              <span className="text-xl flex-shrink-0">⚡</span>
+            <div className="rounded-xl p-4 flex items-start gap-3"
+              style={{ background: 'rgba(107,124,69,.08)', border: '1px solid rgba(107,124,69,.22)' }}>
+              <svg className="w-5 h-5 text-[#6B7C45] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
               <div>
                 <p className="text-sm font-semibold text-[#2C2416]">{t('quick_reply_title')}</p>
                 <p className="text-xs text-[#9B8A74] mt-0.5">{t('quick_reply_text')}</p>

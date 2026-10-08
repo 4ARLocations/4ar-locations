@@ -29,22 +29,24 @@ export default function FavorisClient() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#2C2416] flex items-center gap-3">
-          <span>❤️</span> {t('title')}
-        </h1>
-        <p className="text-[#9B8A74] mt-2">
-          {mounted && favProps.length > 0
-            ? favProps.length === 1 ? t('count_one') : t('count_other', { n: favProps.length })
-            : t('subtitle_empty')}
+      {mounted && favProps.length > 0 && (
+        <p className="text-[#9B8A74] text-sm mb-6">
+          {favProps.length === 1 ? t('count_one') : t('count_other', { n: favProps.length })}
         </p>
-      </div>
+      )}
 
       {!mounted ? null : favProps.length === 0 ? (
-        <div className="text-center py-20 bg-[#FAF7F2] rounded-2xl border border-[#E8DCC8]">
-          <p className="text-5xl mb-4">🏡</p>
-          <p className="text-[#5C4F3A] font-medium text-lg mb-2">{t('empty_title')}</p>
-          <p className="text-[#9B8A74] text-sm mb-6">{t('empty_hint')}</p>
+        <div
+          className="text-center py-20 rounded-2xl"
+          style={{ background: 'linear-gradient(135deg, rgba(44,36,22,.9) 0%, rgba(20,14,4,.95) 100%)', border: '1px solid rgba(200,118,58,.22)' }}
+        >
+          <div className="flex justify-center mb-4">
+            <svg className="w-12 h-12 text-[#C8763A]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+          </div>
+          <p className="text-white/80 font-medium text-lg mb-2">{t('empty_title')}</p>
+          <p className="text-white/42 text-sm mb-6">{t('empty_hint')}</p>
           <Link
             href={`/${locale}/biens`}
             className="inline-block bg-[#C8763A] hover:bg-[#A85E28] text-white font-semibold px-6 py-3 rounded-xl transition-colors"
@@ -77,10 +79,15 @@ export default function FavorisClient() {
                       </svg>
                       {tProp(p.locationKey)}
                     </p>
-                    <div className="flex items-center gap-3 text-sm text-[#5C4F3A]">
-                      <span>👥 {p.guests}</span>
-                      <span>🛏 {p.bedrooms}</span>
-                      <span>🚿 {p.bathrooms}</span>
+                    <div className="flex items-center gap-2 text-xs text-[#9B8A74]">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span>{p.guests}</span>
+                      <span className="text-[#D8CFC4]">·</span>
+                      <span>{p.bedrooms} ch.</span>
+                      <span className="text-[#D8CFC4]">·</span>
+                      <span>{p.bathrooms} sdb</span>
                     </div>
                   </div>
                 </Link>

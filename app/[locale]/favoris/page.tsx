@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import FavorisClient from './FavorisClient';
+import PageHero from '@/components/PageHero';
 
 export async function generateMetadata({
   params,
@@ -12,6 +13,23 @@ export async function generateMetadata({
   return { title: t('favoris_title') };
 }
 
-export default function FavorisPage() {
-  return <FavorisClient />;
+export default async function FavorisPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'favorites' });
+
+  return (
+    <>
+      <PageHero
+        tag="Mes sélections"
+        title={t('title')}
+        subtitle={t('subtitle_empty')}
+        compact
+      />
+      <FavorisClient />
+    </>
+  );
 }

@@ -63,17 +63,6 @@ export default function CarteClient() {
 
   return (
     <>
-      {/* ─── EN-TÊTE ─── */}
-      <div className="bg-[#FAF7F2] border-b border-[#E8DCC8]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('eyebrow')}</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-3">{t('title')}</h1>
-          <p className="text-[#5C4F3A] text-lg max-w-2xl">
-            {t('subtitle')} {t('click_hint')}
-          </p>
-        </div>
-      </div>
-
       {/* ─── CARTE ─── */}
       <div id="map-section" className="bg-white border-b border-[#E8DCC8] scroll-mt-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -83,7 +72,10 @@ export default function CarteClient() {
 
       {/* ─── FICHES DESTINATIONS ─── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-xl font-bold text-[#2C2416] mb-8">{t('discover_heading')}</h2>
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-1 h-6 rounded-full bg-[#C8763A]" />
+          <h2 className="font-serif font-normal text-xl text-[#2C2416]">{t('discover_heading')}</h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {destinations.map((d) => {
             const isActive = focusId === d.mapId;
@@ -121,13 +113,8 @@ export default function CarteClient() {
                   </div>
 
                   <div className="absolute bottom-0 left-0 p-4 text-white">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">{d.emoji}</span>
-                      <div>
-                        <p className="font-bold text-base leading-tight">{d.name}</p>
-                        <p className="text-xs text-white/70">{d.region}</p>
-                      </div>
-                    </div>
+                    <p className="font-bold text-base leading-tight">{d.name}</p>
+                    <p className="text-xs text-white/70">{d.region}</p>
                   </div>
                   <div
                     className="absolute top-3 right-3 text-xs font-semibold text-white px-2.5 py-1 rounded-full"

@@ -17,7 +17,6 @@ interface GuideLink {
 
 interface GuideSection {
   title: string;
-  emoji: string;
   links: GuideLink[];
 }
 
@@ -25,22 +24,54 @@ interface Destination {
   id: string;
   name: string;
   sub: string;
-  emoji: string;
   image: string;
+  photoPosition: string;
   caption: string;
   sections: GuideSection[];
 }
 
-type SeasonItem = { id: Season; label: string; emoji: string; color: string };
+type SeasonItem = { id: Season; label: string; color: string };
 
 const ALL_SEASONS: Season[] = ['winter', 'spring', 'summer', 'autumn'];
 
 const SEASON_COLOR: Record<Season, string> = {
   all: '#6B7C45', winter: '#5B8DB8', spring: '#B87D9A', summer: '#C8763A', autumn: '#A0622A',
 };
-const SEASON_EMOJI: Record<Season, string> = {
-  all: '📅', winter: '❄️', spring: '🌸', summer: '☀️', autumn: '🍂',
-};
+
+function SeasonIcon({ id, className }: { id: Season; className?: string }) {
+  const cls = className ?? 'w-3.5 h-3.5';
+  if (id === 'all') return (
+    <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M8 7V3m8 4V3M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM3 10h18" />
+    </svg>
+  );
+  if (id === 'winter') return (
+    <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
+    </svg>
+  );
+  if (id === 'spring') return (
+    <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M12 22V13M12 13C12 8 8 5 3 4M12 13C12 8 16 5 21 4" />
+    </svg>
+  );
+  if (id === 'summer') return (
+    <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4" strokeWidth={1.8} />
+      <path strokeLinecap="round" strokeWidth={1.8}
+        d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+    </svg>
+  );
+  return (
+    <svg className={cls} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 004.7 21C8 21 12 19 15 16c2-2 3-4.5 2-8zM9 15l5-5" />
+    </svg>
+  );
+}
 
 function LinkCard({ link, activeSeason, seasons }: {
   link: GuideLink;
@@ -57,7 +88,7 @@ function LinkCard({ link, activeSeason, seasons }: {
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col gap-2 bg-white border border-[#E8DCC8] rounded-2xl p-4 hover:border-[#C8763A]/50 hover:shadow-md transition-all"
+      className="group flex flex-col gap-2 bg-white border border-[#E8DCC8] rounded-2xl p-4 hover:border-[#C8763A]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
     >
       <div className="flex items-start justify-between gap-2">
         <span className="font-semibold text-[#2C2416] text-sm leading-snug group-hover:text-[#C8763A] transition-colors">
@@ -72,10 +103,11 @@ function LinkCard({ link, activeSeason, seasons }: {
         {badgeSeasons.map((s) => (
           <span
             key={s}
-            className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full"
+            className="inline-flex items-center gap-1.5 text-[10px] font-medium px-2 py-0.5 rounded-full"
             style={{ backgroundColor: `${SEASON_COLOR[s]}18`, color: SEASON_COLOR[s] }}
           >
-            {SEASON_EMOJI[s]} {seasons.find((x) => x.id === s)?.label}
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 opacity-80" style={{ backgroundColor: SEASON_COLOR[s] }} />
+            {seasons.find((x) => x.id === s)?.label}
           </span>
         ))}
         {link.tags?.map((tag) => (
@@ -95,11 +127,11 @@ export default function GuideClient() {
   const [activeSeason, setActiveSeason] = useState<Season>('all');
 
   const SEASONS: SeasonItem[] = [
-    { id: 'all',    label: t('season_all'),    emoji: '📅', color: '#6B7C45' },
-    { id: 'winter', label: t('season_winter'), emoji: '❄️', color: '#5B8DB8' },
-    { id: 'spring', label: t('season_spring'), emoji: '🌸', color: '#B87D9A' },
-    { id: 'summer', label: t('season_summer'), emoji: '☀️', color: '#C8763A' },
-    { id: 'autumn', label: t('season_autumn'), emoji: '🍂', color: '#A0622A' },
+    { id: 'all',    label: t('season_all'),    color: '#6B7C45' },
+    { id: 'winter', label: t('season_winter'), color: '#5B8DB8' },
+    { id: 'spring', label: t('season_spring'), color: '#B87D9A' },
+    { id: 'summer', label: t('season_summer'), color: '#C8763A' },
+    { id: 'autumn', label: t('season_autumn'), color: '#A0622A' },
   ];
 
   const destinations: Destination[] = [
@@ -107,13 +139,12 @@ export default function GuideClient() {
       id: 'risoul',
       name: 'Risoul 1850',
       sub: t('risoul_sub'),
-      emoji: '⛷',
       image: '/images/bg-risoul-mountain.jpg',
+      photoPosition: '50% 38%',
       caption: t('risoul_caption'),
       sections: [
         {
           title: t('risoul_s1_title'),
-          emoji: '🎿',
           links: [
             { label: t('risoul_s1_l1_label'), desc: t('risoul_s1_l1_desc'), url: 'https://www.risoul.com', seasons: ['winter'], tags: ['Ski'] },
             { label: t('risoul_s1_l2_label'), desc: t('risoul_s1_l2_desc'), url: 'https://www.foretblanche.com', seasons: ['winter'], tags: ['Ski'] },
@@ -123,7 +154,6 @@ export default function GuideClient() {
         },
         {
           title: t('risoul_s2_title'),
-          emoji: '🏔️',
           links: [
             { label: t('risoul_s2_l1_label'), desc: t('risoul_s2_l1_desc'), url: 'https://www.risoul.com/ete/', seasons: ['summer', 'spring'], tags: ['MTB'] },
             { label: t('risoul_s2_l2_label'), desc: t('risoul_s2_l2_desc'), url: 'https://www.serreponcon.com/la-montagne/les-incontournables-montagne/les-demoiselles-coiffees/', seasons: ['summer'] },
@@ -133,7 +163,6 @@ export default function GuideClient() {
         },
         {
           title: t('risoul_s3_title'),
-          emoji: '🏛️',
           links: [
             { label: t('risoul_s3_l1_label'), desc: t('risoul_s3_l1_desc'), url: 'http://www.marmotteygliers.com', seasons: ['spring', 'summer', 'autumn'] },
             { label: t('risoul_s3_l2_label'), desc: t('risoul_s3_l2_desc'), url: 'https://www.montdauphin-vauban.fr/fr', seasons: ALL_SEASONS, tags: ['UNESCO'] },
@@ -147,13 +176,12 @@ export default function GuideClient() {
       id: 'avignon',
       name: 'Avignon',
       sub: t('avignon_sub'),
-      emoji: '🏛️',
       image: '/images/bg-palais.jpg',
+      photoPosition: '50% 22%',
       caption: t('avignon_caption'),
       sections: [
         {
           title: t('avignon_s1_title'),
-          emoji: '🎭',
           links: [
             { label: t('avignon_s1_l1_label'), desc: t('avignon_s1_l1_desc'), url: 'https://www.palais-des-papes.com', seasons: ALL_SEASONS },
             { label: t('avignon_s1_l2_label'), desc: t('avignon_s1_l2_desc'), url: 'https://www.avignon-pont.com', seasons: ALL_SEASONS },
@@ -163,7 +191,6 @@ export default function GuideClient() {
         },
         {
           title: t('avignon_s2_title'),
-          emoji: '🌻',
           links: [
             { label: t('avignon_s2_l1_label'), desc: t('avignon_s2_l1_desc'), url: 'https://www.lesbauxdeprovence.com/', seasons: ['spring', 'summer', 'autumn'] },
             { label: t('avignon_s2_l2_label'), desc: t('avignon_s2_l2_desc'), url: 'https://www.pontdugard.fr', seasons: ALL_SEASONS, tags: ['UNESCO'] },
@@ -173,7 +200,6 @@ export default function GuideClient() {
         },
         {
           title: t('avignon_s3_title'),
-          emoji: '🍷',
           links: [
             { label: t('avignon_s3_l1_label'), desc: t('avignon_s3_l1_desc'), url: 'https://www.avignon-tourisme.com', seasons: ALL_SEASONS },
             { label: t('avignon_s3_l2_label'), desc: t('avignon_s3_l2_desc'), url: 'https://www.vins-rhone.com', seasons: ALL_SEASONS },
@@ -185,13 +211,12 @@ export default function GuideClient() {
       id: 'luberon',
       name: 'Lauris · Luberon',
       sub: t('luberon_sub'),
-      emoji: '🌿',
       image: '/images/bg-lauris-panorama.jpg',
+      photoPosition: '50% 35%',
       caption: t('luberon_caption'),
       sections: [
         {
           title: t('luberon_s1_title'),
-          emoji: '🏡',
           links: [
             { label: t('luberon_s1_l1_label'), desc: t('luberon_s1_l1_desc'), url: 'https://www.lourmarin.com', seasons: ALL_SEASONS },
             { label: t('luberon_s1_l2_label'), desc: t('luberon_s1_l2_desc'), url: 'https://www.gordes-village.com', seasons: ['spring', 'summer', 'autumn'] },
@@ -201,7 +226,6 @@ export default function GuideClient() {
         },
         {
           title: t('luberon_s2_title'),
-          emoji: '🥾',
           links: [
             { label: t('luberon_s2_l1_label'), desc: t('luberon_s2_l1_desc'), url: 'https://www.parcduluberon.fr', seasons: ['spring', 'summer', 'autumn'] },
             { label: t('luberon_s2_l2_label'), desc: t('luberon_s2_l2_desc'), url: 'https://www.randoxygene.org', seasons: ['spring', 'summer', 'autumn'] },
@@ -211,7 +235,6 @@ export default function GuideClient() {
         },
         {
           title: t('luberon_s3_title'),
-          emoji: '🧄',
           links: [
             { label: t('luberon_s3_l1_label'), desc: t('luberon_s3_l1_desc'), url: 'https://lourmarin.com/marches/', seasons: ALL_SEASONS },
             { label: t('luberon_s3_l2_label'), desc: t('luberon_s3_l2_desc'), url: 'https://www.ville-pertuis.fr', seasons: ALL_SEASONS },
@@ -221,7 +244,6 @@ export default function GuideClient() {
         },
         {
           title: t('luberon_s4_title'),
-          emoji: '🎪',
           links: [
             { label: t('luberon_s4_l1_label'), desc: t('luberon_s4_l1_desc'), url: 'https://www.festivalpierrecardin.com/', seasons: ['summer'], tags: ['Festival'] },
             { label: t('luberon_s4_l2_label'), desc: t('luberon_s4_l2_desc'), url: 'https://www.luberon-apt.fr/', seasons: ALL_SEASONS },
@@ -246,31 +268,21 @@ export default function GuideClient() {
 
   return (
     <>
-      {/* ─── EN-TÊTE ─── */}
-      <div className="bg-[#FAF7F2] border-b border-[#E8DCC8]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8763A] mb-2">{t('eyebrow')}</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-3">{t('title')}</h1>
-          <p className="text-[#5C4F3A] text-lg max-w-2xl">{t('subtitle')}</p>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
         {/* ─── ONGLETS DESTINATION ─── */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="flex flex-wrap gap-2 mb-8">
           {destinations.map((d) => (
             <button
               key={d.id}
               onClick={() => { setActiveDestination(d.id); setActiveSeason('all'); }}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all border ${
+              className={`px-5 py-2 rounded-xl font-medium text-sm transition-all border ${
                 activeDestination === d.id
                   ? 'bg-[#2C2416] text-white border-[#2C2416] shadow-md'
-                  : 'bg-white text-[#5C4F3A] border-[#E8DCC8] hover:border-[#C8763A]/40'
+                  : 'bg-white text-[#5C4F3A] border-[#E8DCC8] hover:border-[#C8763A]/40 hover:text-[#2C2416]'
               }`}
             >
-              <span>{d.emoji}</span>
-              <span>{d.name}</span>
+              {d.name}
             </button>
           ))}
         </div>
@@ -281,32 +293,32 @@ export default function GuideClient() {
             src={dest.image}
             alt={dest.caption}
             fill
-            className="object-cover object-center"
+            className="object-cover"
+            style={{ objectPosition: dest.photoPosition }}
             sizes="(max-width: 768px) 100vw, 1152px"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2C2416]/70 via-transparent to-transparent" />
-          <div className="absolute bottom-0 left-0 p-5 text-white">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-2xl">{dest.emoji}</span>
-              <h2 className="text-xl font-bold">{dest.name}</h2>
-            </div>
-            <p className="text-sm text-white/70">{dest.sub}</p>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C0702]/82 via-[#0C0702]/18 to-transparent" />
+          <div className="absolute bottom-0 left-0 p-6 text-white">
+            <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-2">{dest.name}</p>
+            <p className="font-serif text-[22px] font-normal leading-tight mb-1">{dest.caption}</p>
+            <p className="text-[12px] text-white/52">{dest.sub}</p>
           </div>
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C8763A] via-[#C8763A]/60 to-transparent" />
         </div>
 
         {/* ─── FILTRE SAISON ─── */}
-        <div className="flex flex-wrap gap-2 mb-8 p-1 bg-white border border-[#E8DCC8] rounded-2xl w-fit">
+        <div className="flex flex-wrap gap-1.5 mb-8 p-1.5 bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl w-fit">
           {SEASONS.map((s) => (
             <button
               key={s.id}
               onClick={() => setActiveSeason(s.id)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                activeSeason === s.id ? 'text-white shadow-sm' : 'text-[#5C4F3A] hover:bg-[#FAF7F2]'
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                activeSeason === s.id ? 'text-white shadow-sm' : 'text-[#5C4F3A] hover:bg-white hover:shadow-sm'
               }`}
               style={activeSeason === s.id ? { backgroundColor: s.color } : {}}
             >
-              <span>{s.emoji}</span>
+              <SeasonIcon id={s.id} className="w-3.5 h-3.5 flex-shrink-0" />
               <span>{s.label}</span>
             </button>
           ))}
@@ -315,14 +327,20 @@ export default function GuideClient() {
         {/* ─── RÉSUMÉ ─── */}
         {activeSeason !== 'all' && (
           <p className="text-xs text-[#9B8A74] mb-6">
-            {totalLinks === 1 ? t('activities_one', { n: totalLinks }) : t('activities_other', { n: totalLinks })} {activeSeasonItem?.emoji} {activeSeasonItem?.label.toLowerCase()} — {dest.name}
+            {totalLinks === 1 ? t('activities_one', { n: totalLinks }) : t('activities_other', { n: totalLinks })}
+            {' · '}
+            <span style={{ color: activeSeasonItem?.color }}>{activeSeasonItem?.label}</span>
+            {' · '}
+            {dest.name}
           </p>
         )}
 
         {/* ─── SECTIONS ─── */}
         {filteredSections.length === 0 ? (
           <div className="text-center py-16 text-[#9B8A74]">
-            <p className="text-4xl mb-3">🌿</p>
+            <div className="flex justify-center mb-3">
+              <SeasonIcon id={activeSeason} className="w-10 h-10 text-[#D8CFC4]" />
+            </div>
             <p className="font-medium text-[#5C4F3A]">{t('no_activities')}</p>
             <button onClick={() => setActiveSeason('all')} className="mt-3 text-sm text-[#C8763A] hover:underline">
               {t('show_all_seasons')}
@@ -332,11 +350,13 @@ export default function GuideClient() {
           <div className="space-y-10">
             {filteredSections.map((section) => (
               <div key={section.title}>
-                <h3 className="flex items-center gap-2 text-base font-bold text-[#2C2416] mb-4">
-                  <span>{section.emoji}</span>
-                  {section.title}
-                  <span className="text-xs font-normal text-[#9B8A74] ml-1">({section.links.length})</span>
-                </h3>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-0.5 h-5 rounded-full bg-[#C8763A]" />
+                  <h3 className="font-serif font-normal text-[#2C2416] text-base">
+                    {section.title}
+                    <span className="text-xs font-normal text-[#9B8A74] ml-2 font-sans">({section.links.length})</span>
+                  </h3>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {section.links.map((link) => (
                     <LinkCard key={link.url} link={link} activeSeason={activeSeason} seasons={SEASONS} />
@@ -348,18 +368,20 @@ export default function GuideClient() {
         )}
 
         {/* ─── BLOC SUGGESTION ─── */}
-        <div className="mt-12 bg-[#FAF7F2] border border-[#E8DCC8] rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <span className="text-3xl">💬</span>
-          <div className="flex-1">
-            <p className="font-semibold text-[#2C2416] text-sm">{t('suggest_title')}</p>
-            <p className="text-xs text-[#9B8A74] mt-0.5">{t('suggest_text')}</p>
+        <div className="mt-12 rounded-2xl overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #2C2416 0%, #1A1209 100%)', border: '1px solid rgba(200,118,58,0.20)' }}>
+          <div className="px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex-1">
+              <p className="text-[9px] font-bold uppercase tracking-[.24em] text-[#C8763A] mb-2">{t('suggest_title')}</p>
+              <p className="text-sm text-white/60 leading-relaxed">{t('suggest_text')}</p>
+            </div>
+            <Link
+              href={`/${locale}/contact`}
+              className="flex-shrink-0 bg-[#C8763A] hover:bg-[#A85E28] text-white text-sm font-bold px-6 py-2.5 rounded-xl transition-colors"
+            >
+              {t('suggest_cta')}
+            </Link>
           </div>
-          <Link
-            href={`/${locale}/contact`}
-            className="flex-shrink-0 bg-[#C8763A] hover:bg-[#A85E28] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
-          >
-            {t('suggest_cta')}
-          </Link>
         </div>
 
       </div>

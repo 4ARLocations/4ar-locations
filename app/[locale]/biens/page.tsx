@@ -2,7 +2,9 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
+import PageHero from '@/components/PageHero';
 import { properties } from '@/lib/properties';
 import { getPropertyImages } from '@/lib/property-images';
 import { getReviews } from '@/lib/redis';
@@ -46,7 +48,19 @@ export default async function BiensPage({
   // "Coup de cœur" : note moyenne ≥ 4.5 avec au moins 3 avis
   const topRated = new Set(reviewData.filter((r) => r.avg >= 4.5 && r.count >= 3).map((r) => r.id));
 
-  return <BiensContent locale={locale} imageOverrides={imageOverrides} regionFilter={region} topRated={topRated} />;
+  const t = await getTranslations({ locale, namespace: 'properties' });
+
+  return (
+    <>
+      <PageHero
+        tag="Nos destinations"
+        title={t('title')}
+        subtitle={t('subtitle')}
+        compact
+      />
+      <BiensContent locale={locale} imageOverrides={imageOverrides} regionFilter={region} topRated={topRated} />
+    </>
+  );
 }
 
 function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { locale: string; imageOverrides: Record<string, string>; regionFilter?: string; topRated?: Set<string> }) {
@@ -60,17 +74,13 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
 
   return (
     <>
-      {/* ─── EN-TÊTE ─── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-4 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#2C2416] mb-3">{t('title')}</h1>
-        <p className="text-[#5C4F3A] text-lg">{t('subtitle')}</p>
-      </div>
-
       {/* ─── LIEN CARTE ─── */}
-      <section className="py-4 bg-[#FAF7F2] border-y border-[#E8DCC8] mb-2">
+      <section className="py-3.5 border-b border-[#E8DCC8]" style={{ background: '#FAF7F2' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🗺️</span>
+            <svg className="w-5 h-5 text-[#C8763A] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
             <div>
               <p className="font-semibold text-[#2C2416] text-sm">{t('map_promo_title')}</p>
               <p className="text-xs text-[#9B8A74]">{t('map_promo_sub')}</p>
@@ -101,14 +111,16 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
             backgroundAttachment: 'fixed',
           }}
         >
-          <div className="absolute inset-0 bg-[#EEF3F7]/70 pointer-events-none" />
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: 'rgba(4,10,18,.72)' }} />
 
           <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-2xl">⛷</span>
+            <div className="flex items-center gap-4 mb-7">
+              <div className="w-1 h-10 bg-[#C8763A] rounded-full flex-shrink-0" />
               <div>
-                <h2 className="text-xl font-bold text-[#1A2C3A]">{t('alps_title')}</h2>
-                <p className="text-xs text-[#5C7080] font-medium tracking-wide">{t('alps_sub')}</p>
+                <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-0.5">Hautes-Alpes</p>
+                <h2 className="font-serif text-[20px] font-normal text-white leading-tight">{t('alps_title')}</h2>
+                <p className="text-[11px] text-white/45 mt-0.5">{t('alps_sub')}</p>
               </div>
             </div>
             <PropertyCard property={risoul} locale={locale} imageOverride={imageOverrides[risoul.id]} topRated={topRated?.has(risoul.id)} />
@@ -116,8 +128,8 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
         </div>
 
         {/* Séparateur vertical */}
-        <div className="hidden md:block w-px bg-[#D8CFC4] flex-shrink-0 my-6" />
-        <div className="md:hidden h-px bg-[#D8CFC4] mx-6" />
+        <div className="hidden md:block w-px bg-white/10 flex-shrink-0 my-6" />
+        <div className="md:hidden h-px bg-white/10 mx-6" />
 
         {/* ─── CÔTÉ DROIT : Avignon ─── */}
         <div
@@ -129,14 +141,16 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
             backgroundAttachment: 'fixed',
           }}
         >
-          <div className="absolute inset-0 bg-[#F8F2E8]/70 pointer-events-none" />
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: 'rgba(14,7,2,.68)' }} />
 
           <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-2xl">🏛️</span>
+            <div className="flex items-center gap-4 mb-7">
+              <div className="w-1 h-10 bg-[#C8763A] rounded-full flex-shrink-0" />
               <div>
-                <h2 className="text-xl font-bold text-[#2C1A08]">Avignon</h2>
-                <p className="text-xs text-[#80604A] font-medium tracking-wide">{t('avignon_area_sub')}</p>
+                <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-0.5">Vaucluse</p>
+                <h2 className="font-serif text-[20px] font-normal text-white leading-tight">Avignon</h2>
+                <p className="text-[11px] text-white/45 mt-0.5">{t('avignon_area_sub')}</p>
               </div>
             </div>
             <PropertyCard property={avignon} locale={locale} imageOverride={imageOverrides[avignon.id]} topRated={topRated?.has(avignon.id)} />
@@ -148,7 +162,7 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
       {/* ─── SECTION LUBERON — fond château de Lauris ─── */}
       <section
         id="luberon"
-        className="relative py-12"
+        className="relative py-14"
         style={{
           backgroundImage: "url('/images/bg-lauris-mid.jpg')",
           backgroundSize: 'cover',
@@ -156,16 +170,20 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="absolute inset-0 bg-[#FAF7F2]/72 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'rgba(5,3,1,.64)' }} />
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 130% 100% at 50% 50%, transparent 40%, rgba(0,0,0,.45) 100%)' }} />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
 
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">🌿</span>
-            <div>
-              <h2 className="text-xl font-bold text-[#2C2416]">{t('luberon_title')}</h2>
-              <p className="text-xs text-[#6B7C45] font-medium tracking-wide">{t('luberon_area_sub')}</p>
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-1 h-10 bg-[#C8763A] rounded-full flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-0.5">Luberon · Vaucluse</p>
+              <h2 className="font-serif text-[20px] font-normal text-white leading-tight">{t('luberon_title')}</h2>
+              <p className="text-[11px] text-white/45 mt-0.5">{t('luberon_area_sub')}</p>
             </div>
-            <div className="flex-1 h-px bg-[#E8DCC8] ml-2" />
+            <div className="flex-1 h-px bg-white/10 ml-2 hidden sm:block" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -262,26 +280,24 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
           </div>
 
           {/* Découvrir Lauris */}
-          <div className="bg-white/80 backdrop-blur-sm border border-[#6B7C45]/20 rounded-2xl p-6 md:p-8">
-            <div className="flex items-start gap-4">
-              <span className="text-4xl shrink-0">🏡</span>
-              <div>
-                <h3 className="text-xl font-bold text-[#2C2416] mb-2">{tLauris('discover_title')}</h3>
-                <p className="text-[#5C4F3A] mb-5 leading-relaxed">{tLauris('discover_text')}</p>
-                <div className="flex flex-wrap gap-3">
-                  <a href="https://frenchmoments.eu/lauris/?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white border border-[#6B7C45] text-[#6B7C45] px-4 py-2 rounded-lg hover:bg-[#6B7C45] hover:text-white transition-colors text-sm font-medium shadow-sm">
-                    🌿 {tLauris('link1_label')}
-                  </a>
-                  <a href="https://www.j-aime-le-vaucluse.com/lauris#gsc.tab=0" target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white border border-[#C8763A] text-[#C8763A] px-4 py-2 rounded-lg hover:bg-[#C8763A] hover:text-white transition-colors text-sm font-medium shadow-sm">
-                    ☀️ {tLauris('link2_label')}
-                  </a>
-                  <a href="https://www.destinationluberon.com/decouvrir/villes-et-villages/lauris" target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white border border-[#9B8EC4] text-[#9B8EC4] px-4 py-2 rounded-lg hover:bg-[#9B8EC4] hover:text-white transition-colors text-sm font-medium shadow-sm">
-                    🗺️ {tLauris('link3_label')}
-                  </a>
-                </div>
+          <div className="rounded-2xl p-6 md:p-8 backdrop-blur-sm"
+            style={{ background: 'rgba(255,250,242,.07)', border: '1px solid rgba(200,118,58,.18)' }}>
+            <div>
+              <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-2">{tLauris('discover_title')}</p>
+              <p className="text-white/58 mb-5 leading-relaxed text-[14px]">{tLauris('discover_text')}</p>
+              <div className="flex flex-wrap gap-3">
+                <a href="https://frenchmoments.eu/lauris/?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#6B7C45] hover:text-[#6B7C45] transition-colors text-sm font-medium">
+                  {tLauris('link1_label')}
+                </a>
+                <a href="https://www.j-aime-le-vaucluse.com/lauris#gsc.tab=0" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#C8763A] hover:text-[#C8763A] transition-colors text-sm font-medium">
+                  {tLauris('link2_label')}
+                </a>
+                <a href="https://www.destinationluberon.com/decouvrir/villes-et-villages/lauris" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-white/50 hover:text-white transition-colors text-sm font-medium">
+                  {tLauris('link3_label')}
+                </a>
               </div>
             </div>
           </div>

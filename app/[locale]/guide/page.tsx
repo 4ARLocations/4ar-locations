@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import GuideClient from './GuideClient';
+import PageHero from '@/components/PageHero';
 
 export async function generateMetadata({
   params,
@@ -12,6 +13,23 @@ export async function generateMetadata({
   return { title: t('guide_title') };
 }
 
-export default function GuidePage() {
-  return <GuideClient />;
+export default async function GuidePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'guide' });
+
+  return (
+    <>
+      <PageHero
+        tag={t('eyebrow')}
+        title={t('title')}
+        subtitle={t('subtitle')}
+        compact
+      />
+      <GuideClient />
+    </>
+  );
 }

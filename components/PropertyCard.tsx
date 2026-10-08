@@ -6,16 +6,10 @@ import { useRouter } from 'next/navigation';
 import type { Property } from '@/lib/properties';
 import FavoriteButton from '@/components/FavoriteButton';
 
-const regionGradient: Record<string, string> = {
-  alpes: 'from-[#1A3050] to-[#2C4870]',
-  avignon: 'from-[#3A2410] to-[#5C3A1A]',
-  luberon: 'from-[#1A2E10] to-[#2C4A1A]',
-};
-
-const regionEmoji: Record<string, string> = {
-  alpes: '🏔️',
-  avignon: '🏛️',
-  luberon: '🌿',
+const regionLabel: Record<string, string> = {
+  alpes:   'Hautes-Alpes',
+  avignon: 'Vaucluse',
+  luberon: 'Vaucluse',
 };
 
 export default function PropertyCard({
@@ -23,162 +17,229 @@ export default function PropertyCard({
   locale,
   imageOverride,
   topRated,
+  featured,
+  compact,
+  fillHeight,
 }: {
   property: Property;
   locale: string;
   imageOverride?: string;
   topRated?: boolean;
+  featured?: boolean;
+  compact?: boolean;
+  fillHeight?: boolean;
 }) {
   const t = useTranslations();
   const router = useRouter();
   const displayImage = imageOverride ?? property.image;
   const hasPhoto = !!displayImage;
 
-  const priceLabel = property.priceOnRequest
-    ? null
-    : property.priceFrom > 0
-    ? `${property.priceFrom}€`
+  const priceLabel =
+    property.priceOnRequest ? null
+    : property.priceFrom > 0 ? `${property.priceFrom}€`
     : null;
 
-  return (
-    <div
-      className="group bg-white rounded-2xl overflow-hidden border border-[#E8DCC8] hover:border-[#C8763A]/30 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col"
-      onClick={() => router.push(`/${locale}/biens/${property.slug}`)}
-    >
-      {/* ─── Photo ─── */}
-      <div className={`relative h-60 overflow-hidden flex-shrink-0 ${!hasPhoto ? `bg-gradient-to-br ${regionGradient[property.region]}` : ''}`}>
+  /* ── CARTE FEATURED — grande photo pleine largeur + overlay ── */
+  if (featured) {
+    return (
+      <div
+        className="group cursor-pointer"
+        onClick={() => router.push(`/${locale}/biens/${property.slug}`)}
+      >
+        <div className="relative overflow-hidden rounded-xl h-[300px] md:h-[420px] shadow-[0_4px_40px_rgba(44,36,22,0.14)] group-hover:shadow-[0_10px_56px_rgba(44,36,22,0.20)] transition-shadow duration-700">
+          {hasPhoto ? (
+            <Image src={displayImage} alt={t(property.nameKey)} fill
+              className="object-cover photo-card-img" sizes="1152px" priority />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] to-[#5C4F3A]" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/20 to-black/8" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-transparent" />
+
+          {/* Badge région */}
+          <div className="absolute top-5 left-5">
+            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+              {regionLabel[property.region] ?? property.region}
+            </span>
+          </div>
+          <div className="absolute top-4 right-4 z-10">
+            <FavoriteButton propertyId={property.id} size="sm"
+              className="bg-white/15 hover:bg-white/30 backdrop-blur-md rounded-full p-2.5 text-white/55 hover:text-white transition-all" />
+          </div>
+
+          {/* Contenu bas */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+            <div className="flex items-end justify-between gap-6">
+              <div className="flex-1 min-w-0">
+                {property.score && (
+                  <div className="flex items-center gap-1.5 mb-2.5">
+                    <svg className="w-3.5 h-3.5 text-[#C8763A] fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span className="text-[13px] font-bold text-white">{property.score.value}</span>
+                    <span className="text-[11px] text-white/40">· {t(property.typeKey)}</span>
+                  </div>
+                )}
+                <h3 className="font-serif text-[26px] md:text-[34px] text-white leading-tight mb-1.5 truncate">
+                  {t(property.nameKey)}
+                </h3>
+                <p className="text-[13px] text-white/50">
+                  {property.guests}&thinsp;{t('properties.guests_short')}
+                  &ensp;·&ensp;{property.bedrooms}&thinsp;{t('properties.bedrooms_short')}
+                  &ensp;·&ensp;{property.bathrooms}&thinsp;{t('properties.bathrooms_short')}
+                </p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                {priceLabel ? (
+                  <div className="mb-3">
+                    <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/32 mb-0.5">{t('home.from_price')}</div>
+                    <div className="flex items-baseline gap-1 justify-end">
+                      <span className="text-white font-bold text-[30px] leading-none">{priceLabel}</span>
+                      <span className="text-white/40 text-sm">{t('properties.per_night_short')}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-white/50 text-sm italic mb-3">{t('properties.on_request')}</p>
+                )}
+                <Link href={`/${locale}/contact?bien=${property.id}`} onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-2 bg-[#C8763A] hover:bg-[#A85E28] text-white font-bold px-5 py-2.5 rounded-lg text-[13px] transition-colors">
+                  {t('properties.book_btn')}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── CARTE COMPACTE — 100% photo overlay, ZÉRO encadré ── */
+  if (compact) {
+    return (
+      <div
+        className={`group cursor-pointer relative ${fillHeight ? 'h-full' : 'aspect-[3/4]'} overflow-hidden rounded-xl shadow-[0_2px_16px_rgba(44,36,22,0.10)] hover:shadow-[0_8px_32px_rgba(44,36,22,0.18)] transition-shadow duration-500`}
+        onClick={() => router.push(`/${locale}/biens/${property.slug}`)}
+      >
         {hasPhoto ? (
-          <Image
-            src={displayImage}
-            alt={t(property.nameKey)}
-            fill
-            className="object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          <Image src={displayImage} alt={t(property.nameKey)} fill
+            className="object-cover photo-card-img"
+            sizes="(max-width: 768px) 50vw, 25vw" />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-7xl opacity-30">{regionEmoji[property.region]}</span>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] to-[#5C4F3A]" />
+        )}
+
+        {/* Gradient */}
+        <div className="absolute inset-0 compact-card-overlay" />
+
+        {/* Fav */}
+        <div className="absolute top-3 right-3 z-10">
+          <FavoriteButton propertyId={property.id} size="sm"
+            className="bg-black/20 hover:bg-black/40 backdrop-blur-sm rounded-full p-2 text-white/50 hover:text-white transition-all" />
+        </div>
+
+        {/* Note */}
+        {property.score && (
+          <div className="absolute top-3 left-3 flex items-center gap-1 bg-black/25 backdrop-blur-sm px-2 py-1 rounded-full">
+            <svg className="w-2.5 h-2.5 text-[#C8763A] fill-current" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span className="text-[11px] font-bold text-white">{property.score.value}</span>
           </div>
         )}
 
-        {/* Gradient bas */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-
-        {/* Badges haut gauche */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-          <span className="bg-[#C8763A] text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm tracking-wide">
-            {t(property.badgeKey)}
-          </span>
-          {topRated && (
-            <span className="bg-amber-400 text-amber-900 text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
-              ❤️ {t('properties.top_rated')}
-            </span>
-          )}
-        </div>
-
-        {/* Favoris haut droite */}
-        <div className="absolute top-3 right-3 z-10">
-          <FavoriteButton
-            propertyId={property.id}
-            size="sm"
-            className="bg-white/90 hover:bg-white rounded-full p-2 shadow-sm text-[#2C2416]/50 hover:text-[#C8763A] transition-all"
-          />
-        </div>
-
-        {/* Nom + localisation en bas de l'image */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-8 z-10">
-          <h3 className="text-white font-bold text-base leading-snug drop-shadow-sm">
+        {/* Texte bas */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <h3 className="font-serif text-[16px] text-white leading-tight mb-1">
             {t(property.nameKey)}
           </h3>
-          <p className="text-white/70 text-xs flex items-center gap-1 mt-0.5">
-            <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {t(property.locationKey)}
-          </p>
+          <div className="flex items-end justify-between gap-2">
+            <p className="text-[11px] text-white/50">
+              {property.guests}&thinsp;{t('properties.guests_short')}
+              &ensp;·&ensp;{property.bedrooms}&thinsp;{t('properties.bedrooms_short')}
+            </p>
+            {priceLabel && (
+              <span className="text-white font-bold text-[15px] leading-none flex-shrink-0">
+                {priceLabel}
+                <span className="text-white/40 text-[10px] font-normal">{t('properties.per_night_short')}</span>
+              </span>
+            )}
+          </div>
         </div>
       </div>
+    );
+  }
 
-      {/* ─── Infos ─── */}
-      <div className="p-4 flex flex-col flex-1">
-        {/* Capacité */}
-        <div className="flex items-center gap-4 text-[#9B8A74] text-xs mb-3 pb-3 border-b border-[#F0EAE0]">
-          <span className="flex items-center gap-1">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {property.guests} {t('properties.guests_short')}
-          </span>
-          <span className="flex items-center gap-1">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-            </svg>
-            {property.bedrooms} {t('properties.bedrooms_short')}
-          </span>
-          <span className="flex items-center gap-1">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-2 2-2V6c0-1.1-.9-2-2-2z" />
-            </svg>
-            {property.bathrooms} {t('properties.bathrooms_short')}
-          </span>
-          <span className="ml-auto text-[#9B8A74] bg-[#FAF7F2] px-2 py-0.5 rounded text-[10px] font-medium">
-            {t(property.typeKey)}
+  /* ── CARTE STANDARD (fallback) ── */
+  return (
+    <div className="group cursor-pointer" onClick={() => router.push(`/${locale}/biens/${property.slug}`)}>
+      <div className="relative h-[240px] overflow-hidden rounded-xl mb-4 shadow-[0_2px_20px_rgba(44,36,22,0.08)] group-hover:shadow-[0_8px_32px_rgba(44,36,22,0.14)] transition-shadow duration-500">
+        {hasPhoto ? (
+          <Image src={displayImage} alt={t(property.nameKey)} fill
+            className="object-cover photo-card-img"
+            sizes="(max-width: 768px) 100vw, 33vw" />
+        ) : (
+          <div className="absolute inset-0 bg-[#2C2416]/10" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-transparent to-transparent" />
+        <div className="absolute top-3 left-3">
+          <span className="text-[10px] font-medium tracking-wide text-white/80 bg-black/22 backdrop-blur-sm px-2.5 py-1 rounded-full">
+            {regionLabel[property.region] ?? property.region}
           </span>
         </div>
-
-        {/* Description courte */}
-        <p className="text-[#5C4F3A] text-sm leading-relaxed line-clamp-2 flex-1 mb-4">
-          {t(property.descriptionKey)}
+        <div className="absolute top-3 right-3 z-10">
+          <FavoriteButton propertyId={property.id} size="sm"
+            className="bg-white/75 hover:bg-white rounded-full p-2 shadow-sm text-[#2C2416]/30 hover:text-[#C8763A] transition-all backdrop-blur-sm" />
+        </div>
+        {topRated && (
+          <div className="absolute bottom-3 left-3">
+            <span className="bg-[#C8763A] text-white text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+              {t('properties.top_rated')}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="px-0.5">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="font-serif text-[18px] text-[#2C2416] leading-snug flex-1">{t(property.nameKey)}</h3>
+          {property.score && (
+            <div className="flex items-center gap-1 flex-shrink-0 mt-1">
+              <svg className="w-3 h-3 text-[#C8763A] fill-current" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span className="text-[12px] font-bold text-[#2C2416]">{property.score.value}</span>
+            </div>
+          )}
+        </div>
+        <p className="text-[12px] text-[#9B8A74] mb-3">{t(property.typeKey)}</p>
+        <p className="text-[12px] text-[#6B5F4F] mb-4">
+          {property.guests}&thinsp;{t('properties.guests_short')}&ensp;·&ensp;
+          {property.bedrooms}&thinsp;{t('properties.bedrooms_short')}&ensp;·&ensp;
+          {property.bathrooms}&thinsp;{t('properties.bathrooms_short')}
         </p>
-
-        {/* Prix + CTA */}
-        <div className="flex items-end justify-between gap-2 flex-wrap">
+        <div className="flex items-end justify-between gap-2">
           <div>
             {priceLabel ? (
               <>
-                <div className="text-[10px] text-[#9B8A74] uppercase tracking-wide leading-none mb-0.5">
-                  {t('home.from_price')}
-                </div>
+                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#9B8A74] mb-0.5">{t('home.from_price')}</div>
                 <div className="flex items-baseline gap-0.5">
-                  <span className="text-[#C8763A] font-bold text-xl leading-none">{priceLabel}</span>
+                  <span className="text-[#C8763A] font-bold text-[22px] leading-none">{priceLabel}</span>
                   <span className="text-[#9B8A74] text-xs">{t('properties.per_night_short')}</span>
                 </div>
-                {property.cleaningFee && (
-                  <div className="text-[10px] text-[#9B8A74] mt-0.5">
-                    {t('properties.cleaning_fee_short', { n: property.cleaningFee })}
-                  </div>
-                )}
               </>
             ) : (
               <span className="text-sm text-[#9B8A74] italic">{t('properties.on_request')}</span>
             )}
           </div>
-
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            {property.airbnbUrl !== '#' && (
-              <a
-                href={property.airbnbUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-[10px] font-semibold border border-[#E8DCC8] text-[#9B8A74] hover:border-[#FF5A5F] hover:text-[#FF5A5F] px-2.5 py-1.5 rounded-lg transition-colors"
-              >
-                Airbnb
-              </a>
-            )}
-            <Link
-              href={`/${locale}/contact?bien=${property.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="text-xs font-semibold bg-[#2C2416] hover:bg-[#C8763A] text-white px-3.5 py-1.5 rounded-lg transition-colors"
-            >
-              {t('properties.book_btn')}
-            </Link>
-          </div>
+          <Link href={`/${locale}/contact?bien=${property.id}`} onClick={(e) => e.stopPropagation()}
+            className="group/btn text-[12px] font-semibold text-[#C8763A] hover:text-[#A85E28] flex items-center gap-1 transition-colors flex-shrink-0">
+            {t('properties.book_btn')}
+            <svg className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </div>

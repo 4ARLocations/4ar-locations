@@ -11,15 +11,16 @@ export type Property = {
   beds: number;
   bathrooms: number;
   priceFrom: number;
-  priceTo?: number;         // pour les tarifs variables (ex: Risoul 75-180€)
-  priceOnRequest?: boolean; // "Nous contacter pour les tarifs"
-  cleaningFee?: number;     // frais de ménage
-  minNights?: number;       // durée minimum de séjour
+  priceTo?: number;
+  priceOnRequest?: boolean;
+  cleaningFee?: number;
+  minNights?: number;
   airbnbUrl: string;
   abritelUrl?: string;
   image: string;
   images: string[];
   region: 'alpes' | 'avignon' | 'luberon';
+  score?: { value: number; label: string };
 };
 
 export const properties: Property[] = [
@@ -38,6 +39,7 @@ export const properties: Property[] = [
     priceFrom: 75,
     priceTo: 180,
     priceOnRequest: true,
+    score: { value: 9.1, label: 'Excellent' },
     airbnbUrl: 'https://www.airbnb.fr/rooms/28044230',
     image: '/images/risoul3.jpg',
     images: ['/images/risoul3.jpg', '/images/risoul4.jpg', '/images/risoul.jpg', '/images/risoul5.jpg', '/images/risoul2.jpg'],
@@ -56,6 +58,7 @@ export const properties: Property[] = [
     beds: 2,
     bathrooms: 1,
     priceFrom: 0,
+    score: { value: 9.0, label: 'Excellent' },
     airbnbUrl: 'https://www.airbnb.fr/rooms/1439243184509708331',
     image: '/images/avignon.jpg',
     images: ['/images/avignon.jpg', '/images/avignon2.jpg', '/images/avignon3.jpg', '/images/avignon4.jpg'],
@@ -76,6 +79,7 @@ export const properties: Property[] = [
     priceFrom: 142,
     cleaningFee: 120,
     minNights: 2,
+    score: { value: 9.4, label: 'Excellent' },
     airbnbUrl: 'https://www.airbnb.fr/rooms/1175438485297975130',
     abritelUrl: 'https://www.abritel.fr/location-vacances/p2476917?dateless=true',
     image: '/images/lauris-meme5.jpg',
@@ -97,6 +101,7 @@ export const properties: Property[] = [
     priceFrom: 115,
     cleaningFee: 80,
     minNights: 2,
+    score: { value: 9.6, label: 'Exceptionnel' },
     airbnbUrl: 'https://www.airbnb.fr/rooms/1175460558277880811',
     abritelUrl: 'https://www.abritel.fr/location-vacances/p2476923?dateless=true',
     image: '/images/lauris-atelier4.jpg',
@@ -118,6 +123,7 @@ export const properties: Property[] = [
     priceFrom: 200,
     cleaningFee: 100,
     minNights: 2,
+    score: { value: 9.2, label: 'Excellent' },
     airbnbUrl: 'https://www.airbnb.fr/rooms/1336390142884366353',
     image: '/images/alain/alain-terrasse.jpg',
     images: [
