@@ -28,6 +28,18 @@ function dateToStr(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
+// ─── Constantes de filtrage ────────────────────────────────────────
+// Abritel exporte parfois des blocs géants "Not available" qui couvrent des mois entiers.
+// Ces blocs représentent une indisponibilité plateforme (pas une réservation réelle).
+const MAX_BLOCK_DAYS = 90;
+const PLATFORM_UNAVAILABLE_RE = /not available|indisponible|unavailable|owner block/i;
+
+function daysBetween(a: string, b: string): number {
+  return Math.round(
+    (new Date(b).getTime() - new Date(a).getTime()) / 86_400_000
+  );
+}
+
 // ─── Parsing iCal (node-ical — gère TZID, DATE vs DATETIME, line folding) ──
 async function fetchAndParseICal(
   url: string
@@ -77,11 +89,13 @@ export interface SyncResult {
   propertyId: string;
   added: number;
   removed: number;
+  skipped: number;
   errors: string[];
+  warnings: string[];
 }
 
 export async function syncProperty(propertyId: string): Promise<SyncResult> {
-  const result: SyncResult = { propertyId, added: 0, removed: 0, errors: [] };
+  const result: SyncResult = { propertyId, added: 0, removed: 0, skipped: 0, errors: [], warnings: [] };
   const urls = await getICalUrls(propertyId);
 
   // ── 1. Fetch iCal AVANT de toucher Redis ────────────────────────
@@ -92,6 +106,12 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
     try {
       const events = await fetchAndParseICal(urls.airbnb);
       events.forEach((ev, i) => {
+        const days = daysBetween(ev.start, ev.end);
+        if (days > MAX_BLOCK_DAYS) {
+          result.skipped++;
+          result.warnings.push(`Airbnb: bloc ignoré "${ev.summary}" (${days}j — trop long)`);
+          return;
+        }
         const isHostBlocked = /not available|blocked|unavailable|indisponible/i.test(
           ev.summary ?? ''
         );
@@ -114,6 +134,13 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
     try {
       const events = await fetchAndParseICal(urls.abritel);
       events.forEach((ev, i) => {
+        const days = daysBetween(ev.start, ev.end);
+        // Abritel exporte des blocs "Not available" pluri-mensuels → on les ignore.
+        if (PLATFORM_UNAVAILABLE_RE.test(ev.summary ?? '') || days > MAX_BLOCK_DAYS) {
+          result.skipped++;
+          result.warnings.push(`Abritel: bloc ignoré "${ev.summary}" (${days}j — indisponibilité plateforme)`);
+          return;
+        }
         newBlocks.push({
           id: `abritel-${propertyId}-${ev.start}-${ev.end}-${i}`,
           propertyId,
@@ -137,7 +164,9 @@ export async function syncProperty(propertyId: string): Promise<SyncResult> {
   await redis.set(`ical-last-sync-result:${propertyId}`, JSON.stringify({
     added: result.added,
     removed: result.removed,
+    skipped: result.skipped,
     errors: result.errors,
+    warnings: result.warnings,
     ts: now,
   }));
   return result;
@@ -156,7 +185,9 @@ export async function getLastSync(propertyId: string): Promise<string | null> {
 export interface SyncResultStored {
   added: number;
   removed: number;
+  skipped: number;
   errors: string[];
+  warnings: string[];
   ts: string;
 }
 

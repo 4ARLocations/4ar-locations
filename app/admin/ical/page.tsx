@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 interface LastResult {
   added: number;
   removed: number;
+  skipped: number;
   errors: string[];
+  warnings: string[];
   ts: string;
 }
 
@@ -20,7 +22,9 @@ interface SyncResult {
   propertyId: string;
   added: number;
   removed: number;
+  skipped: number;
   errors: string[];
+  warnings: string[];
 }
 
 function timeAgo(iso: string): string {
@@ -188,13 +192,24 @@ export default function ICalPage() {
             </svg>
             <p className="font-semibold text-green-400 text-sm">Synchronisation terminée</p>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {results.map((r) => (
-              <div key={r.propertyId} className="flex items-center gap-3 text-xs">
-                <span className="font-medium text-white/60 w-40 truncate">{data.find((p) => p.propertyId === r.propertyId)?.name ?? r.propertyId}</span>
-                <span className="text-green-400/80">{r.added} blocs importés</span>
-                {r.removed > 0 && <span className="text-white/30">{r.removed} remplacés</span>}
-                {r.errors.length > 0 && <span className="text-red-400">{r.errors.join(', ')}</span>}
+              <div key={r.propertyId} className="text-xs space-y-0.5">
+                <div className="flex items-center gap-3">
+                  <span className="font-medium text-white/60 w-40 truncate">{data.find((p) => p.propertyId === r.propertyId)?.name ?? r.propertyId}</span>
+                  <span className="text-green-400/80">{r.added} blocs importés</span>
+                  {r.removed > 0 && <span className="text-white/30">{r.removed} remplacés</span>}
+                  {r.skipped > 0 && <span className="text-amber-400/70">{r.skipped} ignorés</span>}
+                  {r.errors.length > 0 && <span className="text-red-400">{r.errors.join(', ')}</span>}
+                </div>
+                {r.warnings?.map((w, i) => (
+                  <p key={i} className="text-amber-400/50 pl-43 flex items-start gap-1.5">
+                    <svg className="w-3 h-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {w}
+                  </p>
+                ))}
               </div>
             ))}
           </div>
@@ -233,10 +248,18 @@ export default function ICalPage() {
                     </p>
                     {p.lastResult?.errors && p.lastResult.errors.length > 0 && (
                       <p className="text-xs text-red-400/70 mt-0.5 flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                         </svg>
                         {p.lastResult.errors.join(' · ')}
+                      </p>
+                    )}
+                    {p.lastResult?.skipped != null && p.lastResult.skipped > 0 && (
+                      <p className="text-xs text-amber-400/60 mt-0.5 flex items-center gap-1">
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {p.lastResult.skipped} bloc{p.lastResult.skipped > 1 ? 's' : ''} ignoré{p.lastResult.skipped > 1 ? 's' : ''} (indisponibilité plateforme)
                       </p>
                     )}
                   </div>
