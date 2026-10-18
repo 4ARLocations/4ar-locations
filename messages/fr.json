@@ -242,9 +242,12 @@
   "lauris": {
     "discover_title": "Découvrir Lauris & le Luberon",
     "discover_text": "Perché sur un éperon rocheux dominant la vallée de la Durance, Lauris est un village provençal authentique aux ruelles pavées et maisons de pierre. Son château du XVIIIe siècle abrite un conservatoire de plantes tinctoriales unique en Europe, suspendu en terrasses sur la falaise. Aux portes du Parc Naturel Régional du Luberon, à 5 km de Lourmarin, c'est un point de départ idéal pour randonnées, marchés et découverte de la Provence profonde.",
+    "welcome_text": "Ravi de vous accueillir à Lauris, ce petit village du Sud Luberon, qui vous charmera à coup sûr, tout comme l'ont été plusieurs générations de ma famille ! À très vite !",
+    "discover_links_intro": "N'hésitez pas à jeter un œil à ces sites pour découvrir le village de Lauris et ses environs :",
     "link1_label": "Lauris par French Moments",
-    "link2_label": "J'aime le Vaucluse",
-    "link3_label": "Destination Luberon"
+    "link2_label": "Provence avec moi",
+    "link3_label": "J'aime le Vaucluse",
+    "link4_label": "Destination Luberon"
   },
   "sejour": {
     "title_with_name": "Merci {nom} !",
@@ -318,7 +321,7 @@
     "no_activities": "Aucune activité répertoriée pour cette saison ici.",
     "show_all_seasons": "Voir toutes les saisons →",
     "suggest_title": "Une adresse à recommander ?",
-    "suggest_text": "Restaurant, activité, bon plan… partagez vos découvertes avec nous et on les ajoutera au guide !",
+    "suggest_text": "Restaurant, activité, bon plan… partagez vos découvertes avec nous, nous les ajouterons au guide !",
     "suggest_cta": "Nous écrire →",
     "risoul_sub": "Hautes-Alpes · Station de montagne",
     "risoul_caption": "Risoul 1850 — Hautes-Alpes",

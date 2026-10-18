@@ -282,23 +282,27 @@ function BiensContent({ locale, imageOverrides, regionFilter, topRated }: { loca
           {/* Découvrir Lauris */}
           <div className="rounded-2xl p-6 md:p-8 backdrop-blur-sm"
             style={{ background: 'rgba(255,250,242,.07)', border: '1px solid rgba(200,118,58,.18)' }}>
-            <div>
-              <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-2">{tLauris('discover_title')}</p>
-              <p className="text-white/58 mb-5 leading-relaxed text-[14px]">{tLauris('discover_text')}</p>
-              <div className="flex flex-wrap gap-3">
-                <a href="https://frenchmoments.eu/lauris/?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#6B7C45] hover:text-[#6B7C45] transition-colors text-sm font-medium">
-                  {tLauris('link1_label')}
-                </a>
-                <a href="https://www.j-aime-le-vaucluse.com/lauris#gsc.tab=0" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#C8763A] hover:text-[#C8763A] transition-colors text-sm font-medium">
-                  {tLauris('link2_label')}
-                </a>
-                <a href="https://www.destinationluberon.com/decouvrir/villes-et-villages/lauris" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-white/50 hover:text-white transition-colors text-sm font-medium">
-                  {tLauris('link3_label')}
-                </a>
-              </div>
+            <p className="text-[9px] font-bold uppercase tracking-[.28em] text-[#C8763A] mb-3">{tLauris('discover_title')}</p>
+            <p className="text-white/70 mb-3 leading-relaxed text-[14px] italic border-l-2 border-[#C8763A]/40 pl-3">{tLauris('welcome_text')}</p>
+            <p className="text-white/50 mb-4 leading-relaxed text-[14px]">{tLauris('discover_text')}</p>
+            <p className="text-xs text-white/35 mb-3">{tLauris('discover_links_intro')}</p>
+            <div className="flex flex-wrap gap-3">
+              <a href="https://frenchmoments.eu/lauris/?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#6B7C45] hover:text-[#6B7C45] transition-colors text-sm font-medium">
+                {tLauris('link1_label')}
+              </a>
+              <a href="https://www.facebook.com/provencewithme" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#C8763A] hover:text-[#C8763A] transition-colors text-sm font-medium">
+                {tLauris('link2_label')}
+              </a>
+              <a href="https://www.j-aime-le-vaucluse.com/lauris#gsc.tab=0" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-[#C8763A] hover:text-[#C8763A] transition-colors text-sm font-medium">
+                {tLauris('link3_label')}
+              </a>
+              <a href="https://www.destinationluberon.com/decouvrir/villes-et-villages/lauris" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-white/18 text-white/70 px-4 py-2 rounded-lg hover:border-white/50 hover:text-white transition-colors text-sm font-medium">
+                {tLauris('link4_label')}
+              </a>
             </div>
           </div>
         </div>

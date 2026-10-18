@@ -242,9 +242,12 @@
   "lauris": {
     "discover_title": "Discover Lauris & the Luberon",
     "discover_text": "Perched on a rocky spur overlooking the Durance valley, Lauris is an authentic Provençal village of cobbled lanes and stone houses. Its 18th-century château is home to a conservatory of dye plants unique in Europe, cascading in terraces down the cliff. On the doorstep of the Luberon Regional Nature Park, 5 km from Lourmarin, it is the perfect base for hiking, local markets and discovering the real Provence.",
+    "welcome_text": "Delighted to welcome you to Lauris, this small village in the southern Luberon, sure to charm you just as it has charmed several generations of my family! See you soon!",
+    "discover_links_intro": "Take a look at these websites to discover the village of Lauris and its surroundings:",
     "link1_label": "Lauris by French Moments",
-    "link2_label": "J'aime le Vaucluse",
-    "link3_label": "Destination Luberon"
+    "link2_label": "Provence with me",
+    "link3_label": "J'aime le Vaucluse",
+    "link4_label": "Destination Luberon"
   },
   "sejour": {
     "title_with_name": "Thank you, {nom}!",
