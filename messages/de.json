@@ -40,7 +40,17 @@
     "see_all_properties": "Alle Objekte ansehen",
     "stat2_label": "sorgfältig\nausgewählte Unterkünfte",
     "stat3_label": "einzigartige\nReiseziele",
-    "stat4_label": "Direktbuchung\nohne Servicegebühren"
+    "stat4_label": "Direktbuchung\nohne Servicegebühren",
+    "hero_eyebrow": "Provence · Alpen · Avignon",
+    "destinations_tag": "Unsere Reiseziele",
+    "destinations_title_1": "Provence & Alpen —",
+    "destinations_title_2": "Sie entscheiden.",
+    "destinations_subtitle": "Zwischen dem Luberon mit seinen Bergdörfern, den Skipisten der Hautes-Alpes und dem historischen Herz von Avignon — drei Welten, zwei Stunden von Marseille.",
+    "dest_lauris_sub_card": "3 Häuser · Provence",
+    "dest_risoul_sub_card": "Skigebiet · Südalpen",
+    "dest_avignon_sub_card": "Historisches Zentrum · Palais des Papes",
+    "marquee_direct": "DIREKTBUCHUNG",
+    "marquee_since": "SEIT 2008"
   },
   "properties": {
     "title": "Alle unsere Unterkünfte",
@@ -70,7 +80,12 @@
     "alps_sub": "Hautes-Alpes · Risoul 1850",
     "avignon_area_sub": "Vaucluse · Innerhalb der Stadtmauern",
     "luberon_title": "Luberon — Lauris",
-    "luberon_area_sub": "Vaucluse · Bergdorf · 3 Häuser gemeinsam buchbar"
+    "luberon_area_sub": "Vaucluse · Bergdorf · 3 Häuser gemeinsam buchbar",
+    "filter_all": "Alle Unterkünfte",
+    "filter_group": "Große Gruppe",
+    "title_h2_1": "Unsere Häuser in der Provence",
+    "title_h2_2": "& in den Alpen",
+    "destinations_tag": "Unsere Reiseziele"
   },
   "contact": {
     "title": "Kontakt & Direktbuchung",

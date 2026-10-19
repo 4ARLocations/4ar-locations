@@ -40,7 +40,17 @@
     "see_all_properties": "Voir tous les biens",
     "stat2_label": "logements\nsoigneusement choisis",
     "stat3_label": "destinations\nuniques",
-    "stat4_label": "réservation\ndirecte, sans frais"
+    "stat4_label": "réservation\ndirecte, sans frais",
+    "hero_eyebrow": "Provence · Alpes · Avignon",
+    "destinations_tag": "Nos destinations",
+    "destinations_title_1": "Provence & Alpes —",
+    "destinations_title_2": "à vous de choisir.",
+    "destinations_subtitle": "Entre le Luberon et ses villages perchés, les pistes des Hautes-Alpes et le cœur historique d'Avignon — trois univers à deux heures de Marseille.",
+    "dest_lauris_sub_card": "3 maisons · Provence",
+    "dest_risoul_sub_card": "Station de ski · Alpes du Sud",
+    "dest_avignon_sub_card": "Centre historique · Palais des Papes",
+    "marquee_direct": "RÉSERVATION DIRECTE",
+    "marquee_since": "DEPUIS 2008"
   },
   "properties": {
     "title": "Tous nos logements",
@@ -70,7 +80,12 @@
     "alps_sub": "Hautes-Alpes · Risoul 1850",
     "avignon_area_sub": "Vaucluse · Intramuros",
     "luberon_title": "Luberon — Lauris",
-    "luberon_area_sub": "Vaucluse · Village perché · 3 maisons privatisables ensemble"
+    "luberon_area_sub": "Vaucluse · Village perché · 3 maisons privatisables ensemble",
+    "filter_all": "Tous les logements",
+    "filter_group": "Grand groupe",
+    "title_h2_1": "Nos maisons en Provence",
+    "title_h2_2": "& dans les Alpes",
+    "destinations_tag": "Nos destinations"
   },
   "contact": {
     "title": "Contact & Réservation directe",

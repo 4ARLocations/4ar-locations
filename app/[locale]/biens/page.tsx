@@ -53,7 +53,7 @@ export default async function BiensPage({
   return (
     <>
       <PageHero
-        tag="Nos destinations"
+        tag={t('destinations_tag')}
         title={t('title')}
         subtitle={t('subtitle')}
         compact

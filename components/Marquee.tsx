@@ -1,10 +1,8 @@
-const ITEMS = [
-  'LUBERON', 'LAURIS', 'RISOUL 1850', 'AVIGNON',
-  'PROVENCE', 'HAUTES-ALPES', 'RÉSERVATION DIRECTE', 'DEPUIS 2008',
-];
+const STATIC_ITEMS = ['LUBERON', 'LAURIS', 'RISOUL 1850', 'AVIGNON', 'PROVENCE', 'HAUTES-ALPES'];
 
-export default function Marquee() {
-  const text = ITEMS.join('  ·  ') + '  ·  ';
+export default function Marquee({ directBooking, since }: { directBooking: string; since: string }) {
+  const items = [...STATIC_ITEMS, directBooking, since];
+  const text = items.join('  ·  ') + '  ·  ';
   return (
     <div className="overflow-hidden bg-[#110C06] py-3.5 select-none">
       <div className="marquee-track flex whitespace-nowrap">

@@ -86,7 +86,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
           style={{ minHeight: 'inherit', paddingTop: '5rem', paddingBottom: '2.5rem' }}>
           <div className="lg:max-w-[60%]">
             <p className="hero-a text-[10px] font-bold uppercase tracking-[0.30em] text-[#C8763A] mb-5">
-              Provence · Alpes · Avignon
+              {t('home.hero_eyebrow')}
             </p>
 
             <h1 className="hero-b font-serif font-normal mb-5 leading-[0.90] tracking-tight"
@@ -128,7 +128,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
       </section>
 
       {/* ─── MARQUEE ─── */}
-      <Marquee />
+      <Marquee directBooking={t('home.marquee_direct')} since={t('home.marquee_since')} />
 
       {/* ─── FAMILLE — intro juste sous la vitrine ─── */}
       <section className="relative py-20 overflow-hidden" style={{
@@ -204,16 +204,15 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
 
           <SectionReveal className="mb-12">
             <p className="section-tag text-[10px] font-bold uppercase tracking-[0.28em] text-[#C8763A]/70 mb-5">
-              Nos destinations
+              {t('home.destinations_tag')}
             </p>
             <span className="section-line" />
             <h2 className="text-[30px] md:text-[42px] font-serif font-normal text-[#F2E8DA] leading-tight tracking-tight mb-4">
-              <span className="title-line"><span>Provence &amp; Alpes —</span></span>
-              <span className="title-line"><span>à vous de choisir.</span></span>
+              <span className="title-line"><span>{t('home.destinations_title_1')}</span></span>
+              <span className="title-line"><span>{t('home.destinations_title_2')}</span></span>
             </h2>
             <p className="text-sm text-white/38 leading-relaxed max-w-xl">
-              Entre le Luberon et ses villages perchés, les pistes des Hautes-Alpes et le cœur
-              historique d&apos;Avignon — trois univers à deux heures de Marseille.
+              {t('home.destinations_subtitle')}
             </p>
           </SectionReveal>
 
@@ -223,7 +222,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
               {
                 label: 'Lauris · Luberon',
                 tag: 'Vaucluse',
-                sub: '3 maisons · Provence',
+                sub: t('home.dest_lauris_sub_card'),
                 image: '/images/bg-lauris-mid.jpg',
                 href: `/${locale}/biens#luberon`,
                 direction: 'left' as const,
@@ -231,7 +230,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
               {
                 label: 'Risoul 1850',
                 tag: 'Hautes-Alpes',
-                sub: 'Station de ski · Alpes du Sud',
+                sub: t('home.dest_risoul_sub_card'),
                 image: '/images/bg-risoul-mountain.jpg',
                 href: `/${locale}/biens/risoul`,
                 direction: 'up' as const,
@@ -239,7 +238,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
               {
                 label: 'Avignon',
                 tag: 'Vaucluse',
-                sub: 'Centre historique · Palais des Papes',
+                sub: t('home.dest_avignon_sub_card'),
                 image: '/images/bg-palais.jpg',
                 href: `/${locale}/biens/avignon`,
                 direction: 'right' as const,

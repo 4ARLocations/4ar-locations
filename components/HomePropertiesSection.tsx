@@ -8,13 +8,7 @@ import SectionReveal from '@/components/SectionReveal';
 
 type Filter = 'all' | 'alpes' | 'luberon' | 'avignon' | 'group';
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all',     label: 'Tous les logements' },
-  { id: 'alpes',   label: 'Risoul 1850' },
-  { id: 'luberon', label: 'Luberon · Lauris' },
-  { id: 'avignon', label: 'Avignon' },
-  { id: 'group',   label: 'Grand groupe' },
-];
+type FilterDef = { id: Filter; labelKey: string; staticLabel?: string };
 
 export default function HomePropertiesSection({
   properties,
@@ -26,6 +20,13 @@ export default function HomePropertiesSection({
   imageOverrides: Record<string, string>;
 }) {
   const t = useTranslations();
+  const FILTERS: FilterDef[] = [
+    { id: 'all',     labelKey: 'properties.filter_all' },
+    { id: 'alpes',   labelKey: '', staticLabel: 'Risoul 1850' },
+    { id: 'luberon', labelKey: '', staticLabel: 'Luberon · Lauris' },
+    { id: 'avignon', labelKey: '', staticLabel: 'Avignon' },
+    { id: 'group',   labelKey: 'properties.filter_group' },
+  ];
   const [active, setActive] = useState<Filter>('all');
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -68,8 +69,8 @@ export default function HomePropertiesSection({
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-0">
             <div>
               <h2 className="text-[30px] md:text-[42px] font-serif font-normal text-[#2C2416] leading-tight tracking-tight">
-                <span className="title-line"><span>Nos maisons en Provence</span></span>
-                <span className="title-line"><span>&amp; dans les Alpes</span></span>
+                <span className="title-line"><span>{t('properties.title_h2_1')}</span></span>
+                <span className="title-line"><span>{t('properties.title_h2_2')}</span></span>
               </h2>
               <p className="text-sm text-[#9B8A74] mt-3 leading-relaxed max-w-md">
                 {t('properties.subtitle')}
@@ -94,7 +95,7 @@ export default function HomePropertiesSection({
                   ? 'text-[#2C2416] font-semibold'
                   : 'text-[#9B8A74] hover:text-[#5C4F3A] font-medium'
               }`}>
-              {f.label}
+              {f.staticLabel ?? t(f.labelKey as Parameters<typeof t>[0])}
               {active === f.id && <span className="filter-tab-active" />}
             </button>
           ))}

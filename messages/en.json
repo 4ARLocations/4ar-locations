@@ -40,7 +40,17 @@
     "see_all_properties": "See all properties",
     "stat2_label": "properties\nhandpicked for you",
     "stat3_label": "unique\ndestinations",
-    "stat4_label": "direct booking\nno service fees"
+    "stat4_label": "direct booking\nno service fees",
+    "hero_eyebrow": "Provence · Alps · Avignon",
+    "destinations_tag": "Our destinations",
+    "destinations_title_1": "Provence & the Alps —",
+    "destinations_title_2": "you choose.",
+    "destinations_subtitle": "Between the Luberon and its hilltop villages, the ski slopes of the Hautes-Alpes and the historic heart of Avignon — three worlds within two hours of Marseille.",
+    "dest_lauris_sub_card": "3 houses · Provence",
+    "dest_risoul_sub_card": "Ski resort · Southern Alps",
+    "dest_avignon_sub_card": "Historic centre · Palais des Papes",
+    "marquee_direct": "DIRECT BOOKING",
+    "marquee_since": "SINCE 2008"
   },
   "properties": {
     "title": "All our properties",
@@ -70,7 +80,12 @@
     "alps_sub": "Hautes-Alpes · Risoul 1850",
     "avignon_area_sub": "Vaucluse · Within the city walls",
     "luberon_title": "Luberon — Lauris",
-    "luberon_area_sub": "Vaucluse · Hilltop village · 3 houses bookable together"
+    "luberon_area_sub": "Vaucluse · Hilltop village · 3 houses bookable together",
+    "filter_all": "All properties",
+    "filter_group": "Large group",
+    "title_h2_1": "Our homes in Provence",
+    "title_h2_2": "& in the Alps",
+    "destinations_tag": "Our destinations"
   },
   "contact": {
     "title": "Contact & Direct Booking",
