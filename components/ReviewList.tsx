@@ -90,11 +90,11 @@ export default async function ReviewList({ propertyId }: { propertyId: string })
                     target="_blank"
                     rel="noopener noreferrer"
                     className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#E8DCC8] hover:opacity-90 transition-opacity flex-shrink-0"
-                    title="Voir la photo en grand"
+                    title={t('view_photo')}
                   >
                     <Image
                       src={url}
-                      alt={`Photo du séjour ${idx + 1}`}
+                      alt={t('photo_alt', { n: idx + 1 })}
                       fill
                       className="object-cover"
                       sizes="80px"

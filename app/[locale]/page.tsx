@@ -110,7 +110,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
                 {t('home.stat_destinations').toLowerCase()}
               </span>
               <span className="text-white/12">·</span>
-              <span>Direct</span>
+              <span>{t('home.hero_direct')}</span>
             </div>
 
             <div className="hero-d flex flex-col sm:flex-row gap-3">

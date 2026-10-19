@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 const STORAGE_KEY = '4ar-favorites';
 
@@ -22,6 +23,7 @@ export default function FavoriteButton({
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }) {
+  const t = useTranslations('favorites');
   const [isFav, setIsFav] = useState(false);
   const [pulse, setPulse] = useState(false);
 
@@ -47,8 +49,8 @@ export default function FavoriteButton({
     <button
       onClick={toggle}
       className={`transition-transform ${pulse ? 'scale-125' : 'scale-100'} ${className}`}
-      aria-label={isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-      title={isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+      aria-label={isFav ? t('remove') : t('add')}
+      title={isFav ? t('remove') : t('add')}
     >
       <svg
         viewBox="0 0 24 24"

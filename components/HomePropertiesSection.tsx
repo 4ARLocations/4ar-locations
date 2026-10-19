@@ -165,7 +165,7 @@ export default function HomePropertiesSection({
           </div>
         ) : (
           <p className="text-center py-16 text-[#9B8A74] text-sm">
-            Aucun logement disponible pour ce filtre.
+            {t('properties.no_results')}
           </p>
         )}
       </div>

@@ -1,62 +1,35 @@
 'use client';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
-type FAQItem = { q: string; a: string };
-
-const FAQ_DATA: Record<string, FAQItem[]> = {
-  risoul: [
-    { q: 'Y a-t-il un parking ?', a: "Oui, un parking couvert est inclus dans la résidence Altaïr, à proximité immédiate de l'appartement." },
-    { q: 'Le linge de lit est-il fourni ?', a: 'Oui, le linge de lit est fourni. Les serviettes de bain sont disponibles sur demande.' },
-    { q: 'L\'accès aux pistes est-il direct ?', a: 'Oui, l\'appartement est ski aux pieds — accès direct aux pistes depuis la résidence.' },
-    { q: 'Peut-on louer en dehors des vacances scolaires ?', a: 'Oui, le logement est disponible hors vacances scolaires, sous réserve de disponibilité. Nous contacter pour les tarifs.' },
-    { q: 'Les animaux sont-ils acceptés ?', a: 'Non, les animaux de compagnie ne sont pas acceptés dans cet appartement.' },
-  ],
-  avignon: [
-    { q: 'Où se garer à Avignon ?', a: 'L\'appartement est en intramuros ; nous recommandons le parking du Palais des Papes ou les parkings payants à proximité des remparts.' },
-    { q: 'Y a-t-il la climatisation ?', a: 'Oui, l\'appartement est équipé de la climatisation pour les nuits d\'été.' },
-    { q: 'Est-il possible d\'accueillir plus de 2 personnes ?', a: 'Le logement est conçu pour 2 personnes. Nous contacter pour toute demande particulière.' },
-    { q: 'Quel est l\'accès au logement ?', a: 'Un accès autonome est prévu avec boîte à clés. Les instructions vous seront envoyées avant l\'arrivée.' },
-  ],
-  'lauris-meme': [
-    { q: 'Peut-on privatiser les 3 maisons ensemble ?', a: 'Oui ! Les 3 maisons de Lauris (Mémé, l\'Atelier, Maison d\'Alain) peuvent être combinées pour accueillir jusqu\'à 20 personnes. Tarif préférentiel sur demande.' },
-    { q: 'Le ménage est-il inclus ?', a: 'Un ménage de fin de séjour est en option (120€). Vous pouvez aussi effectuer le ménage vous-même.' },
-    { q: 'Y a-t-il un jardin ou une terrasse ?', a: 'Oui, la maison dispose d\'espaces extérieurs — une cour et une terrasse ombragée.' },
-    { q: 'Les animaux sont-ils acceptés ?', a: 'Oui, les animaux de compagnie sont acceptés sous réserve d\'accord préalable.' },
-    { q: 'Quelle est la durée minimum de séjour ?', a: '2 nuits minimum. Pour les longues durées (semaine ou plus), un tarif préférentiel est appliqué.' },
-  ],
-  'lauris-atelier': [
-    { q: 'L\'Atelier est-il accessible aux personnes à mobilité réduite ?', a: 'Non, le logement comporte un escalier abrupt — il n\'est pas adapté aux personnes à mobilité réduite.' },
-    { q: 'Peut-on combiner avec les maisons voisines ?', a: 'Oui, l\'Atelier peut être combiné avec la Maison de Mémé et la Maison d\'Alain pour des groupes jusqu\'à 20 personnes.' },
-    { q: 'Le ménage est-il inclus ?', a: 'Un ménage de fin de séjour est en option (80€). Vous pouvez aussi effectuer le ménage vous-même.' },
-    { q: 'Y a-t-il la climatisation ?', a: 'Non, mais les épaisses murs en pierre gardent la maison fraîche naturellement, même en été.' },
-  ],
-  'lauris-alain': [
-    { q: 'Peut-on privatiser les 3 maisons ensemble ?', a: 'Oui ! Les 3 maisons de Lauris peuvent être combinées pour accueillir jusqu\'à 20 personnes. Tarif préférentiel sur demande.' },
-    { q: 'Y a-t-il une terrasse ?', a: 'Oui, la grande terrasse du 1er étage offre une vue sur le village — idéale pour les dîners en plein air.' },
-    { q: 'La salle voûtée est-elle disponible pour des événements ?', a: 'La salle voûtée au rez-de-chaussée est parfaite pour des repas en famille, mais les fêtes sont interdites.' },
-    { q: 'Quelle est la durée minimum de séjour ?', a: '2 nuits minimum. Pour les longues durées, un tarif préférentiel est appliqué.' },
-  ],
+const FAQ_KEYS: Record<string, [string, string][]> = {
+  risoul:          [['risoul_q1','risoul_a1'],['risoul_q2','risoul_a2'],['risoul_q3','risoul_a3'],['risoul_q4','risoul_a4'],['risoul_q5','risoul_a5']],
+  avignon:         [['avignon_q1','avignon_a1'],['avignon_q2','avignon_a2'],['avignon_q3','avignon_a3'],['avignon_q4','avignon_a4']],
+  'lauris-meme':   [['lauris_meme_q1','lauris_meme_a1'],['lauris_meme_q2','lauris_meme_a2'],['lauris_meme_q3','lauris_meme_a3'],['lauris_meme_q4','lauris_meme_a4'],['lauris_meme_q5','lauris_meme_a5']],
+  'lauris-atelier':[['lauris_atelier_q1','lauris_atelier_a1'],['lauris_atelier_q2','lauris_atelier_a2'],['lauris_atelier_q3','lauris_atelier_a3'],['lauris_atelier_q4','lauris_atelier_a4']],
+  'lauris-alain':  [['lauris_alain_q1','lauris_alain_a1'],['lauris_alain_q2','lauris_alain_a2'],['lauris_alain_q3','lauris_alain_a3'],['lauris_alain_q4','lauris_alain_a4']],
 };
 
 export default function PropertyFAQ({ propertyId }: { propertyId: string }) {
-  const items = FAQ_DATA[propertyId];
+  const t = useTranslations('faq');
+  const pairs = FAQ_KEYS[propertyId];
   const [open, setOpen] = useState<number | null>(null);
 
-  if (!items || items.length === 0) return null;
+  if (!pairs || pairs.length === 0) return null;
 
   return (
     <div className="py-8 border-t border-[#E8DCC8]">
       <h2 className="text-xl font-bold text-[#2C2416] mb-5 flex items-center gap-2">
-        <span>💬</span> Questions fréquentes
+        <span>💬</span> {t('title')}
       </h2>
       <div className="space-y-2">
-        {items.map((item, i) => (
+        {pairs.map(([qKey, aKey], i) => (
           <div key={i} className="border border-[#E8DCC8] rounded-xl overflow-hidden">
             <button
               onClick={() => setOpen(open === i ? null : i)}
               className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-[#FAF7F2] transition-colors"
             >
-              <span className="font-medium text-[#2C2416] text-sm pr-4">{item.q}</span>
+              <span className="font-medium text-[#2C2416] text-sm pr-4">{t(qKey as Parameters<typeof t>[0])}</span>
               <span className={`text-[#C8763A] flex-shrink-0 transition-transform duration-200 ${open === i ? 'rotate-45' : ''}`}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -65,7 +38,7 @@ export default function PropertyFAQ({ propertyId }: { propertyId: string }) {
             </button>
             {open === i && (
               <div className="px-5 pb-4 pt-1 bg-[#FAF7F2] text-[#5C4F3A] text-sm leading-relaxed border-t border-[#E8DCC8]">
-                {item.a}
+                {t(aKey as Parameters<typeof t>[0])}
               </div>
             )}
           </div>

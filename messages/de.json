@@ -50,7 +50,8 @@
     "dest_risoul_sub_card": "Skigebiet · Südalpen",
     "dest_avignon_sub_card": "Historisches Zentrum · Palais des Papes",
     "marquee_direct": "DIREKTBUCHUNG",
-    "marquee_since": "SEIT 2008"
+    "marquee_since": "SEIT 2008",
+    "hero_direct": "Direkt"
   },
   "properties": {
     "title": "Alle unsere Unterkünfte",
@@ -85,7 +86,8 @@
     "filter_group": "Große Gruppe",
     "title_h2_1": "Unsere Häuser in der Provence",
     "title_h2_2": "& in den Alpen",
-    "destinations_tag": "Unsere Reiseziele"
+    "destinations_tag": "Unsere Reiseziele",
+    "no_results": "Keine Unterkünfte für diesen Filter verfügbar."
   },
   "contact": {
     "title": "Kontakt & Direktbuchung",
@@ -212,7 +214,9 @@
     "error_rating": "Bitte wählen Sie eine Bewertung.",
     "error_comment": "Bitte schreiben Sie einen Kommentar.",
     "error_generic": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut.",
-    "error_connection": "Senden nicht möglich. Bitte überprüfen Sie Ihre Verbindung."
+    "error_connection": "Senden nicht möglich. Bitte überprüfen Sie Ihre Verbindung.",
+    "view_photo": "Foto in Originalgröße anzeigen",
+    "photo_alt": "Urlaubsfoto {n}"
   },
   "floor_plan": {
     "title": "Grundriss",
@@ -292,10 +296,12 @@
     "empty_title": "Noch keine Favoriten",
     "empty_hint": "Klicken Sie auf das ❤️ einer Unterkunft, um sie hier zu speichern.",
     "view_properties": "Unsere Unterkünfte ansehen",
-    "remove": "Entfernen",
+    "remove": "Aus Favoriten entfernen",
     "back_to_all": "← Alle Unterkünfte ansehen",
     "bedrooms_short": "Zi.",
-    "bathrooms_short": "Bad"
+    "bathrooms_short": "Bad",
+    "add": "Zu Favoriten hinzufügen",
+    "photo_alt": "Aufenthaltsfoto"
   },
   "carte": {
     "eyebrow": "Provence & Alpen",
@@ -443,5 +449,66 @@
     "value_2_text": "5 Adressen im Luberon, Avignon und den Südalpen",
     "value_3_title": "Direktbuchung",
     "value_3_text": "Keine Provision, echte Flexibilität bei den Konditionen"
+  },
+  "booking": {
+    "title": "Preis für Ihren Aufenthalt berechnen",
+    "checkin": "Anreise",
+    "checkout": "Abreise",
+    "min_stay_warning": "Mindestaufenthalt: {nights} Nächte für diese Unterkunft.",
+    "night": "Nacht",
+    "nights_label": "Nächte",
+    "cleaning_fee": "Endreinigung",
+    "estimated_total": "Geschätzter Gesamtpreis",
+    "disclaimer": "Ohne Kurtaxe. Unverbindlicher Preis."
+  },
+  "faq": {
+    "title": "Häufige Fragen",
+    "risoul_q1": "Gibt es einen Parkplatz?",
+    "risoul_a1": "Ja, ein überdachter Parkplatz ist in der Residenz Altaïr enthalten, direkt neben dem Apartment.",
+    "risoul_q2": "Ist Bettwäsche inklusive?",
+    "risoul_a2": "Ja, Bettwäsche ist inklusive. Handtücher sind auf Anfrage erhältlich.",
+    "risoul_q3": "Gibt es direkten Skizugang?",
+    "risoul_a3": "Ja, das Apartment bietet direkten Ski-in/Ski-out-Zugang von der Residenz aus.",
+    "risoul_q4": "Kann man außerhalb der Schulferien mieten?",
+    "risoul_a4": "Ja, die Unterkunft ist außerhalb der Schulferien verfügbar, vorbehaltlich Verfügbarkeit. Kontaktieren Sie uns für die Preise.",
+    "risoul_q5": "Sind Haustiere erlaubt?",
+    "risoul_a5": "Nein, Haustiere sind in diesem Apartment nicht erlaubt.",
+    "avignon_q1": "Wo kann man in Avignon parken?",
+    "avignon_a1": "Die Wohnung liegt innerhalb der Stadtmauern; wir empfehlen den Parkplatz am Palais des Papes oder kostenpflichtige Parkplätze in der Nähe der Stadtmauern.",
+    "avignon_q2": "Gibt es eine Klimaanlage?",
+    "avignon_a2": "Ja, die Wohnung ist mit einer Klimaanlage für warme Sommernächte ausgestattet.",
+    "avignon_q3": "Können mehr als 2 Gäste untergebracht werden?",
+    "avignon_a3": "Die Unterkunft ist für 2 Gäste ausgelegt. Kontaktieren Sie uns für besondere Anfragen.",
+    "avignon_q4": "Wie erreicht man die Unterkunft?",
+    "avignon_a4": "Self-Check-in ist mit einem Schlüsselkasten möglich. Die Anweisungen werden Ihnen vor der Ankunft zugesandt.",
+    "lauris_meme_q1": "Können alle 3 Häuser zusammen gemietet werden?",
+    "lauris_meme_a1": "Ja! Die 3 Häuser in Lauris (Mémé, L'Atelier, Maison d'Alain) können kombiniert werden, um bis zu 20 Personen zu beherbergen. Vorzugspreis auf Anfrage.",
+    "lauris_meme_q2": "Ist die Endreinigung inklusive?",
+    "lauris_meme_a2": "Eine Endreinigung ist optional erhältlich (120€). Sie können die Reinigung auch selbst durchführen.",
+    "lauris_meme_q3": "Gibt es einen Garten oder eine Terrasse?",
+    "lauris_meme_a3": "Ja, das Haus verfügt über Außenbereiche — einen Innenhof und eine schattige Terrasse.",
+    "lauris_meme_q4": "Sind Haustiere erlaubt?",
+    "lauris_meme_a4": "Ja, Haustiere sind nach vorheriger Absprache willkommen.",
+    "lauris_meme_q5": "Was ist die Mindestaufenthaltsdauer?",
+    "lauris_meme_a5": "Mindestens 2 Nächte. Für längere Aufenthalte (eine Woche oder mehr) gilt ein Vorzugspreis.",
+    "lauris_atelier_q1": "Ist L'Atelier für Menschen mit eingeschränkter Mobilität geeignet?",
+    "lauris_atelier_a1": "Nein, die Unterkunft hat eine steile Treppe — sie ist nicht für Menschen mit eingeschränkter Mobilität geeignet.",
+    "lauris_atelier_q2": "Kann es mit den Nachbarhäusern kombiniert werden?",
+    "lauris_atelier_a2": "Ja, L'Atelier kann mit der Maison de Mémé und der Maison d'Alain für Gruppen von bis zu 20 Personen kombiniert werden.",
+    "lauris_atelier_q3": "Ist die Endreinigung inklusive?",
+    "lauris_atelier_a3": "Eine Endreinigung ist optional erhältlich (80€). Sie können die Reinigung auch selbst durchführen.",
+    "lauris_atelier_q4": "Gibt es eine Klimaanlage?",
+    "lauris_atelier_a4": "Nein, aber die dicken Steinmauern halten das Haus auch im Sommer auf natürliche Weise kühl.",
+    "lauris_alain_q1": "Können alle 3 Häuser zusammen gemietet werden?",
+    "lauris_alain_a1": "Ja! Die 3 Häuser in Lauris können kombiniert werden, um bis zu 20 Personen zu beherbergen. Vorzugspreis auf Anfrage.",
+    "lauris_alain_q2": "Gibt es eine Terrasse?",
+    "lauris_alain_a2": "Ja, die große Terrasse im 1. Obergeschoss bietet einen Blick auf das Dorf — ideal für Abendessen im Freien.",
+    "lauris_alain_q3": "Ist der Gewölbesaal für Veranstaltungen verfügbar?",
+    "lauris_alain_a3": "Der Gewölbesaal im Erdgeschoss eignet sich perfekt für Familienessen, aber Partys sind nicht erlaubt.",
+    "lauris_alain_q4": "Was ist die Mindestaufenthaltsdauer?",
+    "lauris_alain_a4": "Mindestens 2 Nächte. Für längere Aufenthalte gilt ein Vorzugspreis."
+  },
+  "map": {
+    "loading": "Karte wird geladen…"
   }
 }

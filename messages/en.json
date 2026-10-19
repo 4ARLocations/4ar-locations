@@ -50,7 +50,8 @@
     "dest_risoul_sub_card": "Ski resort · Southern Alps",
     "dest_avignon_sub_card": "Historic centre · Palais des Papes",
     "marquee_direct": "DIRECT BOOKING",
-    "marquee_since": "SINCE 2008"
+    "marquee_since": "SINCE 2008",
+    "hero_direct": "Direct"
   },
   "properties": {
     "title": "All our properties",
@@ -85,7 +86,8 @@
     "filter_group": "Large group",
     "title_h2_1": "Our homes in Provence",
     "title_h2_2": "& in the Alps",
-    "destinations_tag": "Our destinations"
+    "destinations_tag": "Our destinations",
+    "no_results": "No properties available for this filter."
   },
   "contact": {
     "title": "Contact & Direct Booking",
@@ -212,7 +214,9 @@
     "error_rating": "Please select a rating.",
     "error_comment": "Please write a comment.",
     "error_generic": "An error occurred, please try again.",
-    "error_connection": "Unable to send. Please check your connection."
+    "error_connection": "Unable to send. Please check your connection.",
+    "view_photo": "View full-size photo",
+    "photo_alt": "Stay photo {n}"
   },
   "floor_plan": {
     "title": "Floor plan",
@@ -292,10 +296,12 @@
     "empty_title": "No favourites yet",
     "empty_hint": "Click the ❤️ on a property to save it here.",
     "view_properties": "View our properties",
-    "remove": "Remove",
+    "remove": "Remove from favourites",
     "back_to_all": "← View all properties",
     "bedrooms_short": "bd.",
-    "bathrooms_short": "ba."
+    "bathrooms_short": "ba.",
+    "add": "Add to favourites",
+    "photo_alt": "Stay photo"
   },
   "carte": {
     "eyebrow": "Provence & Alps",
@@ -443,5 +449,66 @@
     "value_2_text": "5 addresses between the Luberon, Avignon and the Southern Alps",
     "value_3_title": "Direct booking",
     "value_3_text": "No commission, with real flexibility on conditions"
+  },
+  "booking": {
+    "title": "Calculate the price of your stay",
+    "checkin": "Check-in",
+    "checkout": "Check-out",
+    "min_stay_warning": "Minimum stay: {nights} nights for this property.",
+    "night": "night",
+    "nights_label": "nights",
+    "cleaning_fee": "Cleaning fee",
+    "estimated_total": "Estimated total",
+    "disclaimer": "Excluding tourist tax. Indicative price."
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "risoul_q1": "Is there parking?",
+    "risoul_a1": "Yes, a covered parking space is included in the Altaïr residence, right next to the apartment.",
+    "risoul_q2": "Is bed linen provided?",
+    "risoul_a2": "Yes, bed linen is provided. Bath towels are available on request.",
+    "risoul_q3": "Is ski-in/ski-out access available?",
+    "risoul_a3": "Yes, the apartment has direct ski-in/ski-out access from the residence.",
+    "risoul_q4": "Can we rent outside school holidays?",
+    "risoul_a4": "Yes, the property is available outside school holidays, subject to availability. Contact us for pricing.",
+    "risoul_q5": "Are pets allowed?",
+    "risoul_a5": "No, pets are not allowed in this apartment.",
+    "avignon_q1": "Where can we park in Avignon?",
+    "avignon_a1": "The apartment is within the city walls; we recommend the Palais des Papes car park or paid parking near the ramparts.",
+    "avignon_q2": "Is there air conditioning?",
+    "avignon_a2": "Yes, the apartment has air conditioning for warm summer nights.",
+    "avignon_q3": "Can more than 2 guests be accommodated?",
+    "avignon_a3": "The property is designed for 2 guests. Contact us for any special requests.",
+    "avignon_q4": "How do we access the property?",
+    "avignon_a4": "Self-check-in is available with a key safe. Instructions will be sent to you before your arrival.",
+    "lauris_meme_q1": "Can all 3 houses be rented together?",
+    "lauris_meme_a1": "Yes! The 3 Lauris houses (Mémé, L'Atelier, Maison d'Alain) can be combined to host up to 20 guests. Preferential rate on request.",
+    "lauris_meme_q2": "Is cleaning included?",
+    "lauris_meme_a2": "An end-of-stay clean is available as an option (€120). You can also do the cleaning yourself.",
+    "lauris_meme_q3": "Is there a garden or terrace?",
+    "lauris_meme_a3": "Yes, the house has outdoor spaces — a courtyard and a shaded terrace.",
+    "lauris_meme_q4": "Are pets allowed?",
+    "lauris_meme_a4": "Yes, pets are welcome subject to prior agreement.",
+    "lauris_meme_q5": "What is the minimum length of stay?",
+    "lauris_meme_a5": "2 nights minimum. A preferential rate applies for longer stays (a week or more).",
+    "lauris_atelier_q1": "Is L'Atelier accessible for people with reduced mobility?",
+    "lauris_atelier_a1": "No, the property has a steep staircase — it is not suitable for people with reduced mobility.",
+    "lauris_atelier_q2": "Can it be combined with the neighbouring houses?",
+    "lauris_atelier_a2": "Yes, L'Atelier can be combined with Maison de Mémé and Maison d'Alain for groups of up to 20 guests.",
+    "lauris_atelier_q3": "Is cleaning included?",
+    "lauris_atelier_a3": "An end-of-stay clean is available as an option (€80). You can also do the cleaning yourself.",
+    "lauris_atelier_q4": "Is there air conditioning?",
+    "lauris_atelier_a4": "No, but the thick stone walls keep the house naturally cool, even in summer.",
+    "lauris_alain_q1": "Can all 3 houses be rented together?",
+    "lauris_alain_a1": "Yes! The 3 Lauris houses can be combined to host up to 20 guests. Preferential rate on request.",
+    "lauris_alain_q2": "Is there a terrace?",
+    "lauris_alain_a2": "Yes, the large 1st-floor terrace has views over the village — perfect for outdoor dining.",
+    "lauris_alain_q3": "Is the vaulted room available for events?",
+    "lauris_alain_a3": "The ground-floor vaulted room is perfect for family meals, but parties are not permitted.",
+    "lauris_alain_q4": "What is the minimum length of stay?",
+    "lauris_alain_a4": "2 nights minimum. A preferential rate applies for longer stays."
+  },
+  "map": {
+    "loading": "Loading map…"
   }
 }
