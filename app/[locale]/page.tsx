@@ -102,12 +102,12 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
             <div className="hero-c flex flex-wrap items-center gap-x-6 gap-y-2 mb-8 text-white/30 text-[10px] font-medium uppercase tracking-[0.14em]">
               <span className="flex items-center gap-2">
                 <span className="text-[#C8763A] font-bold text-[17px] tabular-nums tracking-normal"><CountUp to={5} delay={420} /></span>
-                logements
+                {t('home.stat_properties').toLowerCase()}
               </span>
               <span className="text-white/12">·</span>
               <span className="flex items-center gap-2">
                 <span className="text-[#C8763A] font-bold text-[17px] tabular-nums tracking-normal"><CountUp to={3} delay={580} /></span>
-                destinations
+                {t('home.stat_destinations').toLowerCase()}
               </span>
               <span className="text-white/12">·</span>
               <span>Direct</span>
@@ -158,10 +158,10 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
             <SectionReveal direction="right">
               <div className="grid grid-cols-2 gap-5">
                 {[
-                  { num: '8+', label: "ans d'expérience" },
-                  { num: '5', label: 'logements\nsoigneusement choisis' },
-                  { num: '3', label: 'destinations\nuniques' },
-                  { num: '100%', label: 'réservation\ndirecte, sans frais' },
+                  { num: '8+', label: t('home.stat_experience') },
+                  { num: '5', label: t('home.stat2_label') },
+                  { num: '3', label: t('home.stat3_label') },
+                  { num: '100%', label: t('home.stat4_label') },
                 ].map((s) => (
                   <div key={s.num} className="flex flex-col gap-2 p-5 rounded-xl"
                     style={{ background: 'rgba(200,118,58,0.06)', border: '1px solid rgba(200,118,58,0.12)' }}>
@@ -304,7 +304,7 @@ function HomeContent({ locale, imageOverrides }: { locale: string; imageOverride
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <SectionReveal>
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8AC870]/70 mb-6">
-              Réservation directe
+              {t('home.direct_booking')}
             </p>
             <h2 className="font-serif text-[30px] md:text-[42px] font-normal mb-6 leading-tight tracking-tight">
               <span className="title-line"><span>{t('contact.advantage_title')}</span></span>

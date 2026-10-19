@@ -85,9 +85,9 @@ export default function FavorisClient() {
                       </svg>
                       <span>{p.guests}</span>
                       <span className="text-[#D8CFC4]">·</span>
-                      <span>{p.bedrooms} ch.</span>
+                      <span>{p.bedrooms} {t('bedrooms_short')}</span>
                       <span className="text-[#D8CFC4]">·</span>
-                      <span>{p.bathrooms} sdb</span>
+                      <span>{p.bathrooms} {t('bathrooms_short')}</span>
                     </div>
                   </div>
                 </Link>

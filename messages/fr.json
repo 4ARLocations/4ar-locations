@@ -37,7 +37,10 @@
     "dest_avignon_sub": "Vaucluse · 🏛️",
     "dest_lauris_sub": "3 maisons · 🌿",
     "family_name": "La famille Rougon",
-    "see_all_properties": "Voir tous les biens"
+    "see_all_properties": "Voir tous les biens",
+    "stat2_label": "logements\nsoigneusement choisis",
+    "stat3_label": "destinations\nuniques",
+    "stat4_label": "réservation\ndirecte, sans frais"
   },
   "properties": {
     "title": "Tous nos logements",
@@ -275,7 +278,9 @@
     "empty_hint": "Cliquez sur le ❤️ sur un logement pour le retrouver ici.",
     "view_properties": "Voir nos logements",
     "remove": "Retirer",
-    "back_to_all": "← Voir tous nos logements"
+    "back_to_all": "← Voir tous nos logements",
+    "bedrooms_short": "ch.",
+    "bathrooms_short": "sdb"
   },
   "carte": {
     "eyebrow": "Provence & Alpes",

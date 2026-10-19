@@ -37,7 +37,10 @@
     "dest_avignon_sub": "Vaucluse · 🏛️",
     "dest_lauris_sub": "3 Häuser · 🌿",
     "family_name": "Die Familie Rougon",
-    "see_all_properties": "Alle Objekte ansehen"
+    "see_all_properties": "Alle Objekte ansehen",
+    "stat2_label": "sorgfältig\nausgewählte Unterkünfte",
+    "stat3_label": "einzigartige\nReiseziele",
+    "stat4_label": "Direktbuchung\nohne Servicegebühren"
   },
   "properties": {
     "title": "Alle unsere Unterkünfte",
@@ -245,7 +248,7 @@
     "welcome_text": "Herzlich willkommen in Lauris, diesem kleinen Dorf im südlichen Luberon, das Sie genauso bezaubern wird wie schon mehrere Generationen meiner Familie! Bis bald!",
     "discover_links_intro": "Entdecken Sie das Dorf Lauris und seine Umgebung auf diesen Websites:",
     "link1_label": "Lauris – French Moments",
-    "link2_label": "Provence avec moi",
+    "link2_label": "Provence mit mir",
     "link3_label": "J'aime le Vaucluse",
     "link4_label": "Destination Luberon"
   },
@@ -275,7 +278,9 @@
     "empty_hint": "Klicken Sie auf das ❤️ einer Unterkunft, um sie hier zu speichern.",
     "view_properties": "Unsere Unterkünfte ansehen",
     "remove": "Entfernen",
-    "back_to_all": "← Alle Unterkünfte ansehen"
+    "back_to_all": "← Alle Unterkünfte ansehen",
+    "bedrooms_short": "Zi.",
+    "bathrooms_short": "Bad"
   },
   "carte": {
     "eyebrow": "Provence & Alpen",
